@@ -5,10 +5,13 @@ import ChatData from '../assets/dummy-data/Chats'
 import MessageInput from '../components/MessageInput'
 import { useRoute, useNavigation } from '@react-navigation/core';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import TimerWidget from '../components/TimerWidget'
+import colors from '../styles/colors'
+import elements from '../styles/elements'
 
-const timer_icon = <Ionicons name={"ios-timer-outline"} color={"black"} size={25} style={{marginHorizontal: 5}}/>;
-const call_icon = <Ionicons name={"call"} color={"black"} size={30} style={{marginHorizontal: 5}}/>;
-const video_icon = <Ionicons name={"videocam"} color={"black"} size={30} style={{marginHorizontal: 5}}/>;
+const timer_icon = <Ionicons name={"ios-timer-outline"} color={colors.turquoise} size={25} style={{marginHorizontal: 5}}/>;
+const call_icon = <Ionicons name={"call"} color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>;
+const video_icon = <Ionicons name={"videocam"} color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>;
 
 
 const ChatRoomScreen = () => {
@@ -44,11 +47,8 @@ const ChatRoomScreenHeader = (props) => {
                 <Image source={{uri: props.avatarImage}} style={styles.avatarimage}/>
                 <Text style={styles.headerText}>{props.name}</Text>
             </View>
-                <View style={{right:40, flexDirection: 'row',justifyContent:'space-between'}}>
-                <View style={styles.headerTimer}>
-                    {timer_icon}
-                    <Text style={styles.timerText}>00:36</Text>
-                </View>
+                <View style={{right: 20, flexDirection: 'row',justifyContent:'flex-end'}}>
+                    <TimerWidget/>
                     {call_icon}
                     {video_icon}
                 </View>

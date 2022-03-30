@@ -8,103 +8,95 @@ import MyTutorsScreen from '../screens/MyTutorsScreen';
 import MyBumpsScreen from '../screens/MyBumpsScreen'
 import BumpComponent from '../components/BumpComponent';
 import BumpModal from '../components/BumpModal';
-import { BlurView } from 'expo-blur';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import colors from '../styles/colors';
+import { Auth } from 'aws-amplify';
 
 
 const Tab = createBottomTabNavigator();
 
+
 //Declare icons
-const inbox = <FontAwesome5 name={"inbox"} color={"#0AFFC2"} size={25}/>;
+const inbox = <FontAwesome5 name={"inbox"} color={colors.aquamarine} size={25}/>;
+const store = <FontAwesome5 name={"coins"} color={colors.aquamarine} size={25}/>;
+const myTutors = <MaterialIcons name={"favorite"} color={colors.aquamarine} size={25}/>;
+const home = <MaterialIcons name={"home"} color={colors.aquamarine} size={25}/>;
+const paperPlane = <FontAwesome name={"paper-plane"} color={"black"} size={40}/>
 
-
-
-function MyTabs() {
+const MyTabs = props => {
+  
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false, 
-        tabBarActiveBackgroundColor: '#c0c2c4',
-        tabBarLabelStyle: styles.tablabel,
-    tabBarShowLabel: false,
-        tabBarStyle: { position: 'absolute' },
-        tabBarBackground: () => (
-          <BlurView tint="light" intensity={30} style={StyleSheet.absoluteFill} />
-    ),
+      headerShown: false, 
+      tabBarActiveBackgroundColor: '#c0c2c4',
+      tabBarLabelStyle: styles.tablabel,
+      tabBarShowLabel: false,
+      tabBarStyle: { position: 'absolute' },
   }}>
-      <Tab.Screen 
-      name="Home" 
-      component={WelcomeScreen}
-      options={{
-        tabBarLabel: 'Home',
+      <Tab.Screen name="Home" options={{tabBarLabel: 'Home',
         tabBarIcon: ({focused, color, size}) => (
           <View style={{alignItems:'center'}}>
-          <Image
-            source={require('../assets/home-fill.png')} />
+          {home}
           <Text style={styles.tablabel}>Home</Text>
           </View>
-          )}} />
-      <Tab.Screen 
-      name="My Tutors" 
-      component={MyTutorsScreen}
-      options={{
+          )}} >
+        {screenProps => (
+                <WelcomeScreen {...screenProps} updateAuthState={props.updateAuthState} />
+              )}
+      </Tab.Screen>
+
+      <Tab.Screen name="My Tutors" options={{
         tabBarLabel: 'My Tutors',
         tabBarIcon: ({focused, color, size}) => (
           <View style={{right: 10, alignItems:'center'}}>
-          <Image
-            source={require('../assets/user-star-fill.png')} />
+          {myTutors}
           <Text style={styles.tablabel}>My Tutors</Text>
           </View>
-          )}} />
-      <Tab.Screen 
-      name="Store" 
-      component={StoreScreen}
-      options={{
+          )}} >
+        {screenProps => (
+                <MyTutorsScreen {...screenProps} updateAuthState={props.updateAuthState} />
+              )}
+      </Tab.Screen>
+
+      <Tab.Screen name="Store" options={{
         tabBarLabel: 'Store',
         tabBarIcon: ({focused, color, size}) => (
           <View style={{left: 10, alignItems:'center'}}>
-          <Image
-            source={require('../assets/coins-fill.png')} />
+          {store}
           <Text style={styles.tablabel}>Store</Text>
           </View>
         ),
-      }}/> 
-      <Tab.Screen 
-      name="My Bumps" 
-      component={MyBumpsScreen}
-      options={{
+      }}>
+        {screenProps => (
+                <StoreScreen {...screenProps} updateAuthState={props.updateAuthState} />
+              )}
+      </Tab.Screen>
+
+      <Tab.Screen name="My Bumps" options={{
         tabBarLabel: 'My Bumps',
         tabBarIcon: ({focused, color, size}) => (
           <View style={{alignItems:'center'}}>
             {inbox}
             <Text style={styles.tablabel}>My Bumps</Text>
           </View>
-          )}} />
-      <Tab.Screen 
-        name="Bump" 
+          )}} >
+        {screenProps => (
+                <MyBumpsScreen {...screenProps} updateAuthState={props.updateAuthState} />
+              )}
+      </Tab.Screen>
+
+      <Tab.Screen name="Bump" 
         component={BumpComponent}
         options={{
           tabBarShowLabel: false,
           tabBarButton: (props) => (<BumpModal {...props}/>),
           tabBarIcon: ({tintColor}) => (
-            <View 
-            style={{
-              backgroundColor: "#FFF000",
-              borderRadius: 40,
-              borderWidth: 3,
-              height: 80,
-              width: 80,
-              right: 0.5*Dimensions.get('window').width,
-              justifyContent: 'center',
-              alignItems: 'center',
-              ...styles.shadow
-            }}>
-              <FontAwesome 
-                  name={"paper-plane"} 
-                  color={"black"} 
-                  size={40}
-              />
+            <View style={[styles.bumpIcon,styles.shadow]}>
+              {paperPlane}
             </View>
           )
         }}
@@ -124,7 +116,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.7,
     shadowRadius: 7,
     shadowOffset : { width: 2, height: 2}
-},
+  },
+  bumpIcon: {
+    backgroundColor: colors.aquamarine,
+    borderRadius: 40,
+    borderWidth: 3,
+    borderColor: 'white',
+    height: 80,
+    width: 80,
+    right: 0.5*Dimensions.get('window').width,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 })
 
 export default MyTabs;

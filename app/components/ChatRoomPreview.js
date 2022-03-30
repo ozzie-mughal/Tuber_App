@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity} from 're
 import React from 'react'
 import ChatRooms from '../assets/dummy-data/ChatRooms';
 import { useNavigation } from '@react-navigation/core'
+import colors from '../styles/colors';
 
 const ChatRoomPreview = ({ chatRoom }) => {
 
@@ -15,7 +16,7 @@ const ChatRoomPreview = ({ chatRoom }) => {
   const navigation = useNavigation();
 
   const onChatRoomPress = () => {
-          navigation.navigate('Chat', { id: chatRoom.id, name: senderName, avatarImage: senderAvatarImage });  
+          navigation.navigate('ChatRoom', { id: chatRoom.id, name: senderName, avatarImage: senderAvatarImage });  
         }
 
   return (
@@ -56,14 +57,14 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       padding: 10,
       borderBottomWidth: 1,
-      borderColor: 'grey',
+      borderColor: colors.grey,
     },
     preview_container: {
       flex: 1,
       justifyContent: 'space-evenly'
     },
     badge_container: {
-      backgroundColor: "#0047AB",
+      backgroundColor: colors.med_turquoise,
       height: 20,
       width: 20,
       borderRadius: 10,
@@ -72,11 +73,12 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      left: 50,
+      left: 40,
       top: 10
     },
     badge_text: {
-      color: "white"
+      color: "white",
+      fontWeight: '600'
     },
     activebadge_container: {
       backgroundColor: "lawngreen",
@@ -88,12 +90,12 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      left: 50,
-      top: 50
+      left: 40,
+      top: 40
     },
     avatarimage:{
-      width: 60,
-      height: 60,
+      width: 50,
+      height: 50,
       borderRadius: 30,
       marginRight: 10
     },

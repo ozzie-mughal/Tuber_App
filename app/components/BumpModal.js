@@ -8,35 +8,74 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import Svg, { Path } from 'react-native-svg';
 import RadioButtonCard from './RadioButtonCard';
 import ToggleCard from './ToggleCard';
+import icons from '../styles/icons';
+import colors from '../styles/colors';
+import elements from '../styles/elements';
+import SecondaryButton from './SecondaryButton';
+import PrimaryActionButton from './PrimaryActionButton';
+import PrimaryActionButtonWide from './PrimaryActionButtonWide';
+import SecondaryActionButton from './SecondaryActionButton';
+import NumberHeading from '../components/NumberHeading';
+import ShowMore from './ShowMore';
+import InfoModal from './InfoModal';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import chatRoomsData from '../assets/dummy-data/ChatRooms';
 
 export default function BumpModal({children, onPress}) {
-  const refRBSheet = useRef();
-  const navigation = useNavigation()
 
-  const beginBump = () => {
-    refRBSheet.current.close();
-    navigation.navigate('Chat');
-    console.log('Pressed ask option');
-  };
+    const timer_icon = <Ionicons name={"ios-timer-outline"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
+    const store = <FontAwesome5 name={"coins"} color={'black'} size={20}/>;
+    const randomAvatar = 'https://i.pravatar.cc/300';
 
-  
-  //Define Icons
-  const chalkboard = <FontAwesome5 name={"chalkboard-teacher"} color={"black"} size={40}/>;
-  const group = <MaterialCommunityIcons name={"account-group"} color={"black"} size={40}/>;
-  const video = <FontAwesome5 name={"video"} color={"black"} size={40}/>;
-  const text = <MaterialCommunityIcons name={"message-text"} color={"black"} size={40}/>;
-  
-  const askOptions = [
-    {value: 'Book 1:1 Class', icon: chalkboard, desc: "Schedule an interactive lesson with a tutor of your choice."},
-    {value: 'Join Group', icon: group, desc: "Enter a virtual, interactive classroom with other students."},
-    {value: 'Video', icon: video, desc: "Get your questions answered on a short video call."},
-    {value: 'Text', icon: text, desc: "Get your questions answered in a chat - as quick as 60 seconds."},
-  ];
 
-  const whoOptions = [
-    {value: 'Suggest best for me', icon: chalkboard, desc: "Let Bump AI predict the most effective tutor for me, based on my preferences, ask history, and availability."},
-    {value: 'Select own tutor', icon: group, desc: "Choose from your list of favourited tutors (NOTE: Tutor availability may differ)."},
-  ];
+    //Dummy tutor chat room data
+    const chatRoom = {
+        id:'1',
+        name:'Elon Musk',
+        avatarImage: randomAvatar
+    }
+
+    const refRBSheet = useRef();
+    const navigation = useNavigation()
+
+    const [askOptionData, setAskOptionData] = useState('');
+
+    const selectedAskOption = (value) => {
+        setAskOptionData(value);
+    } 
+    const [whoOptionData, setWhoOptionData] = useState('');
+
+    const selectedWhoOption = (value) => {
+        setWhoOptionData(value);
+    } 
+
+    //Learn More Modal toggle
+    const [showInfoModal, setShowInfoModal] = useState(false);
+
+    const beginAsk = () => {
+        refRBSheet.current.close();
+        navigation.navigate('ChatRoom', { id: chatRoom.id, name: chatRoom.name, avatarImage: chatRoom.avatarImage });  
+        console.log('Pressed ask option');
+    };
+    const closeModal = () => {
+        setAskOptionData('');
+        setWhoOptionData('');
+        console.log('ask modal is closed');
+    };
+
+
+    const askOptions = [
+        {value: 'Book 1:1 Class', icon: icons.chalkboard_medium, desc: "Schedule an interactive lesson with a tutor of your choice."},
+        {value: 'Join Group', icon: icons.group_medium, desc: "Enter a virtual, interactive classroom with other students."},
+        {value: 'Video', icon: icons.video_medium, desc: "Get your questions answered on a short video call."},
+        {value: 'Text', icon: icons.text_medium, desc: "Get your questions answered in a chat - as quick as 60 seconds."},
+    ];
+
+    const whoOptions = [
+        {value: 'Suggest best for me', icon: icons.chalkboard_medium, desc: "Let Bump AI predict the most effective tutor for me, based on my preferences, ask history, and availability."},
+        {value: 'Select own tutor', icon: icons.group_medium, desc: "Choose from your list of favourited tutors (NOTE: Tutor availability may differ)."},
+    ];
+
 
   return (
     <TouchableOpacity 
@@ -53,72 +92,87 @@ export default function BumpModal({children, onPress}) {
         animationType= "slide"
         closeOnDragDown={false}
         closeOnPressMask={true}
+        onClose={closeModal}
         customStyles={{
           container: {
-              height: 750,
+              height: 550,
               backgroundColor: "white",
-              borderRadius: 50,
-              top: 150,
+              borderRadius: 30,
+              top: 0,
               paddingHorizontal: 20
           },
-          draggableIcon: {
-            backgroundColor: "#0AFFC2",
-            width: 60
-          }
         }}
       >
         <View>
             <View style={{marginTop: 15}}>
+
                 <View style={{alignItems:'center'}}>
-                    <View style={{width:70, height: 5, backgroundColor:"#0AFFC2", borderRadius:15}}/>
+                    {/*Collapse bar*/}
+                    <View style={{width:70, height: 5, backgroundColor:colors.aquamarine, borderRadius:15}}/>
                 </View>
-                <Text style={{marginTop: 15, fontSize:24, fontWeight: "700", color:"#9D5DE5"}}>Stumped on something? Let's sort you out.</Text>
+
+                <Text style={{marginVertical: 15, fontSize:24, fontWeight: "700"}}>Stumped on something? Let's sort you out.</Text>
+                <ShowMore title='How it works >'/>
             </View>
             <ScrollView style={{
                 marginVertical:20,
-                height: 450}}>
-                <View style={styles.subContainer}>
-                    <View style={{
-                    marginVertical:10}}>
-                        <Text style={{fontSize:21, fontWeight: "600"}}>How do you want to ask?</Text>
+                height: 350}}>
+                <View style={elements.stackedModalInputContainer}>
+                    <View style={elements.stackedGreyContainer}>
+                        <NumberHeading number='1' title='How do you want to ask?'/>
+                        <RadioButtonCard data={askOptions} selectedOption={selectedAskOption}/>
+                        {askOptionData? <ShowMore title='Learn More' onPress={() => {
+                        setShowInfoModal(true)}}
+                        /> : null}
                     </View>
-                    <RadioButtonCard data={askOptions}/>
+                    <View style={elements.stackedGreyContainer}>
+                        <NumberHeading number='2' title='Who do you want to ask?'/>
+                        <ToggleCard data={whoOptions} selectedOption={selectedWhoOption}/>
+                        {whoOptionData? <ShowMore title='Learn More' onPress={() => {
+                        setShowInfoModal(true)}}
+                        /> : null}
+                        {whoOptionData==='Select own tutor' && 
+                        <PrimaryActionButtonWide title='Select from favourite tutors'/>}
+                    </View>
+                    <View style={elements.stackedGreyContainer}>
+                        <NumberHeading number='3' title='Your Summary'/>
+                            <View style={{flexDirection:'row', alignItems:'center', 
+                            justifyContent:'space-between', marginVertical:5}}>
+                                <Text style={{fontSize:16, fontWeight: "800"}}>Estimated Total Time </Text>
+                                <View style={{ flexDirection: 'row',justifyContent:'space-between'}}>
+                                    <View style={styles.headerTimer}>
+                                        {timer_icon}
+                                        <Text style={styles.timerText}>03:20</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={{flexDirection:'row', alignItems:'center', 
+                                justifyContent:'space-between', marginVertical:5}}>
+                                <Text style={{fontSize:16, fontWeight: "800"}}>Minimum Fee </Text>
+                                <View style={{ flexDirection: 'row',justifyContent:'space-between'}}>
+                                    <View style={styles.headerTimer}>
+                                        {store}
+                                        <Text style={styles.timerText}>3 </Text>
+                                        <Text style={styles.timerText}>(A$7.20)</Text>
+                                    </View>
+                                </View>
+                            </View>
+                    </View>
+
                 </View>
 
-                <View style={styles.subContainer}>
-                    <View style={{
-                    marginVertical:10}}>
-                        <Text style={{fontSize:21, fontWeight: "600"}}>Who do you want to ask?</Text>
-                    </View>
-                    <ToggleCard data={whoOptions}/>
+
+                <View style={{flexDirection:'row', marginBottom: 35, 
+                justifyContent:'space-evenly'}}>
+                    <SecondaryActionButton title='Cancel' onPress={closeModal}/>
+                    <PrimaryActionButton title='Begin' onPress={beginAsk}/>
                 </View>
 
-                <View style={styles.subContainer}>
-                    <View style={{
-                    marginVertical:10}}>
-                        <Text style={{fontSize:20, fontWeight: "800"}}>Approx. Response Time: 1 min</Text>
-                    </View>
-                </View>
-                <View style={styles.subContainer}>
-                    <View style={{
-                    marginVertical:10}}>
-                        <Text style={{fontSize:20, fontWeight: "800"}}>Minimum Fee: 3 coins (A$5.20)</Text>
-                    </View>
-                </View>
-
-                <View style={{flexDirection:'row', width:'100%', marginBottom: 35, justifyContent:'center'}}>
-                    <TouchableOpacity
-                        style={styles.button_secondary}
-                    >
-                        <Text style={styles.button_secondaryText}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.button_primary}
-                        onPress={beginBump}
-                    >
-                        <Text style={styles.button_primaryText}>Begin</Text>
-                    </TouchableOpacity>
-                </View>
+                <InfoModal 
+                    showInfoModal={showInfoModal} 
+                    setShowInfoModal={setShowInfoModal} 
+                    headerTitle={'Some title'}
+                    modalContent={'some extra information'}/>
             </ScrollView>
         </View>
       </RBSheet>
@@ -128,48 +182,17 @@ export default function BumpModal({children, onPress}) {
 }
 
 const styles = StyleSheet.create({
-    buttonShadow: {
-        shadowColor: '#000000',
-        shadowOpacity: 0.7,
-        shadowRadius: 7,
-        shadowOffset : { width: 2, height: 2}
-    },
-    subContainer: {
-        backgroundColor:"#F0F5FA",
-        borderRadius: 15,
-        flex: 1,
-        padding: 10,
-        marginVertical: 10
-    },
-    button_primary: {
-        width: '40%',
-        paddingVertical: 10,
-        backgroundColor: '#FFF000',
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 20,
-        borderWidth: 3,
-        marginHorizontal: 5
-    },
-    button_secondary: {
-        width: '40%',
-        paddingVertical: 10,
-        backgroundColor: 'grey',
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 20,
-        borderWidth: 3,
-        marginHorizontal: 5
-    },
-    button_primaryText: {
-        fontSize: 16,
-        fontWeight: "600"
-    },
-    button_secondaryText: {
-        fontSize: 16,
-        fontWeight: "600",
-        color: "white"
-    }
+        timerText: {
+            fontSize: 14,
+            fontWeight: '600'
+        },
+        headerTimer: {
+            padding: 5,
+            backgroundColor: colors.grey_light,
+            width: 120,
+            flexDirection: 'row',
+            borderRadius: 15,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+        }
 })

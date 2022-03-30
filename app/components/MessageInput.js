@@ -4,12 +4,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import colors from '../styles/colors';
 
-const plus_icon = <FontAwesome name={"plus-circle"} color={"dodgerblue"} size={40} style={{marginHorizontal: 5}}/>;
-const camera_icon = <Feather name={"camera"} color={"grey"} size={30} style={{marginHorizontal: 5}}/>;
-const microphone_icon = <Feather name={"mic"} color={"grey"} size={30} style={{marginHorizontal: 5}}/>;
-const smile_icon = <SimpleLineIcons name={"emotsmile"} color={"grey"} size={30} style={{marginHorizontal: 5}}/>;
-const send_icon = <Ionicons name={"send"} color={"dodgerblue"} size={30} style={{marginHorizontal: 5}}/>;
+const plus_icon = <FontAwesome name={"plus-circle"} color={colors.turquoise} size={40} style={{marginHorizontal: 5}}/>;
+const camera_icon = <Feather name={"camera"} color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>;
+const microphone_icon = <Feather name={"mic"} color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>;
+const smile_icon = <SimpleLineIcons name={"emotsmile"} color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>;
+const send_icon = <Ionicons name={"send"} color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>;
 
 const MessageInput = () => {
 

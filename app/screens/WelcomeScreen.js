@@ -1,76 +1,98 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { View, SafeAreaView, Image, ImageBackground, 
     StyleSheet, Button, Text, TouchableOpacity,
     ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { FloatingAction } from "react-native-floating-action";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { auth } from '../../firebase'
+import { Auth } from 'aws-amplify';
+import elements from '../styles/elements';
+import colors from '../styles/colors';
 import { useNavigation } from '@react-navigation/core'
 import WavyHeader from '../components/WavyHeader';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import DashboardCardFull from '../components/DashboardCardFull';
+import DashboardCard_25 from '../components/DashboardCard_25';
+import DashboardPill from '../components/DashboardPill';
+import ActiveAsksWidget from '../components/ActiveAsksWidget';
+import TopTutorsWidget from '../components/TopTutorsWidget';
+import MetricWidget from '../components/MetricWidget';
+import AnnouncementCard from '../components/AnnouncementCard';
+import GradientText from '../components/GradientText';
+import { MenuProvider } from 'react-native-popup-menu';
+import AccountMenu from '../components/AccountMenu';
 
 
+const store = <FontAwesome5 name={"coins"} color={'black'} size={20}/>;
+const hamburger_menu = <Entypo name={"menu"} color={colors.aquamarine} size={40}/>;
+const lightning = <MaterialCommunityIcons name={"lightning-bolt"} color={'gold'} size={20}/>;
 
-function WelcomeScreen(props) {
 
-    const navigation = useNavigation()
+export default function WelcomeScreen({ navigation, updateAuthState }) {
+
+    //const navigation = useNavigation()
 
     const [coincount, setCoinCount] = useState(0);
+    const [givenName, setGivenName] = useState('');
+    const [picture, setAvatarImage] = useState('placedholder')
 
+    async function signOut() {
+        try {
+            await Auth.signOut();
+            //console.log(isUserLoggedIn);
+            updateAuthState('loggedOut');
+        } 
+        catch(error) {
+            console.log('Error signing out: ', error)
+        }
+        }
 
-    const handleSignOut = () => {
-        auth
-            .signOut()
-            .then(() => {
-                navigation.replace('Login')
-            })
-            .catch(error => alert(error.message))
+    async function getUserInfo() {
+        try {
+            let user = await Auth.currentAuthenticatedUser();
+            const { attributes } = user;
+            setGivenName(attributes.given_name);
+            setAvatarImage(attributes.picture);
+            //console.log(attributes)
+        } catch(error) {
+            console.log('Error in getting user info:',error)
+        }
     }
+    
+    useEffect(() => {
+        getUserInfo()
+    },[])
 
+    const avatar = <Image source={{uri:picture}} style={styles.viewImage_medium}/>;
 
-    const paperplane_icon = <FontAwesome 
-                                name={"paper-plane"} 
-                                color={"black"} 
-                                size={50}
-                            />;
-    const close_icon = <FontAwesome 
-                                name={"close"} 
-                                color={"black"} 
-                                size={50}
-                            />;
     
 
     return (
+        <MenuProvider>
         <Fragment>
-        <SafeAreaView style={{flex:0, backgroundColor:"#0AFFC2"}}/>
+        <SafeAreaView style={elements.topSafeAreaContainer_light}/>
 
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={elements.generalContainer}>
 
-        <ScrollView style={styles.container}>
+        <ScrollView style={elements.generalContainer}>
             <View style={styles.header_container}>
                 <LinearGradient
                     // Background Linear Gradient
-                    colors={['#0AFFC2','#B0FFEB']}
+                    colors={[colors.grey_lightest, colors.grey_light]}
                     locations={[0.1, 0.6]}
                     style={[styles.background]}
                 />
                 <View style={{
                     flexDirection: "row",
-                    justifyContent: "flex-end"}}>
-                    <TouchableOpacity onPress={handleSignOut}>
-                    <Image 
-                        source={require('../assets/avatar-student.png')}
-                        style={styles.viewImage_medium}
-                    />
-                    </TouchableOpacity>
+                    justifyContent: "space-between",}}>
+                    <View style={{marginTop: 10,marginLeft: 10,}}>
+                        {hamburger_menu}
+                    </View>
+                    <AccountMenu avatar={avatar} signOut={signOut}/>
                 </View>
                 <View style={styles.header_title}>
-                    
-                    <Text style={styles.header_titletext}>
-                        Hello,{"\n"}{auth.currentUser?.displayName}!
-                    </Text>
+                    <GradientText style={styles.header_titletext}>Hello,{"\n"}{givenName}!</GradientText>
                     
                 </View>
                 <View style={styles.content_headercards}>
@@ -78,57 +100,9 @@ function WelcomeScreen(props) {
                         flexDirection: "row",
                         justifyContent: "flex-start",
                         margin: 0}}>
-                            <View style={[
-                                styles.content_card_half,
-                                {backgroundColor: "#9D5DE5"}]}>
-                                <View style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    padding: 5}}>
-                                <Image
-                                    source={
-                                        require('../assets/coins-fill.png')}/>
-                                    <Text style={{
-                                        paddingLeft: 7,
-                                        paddingRight: 14,
-                                        fontWeight: "600",
-                                        color: "#FFFFFF"}}>
-                                        {coincount}</Text>
-                                </View>
-                            </View>
-                            <View style={[
-                                styles.content_card_half,
-                                {backgroundColor: "#fcf57e"}]}>
-                                <TouchableOpacity 
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    padding: 7}}
-                                onPress={() => setCoinCount(coincount+5)}>
-                                    <Text style={{
-                                        fontWeight: "600",
-                                        color: "black"}}>
-                                        Get 5 coins</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={[
-                                styles.content_card_half,
-                                {backgroundColor: "#DEE2E6"}]}>
-                                <View style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    padding: 5}}>
-                                <Image
-                                    source={
-                                        require('../assets/flashlight-fill.png')}/>
-                                    <Text style={{
-                                        paddingLeft: 7,
-                                        paddingRight: 14,
-                                        fontWeight: "600",
-                                        color: "#000000"}}>
-                                        8</Text>
-                                </View>
-                            </View>
+                            <DashboardPill icon={store} title={coincount} backgroundColor={colors.aquamarine}/>
+                            <DashboardPill icon={lightning} title='8' backgroundColor={colors.grey_light}/>
+                            <DashboardPill title='Get a tour >' backgroundColor={colors.turquoise}/>
                     </View>
 
                 </View>
@@ -138,94 +112,49 @@ function WelcomeScreen(props) {
                     <WavyHeader
                         customHeight={450}
                         customBgColor="white"
-                        customFill="#B0FFEB"
+                        customFill={colors.grey_light}
                         customWavePattern="m0 0 48 26.7C96 53 192 107 288 144s192 59 288 48 192-53 288-80 192-37 288-26.7c96 10.7 192 42.7 240 58.7l48 16V0H0Z"
                     />
                 </View>
 
             </View>
 
-            <View style={styles.content_container}>
+            {/* Dashboard Content */}
 
-                <View style={styles.content_cards}>
-                    <View>
-                        <View style={styles.content_card_live}>
-                            <View style={{
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                alignItems: "center"}}>
-                                <Text style={styles.content_card_title}>
-                                    Live Nudges
-                                </Text>
-                                <TouchableOpacity>
-                                    <Text style={{
-                                        textDecorationLine:"underline"}}>
-                                        See All
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.content_card_live_msgbox}>
-                                <View style={{
-                                    flexDirection: "row",
-                                    justifyContent: "space-between"}}>
-                                    <View style={{flexDirection: "row"}}>
-                                        <Image 
-                                            source={require('../assets/avatar_icon.png')}
-                                            style={styles.viewImage}/>
-                                        <View style={{paddingLeft:3}}>
-                                            <View style={{flexDirection:"row"}}>
-                                                <Text style={{
-                                                    fontWeight:"600",
-                                                    paddingRight:3}}>
-                                                    Alesha
-                                                </Text>
-                                                <Image 
-                                                    source={require('../assets/focus-fill.png')}
-                                                    style={styles.viewImage_small}/>
-                                            </View>
-                                            <Text>I think the answer might be 5.</Text>
-                                        </View>
-                                    </View>
-                                <TouchableOpacity style={styles.openbutton}>
-                                        <Text style={styles.openbutton_text}>
-                                            Open
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={styles.content_card}>
-                            <Text style={styles.content_card_title}>
-                                Favourite Tutors
-                            </Text>
-                            <Image 
-                            source={require('../assets/icon.png')}
-                            style={styles.viewImage}/>
-                        </View>
-                        <View style={styles.content_card}>
-                            <Text style={styles.content_card_title}>
-                                Recent Nudges
-                            </Text>
-                            <Image 
-                            source={require('../assets/icon.png')}
-                            style={styles.viewImage}/>
-                        </View>
-                        <View style={styles.content_card}>
-                            <Text style={styles.content_card_title}>
-                                Resources / How-To
-                            </Text>
-                            <Image 
-                            source={require('../assets/icon.png')}
-                            style={styles.viewImage}/>
-                        </View>
-                    </View>
+            <View style={elements.dashboardContentContainer}>
+                <AnnouncementCard announcementText='Refer a friend and get 20 free coins*' seeAllTitle='Learn More >' seeAllVisible={true}/>
+
+                <DashboardCardFull headerTitle='Live Sessions' seeAllTitle='See All Asks' 
+                    Widget={ActiveAsksWidget} seeAllVisible={true} 
+                    color_1={'white'} color_2={colors.grey_lightest}/>
+                <View style={{flexDirection:'row', width:'100%', justifyContent:'space-between'}}>
+                    <DashboardCard_25 
+                        Widget={<MetricWidget headingText='11' subHeadingText='Asks' 
+                            subSubHeadingText='until Level 3.' seeMoreText='More >'/>} seeAllVisible={false} 
+                        color_1={colors.slate_blue_light} color_2={colors.french_pink_lightest}
+                        left={true} />       
+                    <DashboardCard_25 
+                        Widget={<MetricWidget headingText='4' subHeadingText='Days' 
+                            subSubHeadingText='until top-up.' seeMoreText='More >'/>} seeAllVisible={false} 
+                        color_1={colors.skyblue_crayola} color_2={colors.baby_blue_light}
+                        middle={true}/>       
+                    <DashboardCard_25 
+                        Widget={<MetricWidget headingText='34' subHeadingText='Tutors' 
+                            subSubHeadingText='online now.' seeMoreText='More >'/>} seeAllVisible={false} 
+                        color_1={colors.turquoise} color_2={colors.mint_green}
+                        right={true}/>       
                 </View>
+                <DashboardCardFull headerTitle='Top-Rated' seeAllTitle='See All' 
+                    Widget={TopTutorsWidget} seeAllVisible={true} 
+                    color_1={'white'} color_2={colors.grey_lightest}/>                       
+                <DashboardCardFull headerTitle='Recent Asks' seeAllVisible={true}/>
+                <DashboardCardFull headerTitle='Resources / How-To' seeAllVisible={true}/>
                 
             </View>
         </ScrollView>
         </SafeAreaView>
         </Fragment>
-
+        </MenuProvider>
     );
 }
 
@@ -250,11 +179,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#7AFFDE', 
         height: 400
     },
-    content_container: {
-        //justifyContent: "flex-start", //sets all objects in bg container to start
-        //alignItems: "center",
-        backgroundColor: 'white' 
-    },
     viewImage: {
         resizeMode: "contain",
         width: 30,
@@ -271,7 +195,10 @@ const styles = StyleSheet.create({
         resizeMode: "contain",
         width: 64,
         height: 64,
-        justifyContent: "flex-end"
+        justifyContent: "flex-end",
+        marginTop: 10,
+        marginRight: 10,
+        borderRadius: 32
     },
     header_title: {
         width: "100%",
@@ -281,18 +208,8 @@ const styles = StyleSheet.create({
     },
     header_titletext: {
         fontSize: 48,
-        fontWeight: "800"
-    },
-    openbutton: {
-        backgroundColor: "#0AFFC2",
-        borderRadius: 100,
-        borderWidth: 1,
-        borderColor: "#000000"
-    },
-    openbutton_text: {
-        fontWeight: "600",
-        fontSize: 16,
-        padding: 4
+        fontWeight: "800",
+        
     },
     content_headercards: {
         flexDirection: "column",
@@ -300,52 +217,4 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         paddingHorizontal: 30,
     },
-    content_cards: {
-        flexDirection: "column",
-        paddingLeft: 20,
-        paddingRight: 20,
-        justifyContent: "space-between",
-    },
-    content_card: {
-        backgroundColor: "#DEE2E6",
-        borderRadius: 20,
-        padding: 10,
-        margin: 10,
-        shadowColor: '#000000',
-        shadowOpacity: 0.7,
-        shadowRadius: 7,
-        shadowOffset : { width: 2, height: 2}
-
-    },
-    content_card_half: {
-        borderRadius: 20,
-        marginBottom: 30,
-        marginRight: 10,
-        shadowColor: '#000000',
-        shadowOpacity: 0.7,
-        shadowRadius: 7,
-        shadowOffset : { width: 2, height: 2}
-    },
-    content_card_title: {
-        fontSize: 24,
-        fontWeight: "600"
-    },
-    content_card_live: {
-        backgroundColor: "#FCF57E",
-        borderRadius: 20,
-        padding: 10,
-        margin: 10,
-        shadowColor: '#000000',
-        shadowOpacity: 0.7,
-        shadowRadius: 7,
-        shadowOffset : { width: 2, height: 2}
-    },
-    content_card_live_msgbox: {
-        backgroundColor: "#b0ab58",
-        borderRadius: 20,
-        padding: 5,
-        marginTop: 5,
-    },
 })
-
-export default WelcomeScreen;

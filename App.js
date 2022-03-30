@@ -1,54 +1,58 @@
-import { StatusBar } from 'expo-status-bar';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, 
-  Alert, Image, SafeAreaView, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import WelcomeScreen from './app/screens/WelcomeScreen';
-import LoginScreen from './app/screens/LoginScreen';
-import RegisterScreen from './app/screens/RegisterScreen';
 import { NavigationContainer } from '@react-navigation/native';
-import MyTabs from './app/navigation/BottomTab';
-import MyDrawer from './app/navigation/HamburgerMenu';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import 'react-native-gesture-handler';
-import { create } from '@mui/material/styles/createTransitions';
+import Amplify from 'aws-amplify';
+import config from './src/aws-exports';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SignInScreen from './app/screens/SignInScreen';
+import SignUpScreen from './app/screens/SignUpScreen';
+import ConfirmSignUpScreen from './app/screens/ConfirmSignUpScreen';
+import MyBumpsScreen from './app/screens/MyBumpsScreen';
 import ChatRoomScreen from './app/screens/ChatRoomScreen';
-import BumpModal from './app/components/BumpModal';
 
-export default function App() {
+import Initializing from './app/navigation/Initialising';
+import MyTabs from './app/navigation/BottomTab'
+import AuthenticationNavigator from './app/navigation/AuthenticationNavigator';
+import AppNavigator from './app/navigation/AppNavigator';
 
-  const Stack = createNativeStackNavigator();
+Amplify.configure(config);
+
+function App() {
+
+  const [isUserLoggedIn, setUserLoggedIn] = useState('initializing');
+
+  useEffect(() => {
+    checkAuthState();
+  }, []);
+
+  async function checkAuthState() {
+    try {
+      await Auth.currentAuthenticatedUser();
+      console.log('✅ User is signed in');
+      setUserLoggedIn('loggedIn');
+    } catch (err) {
+      console.log('❌ User is not signed in');
+      setUserLoggedIn('loggedOut');
+    }
+  }
+  function updateAuthState(isUserLoggedIn) {
+    setUserLoggedIn(isUserLoggedIn);
+  }
 
   return (
-  <NavigationContainer>
-    <Stack.Navigator >
-      <Stack.Screen options={{headerShown:false}} name='Login' component={LoginScreen}/>
-      <Stack.Screen options={{headerShown:false}} name='Home' component={MyTabs}/>
-      <Stack.Screen options={{headerShown:false}} name='Register' component={RegisterScreen}/>
-      <Stack.Screen options={{headerShown:false}} name='Drawer' component={MyDrawer}/>
-      <Stack.Screen 
-        options={{
-          headerShown:true, 
-          headerBackTitleVisible: false
-          }} 
-        name='Chat'  
-        component={ChatRoomScreen}
-      />
-      <Stack.Screen options={{headerShown:false}} name='BumpModal' component={BumpModal}/>
-
-
-    </Stack.Navigator>
-
-  </NavigationContainer>
-    
+    <NavigationContainer>
+      {isUserLoggedIn === 'initializing' && <Initializing />}
+      {isUserLoggedIn === 'loggedIn' && (
+        <AppNavigator updateAuthState={updateAuthState} isUserLoggedIn={isUserLoggedIn}/>
+      )}
+      {isUserLoggedIn === 'loggedOut' && (
+        <AuthenticationNavigator updateAuthState={updateAuthState} isUserLoggedIn={isUserLoggedIn}/>
+      )}
+    </NavigationContainer>
   );
 }
 
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    //alignItems: 'center',
-    //justifyContent: 'center',
-  },
-});
+export default App;

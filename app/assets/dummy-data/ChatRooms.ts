@@ -11,7 +11,7 @@ export default [{
   }],
   lastMessage: {
     id: 'm1',
-    content: 'btw, SpaceX is interested in buying notJust.dev!',
+    content: 'How can I help you today?',
     createdAt: '2020-10-03T14:48:00.000Z',
   },
   newMessages: 4
@@ -40,7 +40,7 @@ export default [{
     imageUri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg',
   }, {
     id: 'u4',
-    name: 'Zuck',
+    name: 'Mark Zuckerberg',
     imageUri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/zuck.jpeg',
   }],
   lastMessage: {

@@ -1,9 +1,10 @@
 import { TouchableOpacity, StyleSheet, Text, View, Pressable } from 'react-native'
 import React, { useState } from 'react'
+import colors from '../styles/colors';
 
 const RadioButtonCard = ({
     data,
-    onSelect
+    selectedOption
 }) => {
 
     const [askOption, setAskOption] = useState(null);
@@ -16,15 +17,20 @@ const RadioButtonCard = ({
             return (
             <Pressable 
                 onPress={() => {
-                    setAskOption(item.value);
-                    setAskOptionDesc(item.desc);
+                    try {
+                    setAskOption(item?.value);
+                    setAskOptionDesc(item?.desc);
+                }
+                finally {
+                    selectedOption(item?.value);
+                    }
                 }}
-                style={[styles.radioButtonCard, item.value === askOption ? styles.selected : styles.unselected]}>
+                style={[item?.icon !== undefined ? styles.radioButtonCard_withIcon : styles.radioButtonCard, item?.value === askOption ? styles.selected : styles.unselected]}>
                 <View style={{justifyContent:'center', alignItems:'center', padding: 10}}>
-                    {item.icon}
+                    {item?.icon}
                 </View>
-                <Text style={item.value === askOption ? styles.radioButtonCard_title_selected : styles.radioButtonCard_title_unselected}>
-                    {item.value}
+                <Text style={item?.value === askOption ? styles.radioButtonCard_title_selected : styles.radioButtonCard_title_unselected}>
+                    {item?.value}
                 </Text>
             </Pressable>
             ); 
@@ -41,7 +47,7 @@ const RadioButtonCard = ({
 export default RadioButtonCard
 
 const styles = StyleSheet.create({
-    radioButtonCard: {
+    radioButtonCard_withIcon: {
         height: 120,
         width: 80,
         borderRadius: 15,
@@ -49,20 +55,28 @@ const styles = StyleSheet.create({
         marginHorizontal: 3,
         justifyContent:'space-evenly'
     },
+    radioButtonCard: {
+        height: 50,
+        borderRadius: 15,
+        padding: 5,
+        marginHorizontal: 3,
+        justifyContent:'space-evenly',
+        alignItems:'center'
+    },
     radioButtonCard_title_selected: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: "600",
     },
     radioButtonCard_title_unselected: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: "400",
     },
     selected: {
-        backgroundColor: "#0AFFC2",
-        borderWidth: 3,
+        backgroundColor: colors.skyblue_crayola,
+        borderWidth: 2,
     },
     unselected: {
-        backgroundColor: "#DEE2E6"
+        backgroundColor: colors.grey_light
     }
 
 })

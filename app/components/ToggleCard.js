@@ -1,9 +1,10 @@
 import { TouchableOpacity, StyleSheet, Text, View, Pressable } from 'react-native'
 import React, { useState } from 'react'
+import colors from '../styles/colors';
 
 const ToggleCard = ({
     data,
-    onSelect
+    selectedOption
 }) => {
 
     const [toggleOption, setToggleOption] = useState(null);
@@ -14,10 +15,14 @@ const ToggleCard = ({
     <View style={{flexDirection:'row', width: "100%", paddingHorizontal: 3, justifyContent: 'center'}}>
         {data.map((item) => {
             return (
-            <Pressable 
-                onPress={() => {
-                    setToggleOption(item.value);
-                    setToggleOptionDesc(item.desc);
+            <Pressable onPress={() => {
+                try {
+                    setToggleOption(item?.value);
+                    setToggleOptionDesc(item?.desc);
+                }
+                finally {
+                    selectedOption(item?.value);
+                    }
                 }}
                 style={[styles.toggleCard, item.value === toggleOption ? styles.selected : styles.unselected]}>
                 <Text style={item.value === toggleOption ? styles.toggleCard_title_selected : styles.toggleCard_title_unselected}>
@@ -56,11 +61,11 @@ const styles = StyleSheet.create({
         fontWeight: "400",
     },
     selected: {
-        backgroundColor: "#0AFFC2",
-        borderWidth: 3,
+        backgroundColor: colors.skyblue_crayola,
+        borderWidth: 2,
     },
     unselected: {
-        backgroundColor: "#DEE2E6"
+        backgroundColor: colors.grey_light
     }
 
 })
