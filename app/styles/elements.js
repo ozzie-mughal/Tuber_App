@@ -41,8 +41,9 @@ const elements = {
     },
     primaryActionButton: {
         width: '40%',
+        height: 50,
         paddingVertical: 10,
-        backgroundColor: colors.baby_blue_light,
+        backgroundColor: colors.baby_blue,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -57,10 +58,29 @@ const elements = {
         fontWeight: "600",
         color: 'white'
     },
+    primaryActionListButton: {
+        width: '25%',
+        //height: 50,
+        paddingVertical: 5,
+        backgroundColor: colors.baby_blue,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        //marginTop: 20,
+        shadowColor: '#000000',
+        shadowOpacity: 0.5,
+        shadowRadius: 6,
+        shadowOffset : { width: 0, height: 3}
+    },
+    primaryActionListButtonText: {
+        fontSize: 16,
+        fontWeight: "600",
+        color: 'white'
+    },
     primaryActionButtonWide: {
         width: '100%',
         paddingVertical: 10,
-        backgroundColor: colors.baby_blue_light,
+        backgroundColor: colors.baby_blue,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -95,6 +115,7 @@ const elements = {
     },
     secondaryActionButton: {
         width: '40%',
+        height: 50,
         paddingVertical: 10,
         backgroundColor: colors.grey_light,
         borderRadius: 20,

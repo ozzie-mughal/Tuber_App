@@ -18,12 +18,16 @@ import SecondaryActionButton from './SecondaryActionButton';
 import NumberHeading from '../components/NumberHeading';
 import ShowMore from './ShowMore';
 import InfoModal from './InfoModal';
+import ActionModal from './ActionModal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import chatRoomsData from '../assets/dummy-data/ChatRooms';
+import SelectTutorScreen from '../screens/SelectTutorScreen';
+import UserPreview from './UserPreview';
 
 export default function BumpModal({children, onPress}) {
 
     const timer_icon = <Ionicons name={"ios-timer-outline"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
+    const person = <Ionicons name={"person"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
     const store = <FontAwesome5 name={"coins"} color={'black'} size={20}/>;
     const randomAvatar = 'https://i.pravatar.cc/300';
 
@@ -37,6 +41,11 @@ export default function BumpModal({children, onPress}) {
 
     const refRBSheet = useRef();
     const navigation = useNavigation()
+    
+        //Learn More Modal toggle
+        const [showInfoModal, setShowInfoModal] = useState(false);
+        //Action Modal toggle
+        const [showActionModal, setShowActionModal] = useState(false);
 
     const [askOptionData, setAskOptionData] = useState('');
 
@@ -49,8 +58,7 @@ export default function BumpModal({children, onPress}) {
         setWhoOptionData(value);
     } 
 
-    //Learn More Modal toggle
-    const [showInfoModal, setShowInfoModal] = useState(false);
+    const [selectedTutor, setSelectedTutor] = useState(null);
 
     const beginAsk = () => {
         refRBSheet.current.close();
@@ -72,8 +80,8 @@ export default function BumpModal({children, onPress}) {
     ];
 
     const whoOptions = [
-        {value: 'Suggest best for me', icon: icons.chalkboard_medium, desc: "Let Bump AI predict the most effective tutor for me, based on my preferences, ask history, and availability."},
-        {value: 'Select own tutor', icon: icons.group_medium, desc: "Choose from your list of favourited tutors (NOTE: Tutor availability may differ)."},
+        {value: 'Suggest best for me', icon: icons.chalkboard_medium, desc: "Let Nemo AI predict the most effective tutor for me, based on my preferences, ask history, and availability."},
+        {value: 'Select own tutor', icon: icons.group_medium, desc: "Choose a favourite, top-rated, or any tutor. (NOTE: Tutor availability may differ)."},
     ];
 
 
@@ -131,11 +139,37 @@ export default function BumpModal({children, onPress}) {
                         {whoOptionData? <ShowMore title='Learn More' onPress={() => {
                         setShowInfoModal(true)}}
                         /> : null}
-                        {whoOptionData==='Select own tutor' && 
-                        <PrimaryActionButtonWide title='Select from favourite tutors'/>}
+                        {whoOptionData==='Select own tutor' && !selectedTutor &&
+                        <PrimaryActionButtonWide 
+                            title='Select my own' 
+                            onPress={()=>{
+                                setShowActionModal(true);
+                            }}/>}
+                        {selectedTutor && <View style={{marginVertical: 20}}>
+                            <Text style={{fontSize:16, fontWeight: "800"}}>Your Selected Tutor </Text>
+                            <UserPreview user={{
+                                imageUri:selectedTutor.imageUri,
+                                name:selectedTutor.name,
+                                active:selectedTutor.active
+                                }}
+                                showButton={true} 
+                                buttonTitle="Change" onPress={()=>{
+                                    setShowActionModal(true)
+                                }}/>
+                        </View>}
                     </View>
                     <View style={elements.stackedGreyContainer}>
                         <NumberHeading number='3' title='Your Summary'/>
+                            {selectedTutor && <View style={{flexDirection:'row', alignItems:'center', 
+                            justifyContent:'space-between', marginVertical:5}}>
+                                <Text style={{fontSize:16, fontWeight: "800"}}>Selected Tutor </Text>
+                                <View style={{ flexDirection: 'row',justifyContent:'space-between'}}>
+                                    <View style={styles.headerTimer}>
+                                        {person}
+                                        <Text style={styles.timerText}>{selectedTutor.name}</Text>
+                                    </View>
+                                </View>
+                            </View>}
                             <View style={{flexDirection:'row', alignItems:'center', 
                             justifyContent:'space-between', marginVertical:5}}>
                                 <Text style={{fontSize:16, fontWeight: "800"}}>Estimated Total Time </Text>
@@ -152,8 +186,12 @@ export default function BumpModal({children, onPress}) {
                                 <View style={{ flexDirection: 'row',justifyContent:'space-between'}}>
                                     <View style={styles.headerTimer}>
                                         {store}
-                                        <Text style={styles.timerText}>3 </Text>
-                                        <Text style={styles.timerText}>(A$7.20)</Text>
+                                        <View style={{flexDirection:'row'}}>
+                                            <Text style={styles.timerText}>3 </Text>
+                                            <Text style={[styles.timerText,{color:colors.grey}]}>
+                                                (A$7.20)
+                                            </Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
@@ -168,11 +206,20 @@ export default function BumpModal({children, onPress}) {
                     <PrimaryActionButton title='Begin' onPress={beginAsk}/>
                 </View>
 
+                {/* Modals */}
                 <InfoModal 
                     showInfoModal={showInfoModal} 
                     setShowInfoModal={setShowInfoModal} 
                     headerTitle={'Some title'}
-                    modalContent={'some extra information'}/>
+                    modalContent={'some extra information'}
+                />
+                <ActionModal 
+                    showActionModal={showActionModal} 
+                    setShowActionModal={setShowActionModal} 
+                    headerTitle={'Find A Tutor'}
+                    ModalContent={SelectTutorScreen}
+                    selectTutorAction={setSelectedTutor}
+                />
             </ScrollView>
         </View>
       </RBSheet>
