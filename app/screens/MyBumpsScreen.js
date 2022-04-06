@@ -14,7 +14,7 @@ import BumpModal from '../components/BumpModal';
 //Declare dummy data
 const chatRoom1 = chatRoomsData[0];
 const chatRoom2 = chatRoomsData[1];
-const newMessage = <Entypo name={"new-message"} color={'black'} size={25} style={{marginHorizontal: 5}}/>;
+const newMessage = <Entypo name={"new-message"} color={'white'} size={25} style={{marginHorizontal: 5}}/>;
 
 
 
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
       fontWeight: "600",
   },
   newAskButton: {
-    backgroundColor: colors.aquamarine,
+    backgroundColor: colors.skyblue_crayola,
     borderRadius: 15,
     flexDirection:'row', 
     justifyContent:'center',
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
   newAskButtonText: {
     fontSize: 18,
     fontWeight: '500',
-    padding: 5
+    padding: 5,
+    color: 'white'
   }
 })

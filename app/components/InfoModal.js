@@ -12,7 +12,7 @@ import elements from '../styles/elements';
 import colors from '../styles/colors'; 
 import information from '../assets/content-info/information'
 
-const InfoModal = ({showInfoModal, setShowInfoModal, headerTitle, modalContent}) => {
+const InfoModal = ({showInfoModal, setShowInfoModal, headerTitle, ModalContent}) => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -34,8 +34,7 @@ const InfoModal = ({showInfoModal, setShowInfoModal, headerTitle, modalContent})
             </Text>
           </View>
           <View style={styles.modalContent}>
-          <Text style={styles.modalText}>
-            {headerTitle==='Student' ? information.roleType_Student : information.roleType_Tutor}</Text>
+          {ModalContent}
           <Pressable
             style={[styles.button, styles.buttonClose]}
             onPress={() => setShowInfoModal(!showInfoModal)}
@@ -89,11 +88,12 @@ const styles = StyleSheet.create({
     width: '75%'
   },
   modalContent: {
-    paddingBottom: 35,
+    paddingBottom: 20,
     paddingHorizontal: 35,
   },
   button: {
     borderRadius: 20,
+    marginTop: 10,
     padding: 10,
     elevation: 2
   },

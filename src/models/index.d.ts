@@ -47,13 +47,10 @@ export declare class ChatRoom {
 export declare class User {
   readonly id: string;
   readonly givenName: string;
-  readonly familyName: string;
-  readonly birthDate: string;
-  readonly imageUri?: string;
-  readonly roleType?: string;
-  readonly status?: string;
   readonly Messages?: (Message | null)[];
   readonly chatrooms?: (ChatRoomUser | null)[];
+  readonly familyName: string;
+  readonly avatarImage?: string;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<User, UserMetaData>);

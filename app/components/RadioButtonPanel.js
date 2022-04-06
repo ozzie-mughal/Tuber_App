@@ -2,7 +2,7 @@ import { TouchableOpacity, StyleSheet, Text, View, Pressable } from 'react-nativ
 import React, { useState } from 'react'
 import colors from '../styles/colors'
 
-const RadioButtonCard = ({
+const RadioButtonPanel = ({
     data,
     selectedOption
 }) => {
@@ -16,6 +16,7 @@ const RadioButtonCard = ({
         {data.map((item) => {
             return (
             <Pressable 
+                key={item.key}
                 onPress={() => {
                     try {
                         setAskOption(item.value);
@@ -26,11 +27,11 @@ const RadioButtonCard = ({
                     }
                 }}
                 style={[styles.radioButtonCard, item.value === askOption ? styles.selected : styles.unselected]}>
-                <View style={item.value === askOption ? styles.radioButtonHeader_selected : styles.radioButtonHeader_unselected}>
+                <View key={item.key+"1"} style={item.value === askOption ? styles.radioButtonHeader_selected : styles.radioButtonHeader_unselected}>
                     {item.icon}
                 </View>
-                <View style={{flex:1, justifyContent:'flex-end', paddingBottom:10, paddingHorizontal: 10}}>
-                    <Text style={item.value === askOption ? styles.radioButtonCard_title_selected : styles.radioButtonCard_title_unselected}>
+                <View key={item.key} style={{flex:1, justifyContent:'flex-end', paddingBottom:10, paddingHorizontal: 10}}>
+                    <Text key={item.key} style={item.value === askOption ? styles.radioButtonCard_title_selected : styles.radioButtonCard_title_unselected}>
                         {item.value}
                     </Text>
                 </View>
@@ -46,7 +47,7 @@ const RadioButtonCard = ({
   )
 }
 
-export default RadioButtonCard
+export default RadioButtonPanel
 
 const styles = StyleSheet.create({
     radioButtonCard: {
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     },
     radioButtonHeader_selected: {
         alignItems:'center',
-        backgroundColor: colors.aquamarine,
+        backgroundColor: colors.sky_pink,
         width: '100%',
         height: '50%',
         borderTopLeftRadius:15,
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     },
     radioButtonHeader_unselected: {
         alignItems:'center',
-        backgroundColor: colors.aquamarine_light,
+        backgroundColor: colors.sky_pink_light,
         width: '100%',
         height: '50%',
         borderTopLeftRadius:15,

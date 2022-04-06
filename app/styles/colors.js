@@ -27,7 +27,7 @@ const colors = {
     carolina_blue: '#4EA8DE',
     cyan_process: '#48BFE3',
     skyblue_crayola: '#11D3F3',
-    skyblue_crayola_light: '#9ED6DE',
+    skyblue_crayola_light: '#80EDFF',
     dark_turquoise: '#2BDAE6',
     med_turquoise: '#64DFDF',
     turquoise: '#45E1D8',
@@ -37,8 +37,14 @@ const colors = {
     aquamarine_light: '#ABEDD1',
     light_green: '#93F6B0',
     mint_green: '#ADFDA2',
-    mint_green_light: '#CEFFC7'
+    mint_green_light: '#CEFFC7',
     //#F8F8F8 - lightest white
+
+    //Atlas palette
+    orange: '#FEAC5E',
+    orange_light: '#FACEA5',
+    sky_pink: '#e38aed',
+    sky_pink_light: '#e9c2ed'
 }
 
 export default colors

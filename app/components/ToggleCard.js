@@ -15,7 +15,7 @@ const ToggleCard = ({
     <View style={{flexDirection:'row', width: "100%", paddingHorizontal: 3, justifyContent: 'center'}}>
         {data.map((item) => {
             return (
-            <Pressable onPress={() => {
+            <Pressable key={item.key} onPress={() => {
                 try {
                     setToggleOption(item?.value);
                     setToggleOptionDesc(item?.desc);
@@ -25,7 +25,7 @@ const ToggleCard = ({
                     }
                 }}
                 style={[styles.toggleCard, item.value === toggleOption ? styles.selected : styles.unselected]}>
-                <Text style={item.value === toggleOption ? styles.toggleCard_title_selected : styles.toggleCard_title_unselected}>
+                <Text key={item.key} style={item.value === toggleOption ? styles.toggleCard_title_selected : styles.toggleCard_title_unselected}>
                     {item.value}
                 </Text>
             </Pressable>

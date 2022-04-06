@@ -1,39 +1,40 @@
-import { FlatList, ScrollView, Dimensions, StyleSheet, Text, View, 
-  Image, SafeAreaView, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
-import WavyHeader from '../components/WavyHeader';
+import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Users from '../assets/dummy-data/Users';
 import colors from '../styles/colors';
 import elements from '../styles/elements';
-import Entypo from 'react-native-vector-icons/Entypo';
-import { LinearGradient } from 'expo-linear-gradient';
-import BumpModal from '../components/BumpModal';
 import UserPreview from '../components/UserPreview';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import { DataStore } from '@aws-amplify/datastore';
+import { User } from '../../src/models';
 
+export default function SelectTutorScreen( { ...props } ) {
 
-//Declare dummy data
-//const chatRoom1 = chatRoomsData[0];
-//const chatRoom2 = chatRoomsData[1];
-//const newMessage = <Entypo name={"new-message"} color={'black'} size={25} style={{marginHorizontal: 5}}/>;
+  const [users, setUsers] = useState([]);
 
-
-
-const SelectTutorScreen = ( { ...props } ) => {
+  useEffect(()=> {
+    try {DataStore.query(User).then(setUsers);
+    console.log(users)
+    }
+    catch (e) {
+      console.log("Datastory query error: ",e)
+    }
+    },[])
 
   return (
     <View style={styles.page}>
     {/* Header Components */}
       <View style={styles.header_container}>   
         <SegmentedControl
-          tintColor={colors.aquamarine}
+          tintColor={colors.skyblue_crayola}
           fontStyle={{color: 'black'}}
           values={['Favourites', 'Top-Rated', 'All']}
+          selectedIndex={0}
         />
       </View>
       {/*User Previews */}
       <FlatList
-          data={Users}
+          data={users}
           renderItem={({ item }) => <UserPreview user={item} showButton={true} 
             buttonTitle="Select" onPress={()=>{
               try {
@@ -50,7 +51,6 @@ const SelectTutorScreen = ( { ...props } ) => {
   )
 }
 
-export default SelectTutorScreen
 
 const styles = StyleSheet.create({
   page: {

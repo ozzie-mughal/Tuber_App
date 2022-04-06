@@ -8,9 +8,9 @@ import TopTutorPreview from './TopTutorPreview';
 
 const TopTutorsWidget = ({selectedOption}) => {
 
-    const arrow_right = <MaterialIcons name={"keyboard-arrow-right"} color={colors.aquamarine} size={30}/>;
+    const arrow_right = <MaterialIcons name={"keyboard-arrow-right"} color={colors.skyblue_crayola} size={30}/>;
     const star = <MaterialIcons name={"star"} color={'yellow'} size={22}/>;
-    const paper_plane = <FontAwesome name={"paper-plane"} color={colors.aquamarine} size={17}/>;
+    const paper_plane = <FontAwesome name={"paper-plane"} color={colors.skyblue_crayola} size={17}/>;
     const medal = <FontAwesome5 name={"medal"} color={colors.purple} size={20}/>;
 
     const [periodOption, setPeriodOption] = useState('Weekly');
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     periodToggleButton_selected: {
         width: 70,
         borderRadius: 25,
-        backgroundColor: colors.turquoise,
+        backgroundColor: colors.skyblue_crayola,
         marginHorizontal: 2,
         padding:2,
         justifyContent:'center',

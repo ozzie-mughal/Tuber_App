@@ -8,6 +8,11 @@ import { FloatingLabelInput } from 'react-native-floating-label-input';
 import Auth from '@aws-amplify/auth';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
+import PrimaryActionButton from '../components/PrimaryActionButton';
+import SecondaryActionButton from '../components/SecondaryActionButton';
+import elements from '../styles/elements';
+import { LinearGradient } from 'expo-linear-gradient';
+import colors from '../styles/colors';
 
 
 export default function ConfirmSignUpScreen({ navigation }) {
@@ -28,65 +33,72 @@ async function confirmSignUp() {
 
 return (
     <Fragment>
-    <SafeAreaView style={{flex:0, backgroundColor:"#0AFFC2"}}/>
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={elements.topSafeAreaContainer}/>
+    <KeyboardAvoidingView 
+                    style={elements.generalContainer}
+                    behavior='padding'>
+    <SafeAreaView style={elements.generalContainer}>
         {/* Header Components */}
-        <View style={styles.header_container}>                
-            <Text style={styles.heading_text}>Register</Text>
-            <View style={{flexDirection:'row', justifyContent:'flex-end', marginTop:5}}>
-                <Text style={[styles.subheading_text, {textAlign:'right'}]}>
-                    Please verify your identity.
-                </Text>
-            </View>
+        <View style={elements.screenHeaderContainer}>                
+            <LinearGradient
+                    // Background Linear Gradient
+                    colors={[colors.orange,colors.sky_pink,colors.skyblue_crayola]}
+                    //start={{x:0.2,y:0.1}}
+                    //end={{x:0.3,y:0.9}}
+                    locations={[0.1,0.6, 1]}
+                    style={[styles.background]}
+                />
+
+            <Image 
+                source={require('../assets/nemo-bannerlogo.png')}
+                style={{resizeMode: 'contain', flex:1, width: 500, height: 500}}
+            />
         </View>
         <View style={{
-            height: 50,
+            height: 30,
         }}>
             <WavyHeader
                 customHeight={450}
+                customFill={colors.skyblue_crayola}
                 customBgColor="white"
-                customFill="#0affc2"
-                customFillOpacity="0"
                 customWavePattern="m0 0 48 26.7C96 53 192 107 288 144s192 59 288 48 192-53 288-80 192-37 288-26.7c96 10.7 192 42.7 240 58.7l48 16V0H0Z"
             />
         </View>
 
         {/* Register Components */}
-        <ScrollView keyboardShouldPersistTaps="handled">
-            
-        <View style={styles.content_container}>
 
-            <View style={styles.input_container}>
-               
-                <View style={styles.inputField}>
-                    <FloatingLabelInput
-                        label={'Username'}
-                        value={username}
-                        onChangeText={value => setUsername(value)}
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        textContentType="emailAddress"
-                        keyboardType="email-address"
-                    />
-                </View>
-                <View style={styles.inputField}>
-                    <FloatingLabelInput
-                        label={'Verification Code'}
-                        value={authCode}
-                        onChangeText={value => setAuthCode(value)}
-                        textContentType="oneTimeCode"
-                        keyboardType="number-pad"
-                    />
-                </View>
-
+        <View style={elements.splashContentContainer}>
+                <View style={elements.stackedInputContainer}>
+                    <Text style={elements.contentHeading_text}>Email Confirmation</Text>
+                    <Text style={elements.contentSubheading_text}>Please verify your identity.</Text>
+                    <View style={{marginVertical:10}}>
+                        <FloatingLabelInput
+                            label={'Username'}
+                            value={username}
+                            onChangeText={value => setUsername(value)}
+                            autoCorrect={false}
+                            autoCapitalize="none"
+                            textContentType="emailAddress"
+                            keyboardType="email-address"
+                        />
+                    </View>
+                    <View style={{marginVertical:10}}>
+                        <FloatingLabelInput
+                            label={'Verification Code'}
+                            value={authCode}
+                            onChangeText={value => setAuthCode(value)}
+                            textContentType="oneTimeCode"
+                            keyboardType="number-pad"
+                        />
+                    </View>
             </View>
-            <View style={styles.buttonContainer}>
-                <PrimaryButton title="Verify Code" onPress={confirmSignUp} />
-                <SecondaryButton title="Return to Registration" onPress={() => navigation.navigate('SignUp')}/>
-            </View>
+                <View style={elements.inlineButtonContainer}>
+                    <SecondaryActionButton title="Return to Register" onPress={() => navigation.navigate('SignUp')}/>
+                    <PrimaryActionButton title="Verify Code" onPress={confirmSignUp} />
+                </View>
         </View>
-        </ScrollView>
     </SafeAreaView>
+    </KeyboardAvoidingView>
     </Fragment>
 );
 }

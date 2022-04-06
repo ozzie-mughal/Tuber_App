@@ -18,30 +18,31 @@ const RadioButtonGrid = ({
             {...otherProps}>
             {data.map((item) => {
                 return (
-                <View>
-                <Pressable 
-                    onPress={() => {
-                        try {
-                        setAskOption(item?.value);
-                        setAskOptionDesc(item?.desc);
-                    }
-                    finally {
-                        selectedValue(item?.value);
+                <View key={item.key}>
+                    <Pressable 
+                        key={item.key}
+                        onPress={() => {
+                            try {
+                            setAskOption(item?.value);
+                            setAskOptionDesc(item?.desc);
                         }
-                    }}
-                    style={[
-                        item?.icon !== undefined ? styles.radioButtonCard_withIcon : styles.radioButtonCard, 
-                        item?.value === askOption ? styles.selected : styles.unselected,
-                        {width: 120, justifyContent:'center', alignItems:'center', marginVertical: 5}]}>
-                    {item.icon && <View style={{justifyContent:'center', alignItems:'center', padding: 10}}>
-                        {item?.icon}
-                    </View>}
-                    <Text style={[
-                        item?.value === askOption ? styles.radioButtonCard_title_selected : styles.radioButtonCard_title_unselected,
-                        ]}>
-                        {item?.value}
-                    </Text>
-                </Pressable>
+                        finally {
+                            selectedValue(item?.value);
+                            }
+                        }}
+                        style={[
+                            item?.icon !== undefined ? styles.radioButtonCard_withIcon : styles.radioButtonCard, 
+                            item?.value === askOption ? styles.selected : styles.unselected,
+                            {width: 120, justifyContent:'center', alignItems:'center', marginVertical: 5}]}>
+                        {item.icon && <View key={item.key} style={{justifyContent:'center', alignItems:'center', padding: 10}}>
+                            {item?.icon}
+                        </View>}
+                        <Text key={item.key} style={[
+                            item?.value === askOption ? styles.radioButtonCard_title_selected : styles.radioButtonCard_title_unselected,
+                            ]}>
+                            {item?.value}
+                        </Text>
+                    </Pressable>
                 </View>
                 ); 
             })}
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
 
     },
     selected: {
-        backgroundColor: colors.aquamarine,
+        backgroundColor: colors.sky_pink,
         borderWidth: 2,
     },
     unselected: {

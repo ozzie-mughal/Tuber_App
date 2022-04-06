@@ -9,9 +9,9 @@ import TimerWidget from '../components/TimerWidget'
 import colors from '../styles/colors'
 import elements from '../styles/elements'
 
-const timer_icon = <Ionicons name={"ios-timer-outline"} color={colors.turquoise} size={25} style={{marginHorizontal: 5}}/>;
-const call_icon = <Ionicons name={"call"} color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>;
-const video_icon = <Ionicons name={"videocam"} color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>;
+const timer_icon = <Ionicons name={"ios-timer-outline"} color={colors.skyblue_crayola} size={25} style={{marginHorizontal: 5}}/>;
+const call_icon = <Ionicons name={"call"} color={colors.skyblue_crayola} size={30} style={{marginHorizontal: 5}}/>;
+const video_icon = <Ionicons name={"videocam"} color={colors.skyblue_crayola} size={30} style={{marginHorizontal: 5}}/>;
 
 
 const ChatRoomScreen = () => {

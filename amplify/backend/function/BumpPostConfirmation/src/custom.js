@@ -16,7 +16,9 @@ exports.handler = async (event, context) => {
   const now = new Date();
   const timestamp = now.getTime();
   const ISOtimestamp = now.toISOString()
-  const name = event.request.userAttributes.given_name+event.request.userAttributes.family_name;
+  const given_name = event.request.userAttributes.given_name;
+  const family_name = event.request.userAttributes.family_name;
+  const picture = event.request.userAttributes.picture;
   const id = event?.request?.userAttributes?.sub;
 
   const userItem = {
@@ -26,8 +28,9 @@ exports.handler = async (event, context) => {
     createdAt: { S: ISOtimestamp },
     updatedAt: { S: ISOtimestamp },
     id: { S: id },
-    name: { S: name },
-
+    givenName: { S: given_name },
+    familyName: { S: family_name },
+    avatarImage: { S: picture },
   }
 
   const params = {

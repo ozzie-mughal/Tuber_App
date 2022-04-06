@@ -19,7 +19,7 @@
       "function": {
         "BumpPostConfirmation": {
           "deploymentBucketName": "amplify-bump-staging-93850-deployment",
-          "s3Key": "amplify-builds/BumpPostConfirmation-7655794c366b44443138-build.zip"
+          "s3Key": "amplify-builds/BumpPostConfirmation-6f395435726c47484e63-build.zip"
         }
       }
     }

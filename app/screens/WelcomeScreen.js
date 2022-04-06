@@ -25,7 +25,7 @@ import AccountMenu from '../components/AccountMenu';
 
 
 const store = <FontAwesome5 name={"coins"} color={'black'} size={20}/>;
-const hamburger_menu = <Entypo name={"menu"} color={colors.aquamarine} size={40}/>;
+const hamburger_menu = <Entypo name={"menu"} color={colors.skyblue_crayola} size={40}/>;
 const lightning = <MaterialCommunityIcons name={"lightning-bolt"} color={'gold'} size={20}/>;
 
 
@@ -100,9 +100,9 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
                         flexDirection: "row",
                         justifyContent: "flex-start",
                         margin: 0}}>
-                            <DashboardPill icon={store} title={coincount} backgroundColor={colors.aquamarine}/>
+                            <DashboardPill icon={store} title={coincount} backgroundColor={colors.sky_pink}/>
                             <DashboardPill icon={lightning} title='8' backgroundColor={colors.grey_light}/>
-                            <DashboardPill title='Get a tour >' backgroundColor={colors.turquoise}/>
+                            <DashboardPill title='Get a tour >' backgroundColor={colors.orange}/>
                     </View>
 
                 </View>
@@ -131,17 +131,17 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
                     <DashboardCard_25 
                         Widget={<MetricWidget headingText='11' subHeadingText='Asks' 
                             subSubHeadingText='until Level 3.' seeMoreText='More >'/>} seeAllVisible={false} 
-                        color_1={colors.slate_blue_light} color_2={colors.french_pink_lightest}
+                        color_1={colors.orange_light} color_2={colors.salmon_light}
                         left={true} />       
                     <DashboardCard_25 
                         Widget={<MetricWidget headingText='4' subHeadingText='Days' 
                             subSubHeadingText='until top-up.' seeMoreText='More >'/>} seeAllVisible={false} 
-                        color_1={colors.skyblue_crayola} color_2={colors.baby_blue_light}
+                        color_1={colors.sky_pink_light} color_2={colors.french_pink_lightest}
                         middle={true}/>       
                     <DashboardCard_25 
                         Widget={<MetricWidget headingText='34' subHeadingText='Tutors' 
                             subSubHeadingText='online now.' seeMoreText='More >'/>} seeAllVisible={false} 
-                        color_1={colors.turquoise} color_2={colors.mint_green}
+                        color_1={colors.skyblue_crayola_light} color_2={colors.baby_blue}
                         right={true}/>       
                 </View>
                 <DashboardCardFull headerTitle='Top-Rated' seeAllTitle='See All' 

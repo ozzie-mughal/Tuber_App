@@ -1,17 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { ScrollView, Image, TouchableOpacity, SafeAreaView, Modal, StyleSheet, View, Button, Text, Dimensions } from "react-native";
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { ScrollView, TouchableOpacity, StyleSheet, View, Text } from "react-native";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/core'
 import RBSheet from "react-native-raw-bottom-sheet";
-import Svg, { Path } from 'react-native-svg';
 import RadioButtonCard from './RadioButtonCard';
 import ToggleCard from './ToggleCard';
 import icons from '../styles/icons';
 import colors from '../styles/colors';
 import elements from '../styles/elements';
-import SecondaryButton from './SecondaryButton';
 import PrimaryActionButton from './PrimaryActionButton';
 import PrimaryActionButtonWide from './PrimaryActionButtonWide';
 import SecondaryActionButton from './SecondaryActionButton';
@@ -20,9 +16,15 @@ import ShowMore from './ShowMore';
 import InfoModal from './InfoModal';
 import ActionModal from './ActionModal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import chatRoomsData from '../assets/dummy-data/ChatRooms';
 import SelectTutorScreen from '../screens/SelectTutorScreen';
 import UserPreview from './UserPreview';
+import { Auth } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
+import { User } from '../../src/models';
+import { ChatRoom } from '../../src/models';
+import { ChatRoomUser } from '../../src/models';
+import {Picker} from '@react-native-picker/picker';
+import TextInputBasic from './TextInputBasic';
 
 export default function BumpModal({children, onPress}) {
 
@@ -42,28 +44,63 @@ export default function BumpModal({children, onPress}) {
     const refRBSheet = useRef();
     const navigation = useNavigation()
     
-        //Learn More Modal toggle
-        const [showInfoModal, setShowInfoModal] = useState(false);
-        //Action Modal toggle
-        const [showActionModal, setShowActionModal] = useState(false);
+    //Modal states
+    const [showInfoModal, setShowInfoModal] = useState(false);
+    const [showActionModal, setShowActionModal] = useState(false);
 
+    //Ask How states
     const [askOptionData, setAskOptionData] = useState('');
-
     const selectedAskOption = (value) => {
         setAskOptionData(value);
     } 
-    const [whoOptionData, setWhoOptionData] = useState('');
 
+    //Ask Who states
+    const [selectedTutor, setSelectedTutor] = useState(null);
+    const [whoOptionData, setWhoOptionData] = useState('');
     const selectedWhoOption = (value) => {
         setWhoOptionData(value);
+
+        if (value==='Suggest best for me') {
+            setSelectedTutor(null)
+        }
     } 
 
-    const [selectedTutor, setSelectedTutor] = useState(null);
+    //Ask What states
+    const [selectedSubject, setSelectedSubject] = useState();
 
-    const beginAsk = () => {
+    const pickerRef = useRef();
+
+    function open() {
+    pickerRef.current.focus();
+    }
+
+    function close() {
+    pickerRef.current.blur();
+    }
+
+    //Button press functions
+    const beginAsk = async () => {
+        //Create chat room
+        const newChatRoom = await DataStore.save(new ChatRoom({newMessages: 0}));
+
+        //Connect authenticated user to chat room
+        const authUser = await Auth.currentAuthenticatedUser();
+        const currentUser = await DataStore.query(User, authUser.attributes.sub);
+        await DataStore.save(new ChatRoomUser({
+            user: currentUser,
+            chatRoom: newChatRoom,
+        }))
+
+        //Connect selected tutor to chat room
+        await DataStore.save(new ChatRoomUser({
+            user: selectedTutor,
+            chatRoom: newChatRoom,
+        }))
+
         refRBSheet.current.close();
-        navigation.navigate('ChatRoom', { id: chatRoom.id, name: chatRoom.name, avatarImage: chatRoom.avatarImage });  
-        console.log('Pressed ask option');
+        
+        navigation.navigate('ChatRoom', { id: newChatRoom.id, name: selectedTutor.givenName, avatarImage: selectedTutor.avatarImage });  
+        //console.log('Pressed ask option');
     };
     const closeModal = () => {
         setAskOptionData('');
@@ -80,8 +117,8 @@ export default function BumpModal({children, onPress}) {
     ];
 
     const whoOptions = [
-        {value: 'Suggest best for me', icon: icons.chalkboard_medium, desc: "Let Nemo AI predict the most effective tutor for me, based on my preferences, ask history, and availability."},
-        {value: 'Select own tutor', icon: icons.group_medium, desc: "Choose a favourite, top-rated, or any tutor. (NOTE: Tutor availability may differ)."},
+        {key: 0, value: 'Suggest best for me', icon: icons.chalkboard_medium, desc: "Let Nemo AI predict the most effective tutor for me, based on my preferences, ask history, and availability."},
+        {key: 1, value: 'Select own tutor', icon: icons.group_medium, desc: "Choose a favourite, top-rated, or any tutor. (NOTE: Tutor availability may differ)."},
     ];
 
 
@@ -116,29 +153,32 @@ export default function BumpModal({children, onPress}) {
 
                 <View style={{alignItems:'center'}}>
                     {/*Collapse bar*/}
-                    <View style={{width:70, height: 5, backgroundColor:colors.aquamarine, borderRadius:15}}/>
+                    <View style={{width:70, height: 5, backgroundColor:colors.skyblue_crayola, borderRadius:15}}/>
                 </View>
 
                 <Text style={{marginVertical: 15, fontSize:24, fontWeight: "700"}}>Stumped on something? Let's sort you out.</Text>
-                <ShowMore title='How it works >'/>
+                <ShowMore title='See how it works >'/>
+                
             </View>
             <ScrollView style={{
                 marginVertical:20,
                 height: 350}}>
                 <View style={elements.stackedModalInputContainer}>
+
+                    {/* HOW */}
                     <View style={elements.stackedGreyContainer}>
-                        <NumberHeading number='1' title='How do you want to ask?'/>
+                        <NumberHeading number='1' keyword='How' title=' do you want to ask?'
+                            onPress={()=>{
+                                setShowInfoModal(true)}}/>
                         <RadioButtonCard data={askOptions} selectedOption={selectedAskOption}/>
-                        {askOptionData? <ShowMore title='Learn More' onPress={() => {
-                        setShowInfoModal(true)}}
-                        /> : null}
                     </View>
+
+                    {/* WHO */}
                     <View style={elements.stackedGreyContainer}>
-                        <NumberHeading number='2' title='Who do you want to ask?'/>
+                        <NumberHeading number='2' keyword='Who' title=' do you want to ask?'
+                            onPress={()=>{
+                                setShowInfoModal(true)}}/>
                         <ToggleCard data={whoOptions} selectedOption={selectedWhoOption}/>
-                        {whoOptionData? <ShowMore title='Learn More' onPress={() => {
-                        setShowInfoModal(true)}}
-                        /> : null}
                         {whoOptionData==='Select own tutor' && !selectedTutor &&
                         <PrimaryActionButtonWide 
                             title='Select my own' 
@@ -148,8 +188,8 @@ export default function BumpModal({children, onPress}) {
                         {selectedTutor && <View style={{marginVertical: 20}}>
                             <Text style={{fontSize:16, fontWeight: "800"}}>Your Selected Tutor </Text>
                             <UserPreview user={{
-                                imageUri:selectedTutor.imageUri,
-                                name:selectedTutor.name,
+                                avatarImage:selectedTutor.avatarImage,
+                                givenName:selectedTutor.givenName,
                                 active:selectedTutor.active
                                 }}
                                 showButton={true} 
@@ -158,15 +198,70 @@ export default function BumpModal({children, onPress}) {
                                 }}/>
                         </View>}
                     </View>
+
+                    {/* WHAT */}
                     <View style={elements.stackedGreyContainer}>
-                        <NumberHeading number='3' title='Your Summary'/>
+                        <NumberHeading number='3' keyword='What' title=' do you want to ask?'
+                            onPress={()=>{
+                                setShowInfoModal(true)}}/>
+                        <View style={{flexDirection:'row'}}>
+                            <View style={{width: '40%'}}>
+                            <Text style={{fontSize:20, fontWeight: "800"}}>Year </Text>
+                            <Picker
+                            ref={pickerRef}
+                            selectedValue={selectedSubject}
+                            onValueChange={(itemValue, itemIndex) =>
+                            setSelectedSubject(itemValue)
+                            }
+                            itemStyle={{fontSize:18}}>
+                            <Picker.Item label="K-6" value="K-6" />
+                            <Picker.Item label="7-10" value="7-10" />
+                            <Picker.Item label="Prelim" value="Prelim" />
+                            <Picker.Item label="HSC" value="HSC" />
+                            </Picker>
+                            </View>
+
+                            <View style={{width: '60%'}}>
+                            <Text style={{fontSize:20, fontWeight: "800"}}>Subject </Text>
+                            <Picker
+                            ref={pickerRef}
+                            selectedValue={selectedSubject}
+                            onValueChange={(itemValue, itemIndex) =>
+                            setSelectedSubject(itemValue)
+                            }
+                            itemStyle={{fontSize:18}}>
+                            <Picker.Item label="Mathematics" value="maths" />
+                            <Picker.Item label="Science" value="science" />
+                            <Picker.Item label="Chemistry" value="chemistry" />
+                            <Picker.Item label="English" value="english" />
+                            </Picker>
+                            </View>
+
+                        </View>
+                        <View>
+                            <TextInputBasic
+                                label={'Brief Description of Ask'}                        
+                                //value={values.username}
+                                //onChangeText={handleChange('username')}
+                                //onBlur={handleBlur('username')}
+                                //error={errors.username}
+                                //touched={touched.username}
+                            />
+                        </View>
+                    </View>
+
+                    {/* SUMMARY */}
+                    <View style={elements.stackedGreyContainer}>
+                        <NumberHeading number='4' title='Your Summary'
+                            onPress={()=>{
+                                setShowInfoModal(true)}}/>
                             {selectedTutor && <View style={{flexDirection:'row', alignItems:'center', 
                             justifyContent:'space-between', marginVertical:5}}>
                                 <Text style={{fontSize:16, fontWeight: "800"}}>Selected Tutor </Text>
                                 <View style={{ flexDirection: 'row',justifyContent:'space-between'}}>
                                     <View style={styles.headerTimer}>
                                         {person}
-                                        <Text style={styles.timerText}>{selectedTutor.name}</Text>
+                                        <Text style={styles.timerText}>{selectedTutor.givenName}</Text>
                                     </View>
                                 </View>
                             </View>}
@@ -211,7 +306,7 @@ export default function BumpModal({children, onPress}) {
                     showInfoModal={showInfoModal} 
                     setShowInfoModal={setShowInfoModal} 
                     headerTitle={'Some title'}
-                    modalContent={'some extra information'}
+                    ModalContent={<Text>some extra information</Text>}
                 />
                 <ActionModal 
                     showActionModal={showActionModal} 
@@ -241,5 +336,8 @@ const styles = StyleSheet.create({
             borderRadius: 15,
             justifyContent: 'space-between',
             alignItems: 'center',
+        },
+        pickerItem: {
+            fontSize: 12
         }
 })

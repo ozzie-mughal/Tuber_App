@@ -8,7 +8,7 @@ import TimerWidget from './TimerWidget';
 
 const ActiveAsksWidget = () => {
 
-const arrowRight = <MaterialIcons name={"keyboard-arrow-right"} color={colors.aquamarine} size={30}/>;
+const arrowRight = <MaterialIcons name={"keyboard-arrow-right"} color={colors.skyblue_crayola} size={30}/>;
 const randomAvatar = 'https://i.pravatar.cc/300';
 
 

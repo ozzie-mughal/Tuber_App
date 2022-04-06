@@ -148,13 +148,10 @@ return (
                 <View style={elements.screenHeaderContainer}>                
                     <LinearGradient
                         // Background Linear Gradient
-                        colors={[colors.skyblue_crayola, colors.dark_turquoise
-                            , colors.turquoise, colors.turquoise_green
-                            , colors.aquamarine, colors.light_green
-                            , colors.mint_green]}
-                        // start={{x:0.2,y:0.1}}
-                        // end={{x:0.3,y:0.9}}
-                        locations={[0.1, 0.3, 0.4, 0.7, 0.8, 0.9, 0.98]}
+                        colors={[colors.orange,colors.sky_pink,colors.skyblue_crayola]}
+                        //start={{x:0.2,y:0.1}}
+                        //end={{x:0.3,y:0.9}}
+                        locations={[0.1,0.6, 1]}
                         style={[styles.background]}
                     />
 
@@ -168,7 +165,7 @@ return (
                 }}>
                     <WavyHeader
                         customHeight={450}
-                        customFill={colors.mint_green}
+                        customFill={colors.skyblue_crayola}
                         customBgColor="white"
                         customWavePattern="m0 0 48 26.7C96 53 192 107 288 144s192 59 288 48 192-53 288-80 192-37 288-26.7c96 10.7 192 42.7 240 58.7l48 16V0H0Z"
                     />

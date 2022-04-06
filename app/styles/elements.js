@@ -23,8 +23,10 @@ const elements = {
     secondaryButton: {
         width: '100%',
         paddingVertical: 10,
-        backgroundColor: colors.light_green,
+        backgroundColor: 'white',
         borderRadius: 20,
+        borderWidth: 2,
+        borderColor: colors.sky_pink,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
@@ -37,13 +39,13 @@ const elements = {
     secondaryButtonText: {
         fontSize: 20,
         fontWeight: "600",
-        color: 'white'
+        color: colors.sky_pink,
     },
     primaryActionButton: {
-        width: '40%',
+        width: '45%',
         height: 50,
         paddingVertical: 10,
-        backgroundColor: colors.baby_blue,
+        backgroundColor: colors.skyblue_crayola,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -62,7 +64,7 @@ const elements = {
         width: '25%',
         //height: 50,
         paddingVertical: 5,
-        backgroundColor: colors.baby_blue,
+        backgroundColor: colors.sky_pink_light,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -96,9 +98,9 @@ const elements = {
         color: 'white'
     },
     showMoreButton: {
-        width: '30%',
+        width: '40%',
         paddingVertical: 5,
-        backgroundColor: colors.salmon,
+        backgroundColor: colors.orange,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -110,14 +112,16 @@ const elements = {
     },
     showMoreButtonText: {
         fontSize: 14,
-        fontWeight: "400",
+        fontWeight: "600",
         color: 'white'
     },
     secondaryActionButton: {
-        width: '40%',
+        width: '45%',
         height: 50,
         paddingVertical: 10,
-        backgroundColor: colors.grey_light,
+        backgroundColor: 'white',
+        borderColor: colors.grey,
+        borderWidth: 2,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -131,10 +135,11 @@ const elements = {
     secondaryActionButtonText: {
         fontSize: 16,
         fontWeight: "600",
+        color: colors.grey
     },
     topSafeAreaContainer: {
         flex: 0,
-        backgroundColor: colors.skyblue_crayola
+        backgroundColor: '#FEAC5E'
     },
     topSafeAreaContainer_light: {
         flex: 0,

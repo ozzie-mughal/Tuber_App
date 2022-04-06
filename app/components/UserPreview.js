@@ -4,11 +4,13 @@ import { useNavigation } from '@react-navigation/core'
 import colors from '../styles/colors';
 import PrimaryActionListButton from './PrimaryActionListButton';
 
-const UserPreview = ({ user, showButton, buttonTitle, onPress, selectedUser }) => {
+const UserPreview = ({ user, showButton, buttonTitle, onPress }) => {
 
-  const senderAvatarImage = user.imageUri;
-  const senderName = user.name;
-  const active = user.active;
+  const userSub = user?.sub;
+  const senderAvatarImage = user?.avatarImage;
+  const senderGivenName = user?.givenName;
+  const senderFamilyName = user?.familyName;
+  const active = user?.active;
 
   const navigation = useNavigation();
 
@@ -28,7 +30,7 @@ const UserPreview = ({ user, showButton, buttonTitle, onPress, selectedUser }) =
 
       <View style={styles.preview_container}>
         <View style={styles.row}>
-          <Text style={styles.name_text}>{senderName}</Text>
+          <Text style={styles.name_text}>{senderGivenName} {senderFamilyName}</Text>
           {showButton && <PrimaryActionListButton title={buttonTitle} onPress={onPress}/>}
         </View>
       </View>

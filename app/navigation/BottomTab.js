@@ -20,11 +20,11 @@ const Tab = createBottomTabNavigator();
 
 
 //Declare icons
-const inbox = <FontAwesome5 name={"inbox"} color={colors.aquamarine} size={25}/>;
-const store = <FontAwesome5 name={"coins"} color={colors.aquamarine} size={25}/>;
-const myTutors = <MaterialIcons name={"favorite"} color={colors.aquamarine} size={25}/>;
-const home = <MaterialIcons name={"home"} color={colors.aquamarine} size={25}/>;
-const paperPlane = <FontAwesome name={"paper-plane"} color={"black"} size={40}/>
+const inbox = <FontAwesome5 name={"inbox"} color={colors.skyblue_crayola} size={25}/>;
+const store = <FontAwesome5 name={"coins"} color={colors.skyblue_crayola} size={25}/>;
+const myTutors = <MaterialIcons name={"favorite"} color={colors.skyblue_crayola} size={25}/>;
+const home = <MaterialIcons name={"home"} color={colors.skyblue_crayola} size={25}/>;
+const paperPlane = <FontAwesome name={"paper-plane"} color={"white"} size={40}/>
 
 const MyTabs = props => {
   
@@ -76,12 +76,12 @@ const MyTabs = props => {
               )}
       </Tab.Screen>
 
-      <Tab.Screen name="My Bumps" options={{
-        tabBarLabel: 'My Bumps',
+      <Tab.Screen name="My Asks" options={{
+        tabBarLabel: 'My Asks',
         tabBarIcon: ({focused, color, size}) => (
           <View style={{alignItems:'center'}}>
             {inbox}
-            <Text style={styles.tablabel}>My Bumps</Text>
+            <Text style={styles.tablabel}>My Asks</Text>
           </View>
           )}} >
         {screenProps => (
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     shadowOffset : { width: 2, height: 2}
   },
   bumpIcon: {
-    backgroundColor: colors.aquamarine,
+    backgroundColor: colors.skyblue_crayola,
     borderRadius: 40,
     borderWidth: 3,
     borderColor: 'white',

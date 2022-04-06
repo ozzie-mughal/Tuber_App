@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         //borderRadius: 10,
-        backgroundColor: colors.mint_green_light,
+        backgroundColor: colors.orange_light,
         shadowColor: '#000000',
         shadowOpacity: 0.3,
         shadowRadius:5,
