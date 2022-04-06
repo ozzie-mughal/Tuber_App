@@ -1,14 +1,14 @@
 import { FlatList, ScrollView, Dimensions, StyleSheet, Text, View, 
   Image, SafeAreaView, TouchableOpacity } from 'react-native';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import ChatRoomPreview from '../components/ChatRoomPreview';
-import WavyHeader from '../components/WavyHeader';
 import chatRoomsData from '../assets/dummy-data/ChatRooms';
 import colors from '../styles/colors';
 import elements from '../styles/elements';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { LinearGradient } from 'expo-linear-gradient';
-import BumpModal from '../components/BumpModal';
+import { ChatRoom, ChatRoomUser } from '../../src/models';
+import { Auth, DataStore } from 'aws-amplify';
 
 
 //Declare dummy data
@@ -18,7 +18,25 @@ const newMessage = <Entypo name={"new-message"} color={'white'} size={25} style=
 
 
 
-const MyBumpsScreen = () => {
+const MyAsksScreen = () => {
+
+  const [chatRooms, setChatRooms] = useState([]);
+
+  useEffect(() => {
+    const fetchChatRooms = async () => {
+      //Fetch only chatrooms which current user belongs to
+      const authUser = await Auth.currentAuthenticatedUser();
+      //DataStore.clear();
+      const chatRooms = (await DataStore.query(ChatRoomUser))
+          .filter(
+            (chatRoomUser) => chatRoomUser.user.id === authUser.attributes.sub)
+          .map(
+            (chatRoomUser) => chatRoomUser.chatRoom);
+      //console.log(chatRooms);
+      setChatRooms(chatRooms);
+    };
+    fetchChatRooms();
+  },[])
 
   return (
     <Fragment>
@@ -49,17 +67,19 @@ const MyBumpsScreen = () => {
       </View>
       {/*Message Previews */}
       <FlatList
-          data={chatRoomsData}
+          data={chatRooms}
           renderItem={({ item }) => <ChatRoomPreview chatRoom={item}/> }
           style={styles.messagepreviews_container}
       />
+
+
 
     </SafeAreaView>
     </Fragment>
   )
 }
 
-export default MyBumpsScreen
+export default MyAsksScreen
 
 const styles = StyleSheet.create({
   background: {

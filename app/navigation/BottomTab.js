@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import StoreScreen from '../screens/StoreScreen';
 import MyTutorsScreen from '../screens/MyTutorsScreen';
-import MyBumpsScreen from '../screens/MyBumpsScreen'
+import MyAsksScreen from '../screens/MyAsksScreen'
 import BumpComponent from '../components/BumpComponent';
 import BumpModal from '../components/BumpModal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -85,7 +85,7 @@ const MyTabs = props => {
           </View>
           )}} >
         {screenProps => (
-                <MyBumpsScreen {...screenProps} updateAuthState={props.updateAuthState} />
+                <MyAsksScreen {...screenProps} updateAuthState={props.updateAuthState} />
               )}
       </Tab.Screen>
 

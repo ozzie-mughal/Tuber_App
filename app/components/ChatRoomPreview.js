@@ -1,19 +1,40 @@
 import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity} from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import ChatRooms from '../assets/dummy-data/ChatRooms';
 import { useNavigation } from '@react-navigation/core'
 import colors from '../styles/colors';
+import { Auth, DataStore } from 'aws-amplify';
+import { ChatRoomUser, User } from '../../src/models';
 
 const ChatRoomPreview = ({ chatRoom }) => {
 
-  const senderAvatarImage = chatRoom.users[1].imageUri;
-  const senderName = chatRoom.users[1].name;
-  const lastMessageTimestamp = chatRoom.lastMessage.createdAt;
-  const lastMessageContent = chatRoom.lastMessage.content; 
-  const newMessages = chatRoom.newMessages;
-  const active = chatRoom.active;
-
   const navigation = useNavigation();
+
+  //const [users, setUsers] = useState([]);
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    
+    const fetchUsers = async () => {
+      const authUser = await Auth.currentAuthenticatedUser();
+      const fetchedUsers = (await DataStore.query(ChatRoomUser))
+        .filter(chatRoomUser => chatRoomUser.chatRoom.id === chatRoom.id)
+        .map(chatRoomUser => chatRoomUser.user);
+
+      //console.log(fetchedUsers);
+      //setUsers(fetchedUsers);
+      setUser(fetchedUsers.find(user => user.id !== authUser.attributes.sub) || null);
+    };
+    fetchUsers();
+  },[])
+
+  const senderAvatarImage = user?.avatarImage;
+  const senderName = user?.givenName;
+  const lastMessageTimestamp = chatRoom.lastMessage?.createdAt;
+  const lastMessageContent = chatRoom.lastMessage?.content; 
+  const newMessages = chatRoom.newMessages;
+  //const active = chatRoom.active;
+  const active = true;
 
   const onChatRoomPress = () => {
           navigation.navigate('ChatRoom', { id: chatRoom.id, name: senderName, avatarImage: senderAvatarImage });  
