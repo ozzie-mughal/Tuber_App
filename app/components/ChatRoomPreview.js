@@ -4,17 +4,18 @@ import ChatRooms from '../assets/dummy-data/ChatRooms';
 import { useNavigation } from '@react-navigation/core'
 import colors from '../styles/colors';
 import { Auth, DataStore } from 'aws-amplify';
-import { ChatRoomUser, User } from '../../src/models';
+import { ChatRoomUser, User, Message as MessageModel } from '../../src/models';
 
 const ChatRoomPreview = ({ chatRoom }) => {
 
   const navigation = useNavigation();
 
-  //const [users, setUsers] = useState([]);
-  const [user, setUser] = useState();
+  //const [users, setUsers] = useState([]); //All users in chatroom
+  const [user, setUser] = useState(); //The user displayed as having a chat with
+  const [lastMessage, setLastMessage] = useState() //The last message for a given chatRoom
 
+  //Fetch chatrooms, that current user belongs to, and their users
   useEffect(() => {
-    
     const fetchUsers = async () => {
       const authUser = await Auth.currentAuthenticatedUser();
       const fetchedUsers = (await DataStore.query(ChatRoomUser))
@@ -28,14 +29,23 @@ const ChatRoomPreview = ({ chatRoom }) => {
     fetchUsers();
   },[])
 
+  //Fetch last message for each chatRoom
+  useEffect(() => {
+    if (!chatRoom.chatRoomLastMessageId) { return }
+    
+    DataStore.query(MessageModel,chatRoom.chatRoomLastMessageId).then(setLastMessage);
+  },[])
+
+  //Set preview variables
   const senderAvatarImage = user?.avatarImage;
   const senderName = user?.givenName;
-  const lastMessageTimestamp = chatRoom.lastMessage?.createdAt;
-  const lastMessageContent = chatRoom.lastMessage?.content; 
+  const lastMessageTimestamp = lastMessage?.createdAt;
+  const lastMessageContent = lastMessage?.content; 
   const newMessages = chatRoom.newMessages;
   //const active = chatRoom.active;
   const active = true;
 
+  //On chatRoom preview press
   const onChatRoomPress = () => {
           navigation.navigate('ChatRoom', { id: chatRoom.id, name: senderName, avatarImage: senderAvatarImage });  
         }
@@ -45,11 +55,7 @@ const ChatRoomPreview = ({ chatRoom }) => {
 
       <Image style={styles.avatarimage} source={{uri: senderAvatarImage}}/>
 
-      {newMessages ? 
-      <View style={styles.badge_container}>
-        <Text style={styles.badge_text}>{newMessages}</Text>
-      </View>
-      : null}
+
 
       {active ? 
       <View style={styles.activebadge_container}/>
@@ -58,12 +64,17 @@ const ChatRoomPreview = ({ chatRoom }) => {
       <View style={styles.preview_container}>
         <View style={styles.row}>
           <Text style={styles.name_text}>{senderName}</Text>
-          <Text style={newMessages ? styles.timestamp_text_unread: styles.timestamp_text_read }>{lastMessageTimestamp}</Text>
+          <Text style={(newMessages>0) ? styles.timestamp_text_unread: styles.timestamp_text_read }>{lastMessageTimestamp}</Text>
         </View>
-        <View>
-          <Text numberOfLines={1} style={newMessages ? styles.message_text_unread: styles.message_text_read }>
+        <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+          <Text numberOfLines={1} style={(newMessages>0) ? styles.message_text_unread: styles.message_text_read }>
             {lastMessageContent}
           </Text>
+          {newMessages ? 
+          <View style={styles.badge_container}>
+            <Text style={styles.badge_text}>{newMessages}</Text>
+          </View>
+          : null}
         </View>
       </View>
 
@@ -85,7 +96,7 @@ const styles = StyleSheet.create({
       justifyContent: 'space-evenly'
     },
     badge_container: {
-      backgroundColor: colors.med_turquoise,
+      backgroundColor: colors.skyblue_crayola,
       height: 20,
       width: 20,
       borderRadius: 10,
@@ -93,9 +104,6 @@ const styles = StyleSheet.create({
       borderColor: "white",
       justifyContent: 'center',
       alignItems: 'center',
-      position: 'absolute',
-      left: 40,
-      top: 10
     },
     badge_text: {
       color: "white",
@@ -103,16 +111,16 @@ const styles = StyleSheet.create({
     },
     activebadge_container: {
       backgroundColor: "lawngreen",
-      height: 20,
-      width: 20,
+      height: 15,
+      width: 15,
       borderRadius: 10,
       borderWidth: 1,
       borderColor: "white",
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      left: 40,
-      top: 40
+      left: 45,
+      top: 45
     },
     avatarimage:{
       width: 50,

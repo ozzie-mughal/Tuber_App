@@ -188,12 +188,13 @@ const elements = {
     contentHeading_text: {
         fontSize: 35,
         fontWeight: '600',
-        marginVertical: 5
+        marginVertical: 5,
+        color: 'white',
     },
     contentSubheading_text: {
         fontSize: 24,
         fontWeight: '600',
-        color: colors.grey_light
+        color: 'white',
     },
     pageContentContainer: {
         flex: 1,
