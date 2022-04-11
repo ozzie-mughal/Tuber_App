@@ -5,6 +5,8 @@ import { FontAwesome, SimpleLineIcons, Feather, Ionicons } from '@expo/vector-ic
 import colors from '../styles/colors';
 import { Auth, DataStore } from 'aws-amplify';
 import { ChatRoom, Message as MessageModel} from '../../src/models';
+import EmojiSelector from 'react-native-emoji-selector'
+
 
 const plus_icon = <FontAwesome name={"plus-circle"} 
     color={colors.skyblue_crayola} size={40} style={{marginHorizontal: 5}}/>;
@@ -20,6 +22,7 @@ const send_icon = <Ionicons name={"send"}
 const MessageInput = ({ chatRoom }) => {
 
     const [message, setMessage] = useState('');
+    const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
     const sendMessage = async () => {
         const senderUser = await Auth.currentAuthenticatedUser();
@@ -54,32 +57,39 @@ const MessageInput = ({ chatRoom }) => {
   return (
     <KeyboardAvoidingView 
     behavior={Platform.OS === "ios" ? "padding" : "height"} 
-    style={styles.root}
+    style={[styles.root, {height: emojiPickerOpen ? '50%' : 'auto'}]}
     keyboardVerticalOffset={100}>
-      <View style={styles.inputContainer}>
-        <TouchableOpacity>
-        {smile_icon}
-        </TouchableOpacity>
+        <View style={{flexDirection:'row'}}>
+            <View style={styles.inputContainer}>
+                <TouchableOpacity onPress={()=> 
+                    setEmojiPickerOpen((currentValue) => !currentValue)}>
+                {smile_icon}
+                </TouchableOpacity>
 
-        <TextInput 
-            style={styles.input}
-            placeholder="Type message"
-            value={message}
-            onChangeText={setMessage}/>
+                <TextInput 
+                    style={styles.input}
+                    placeholder="Type message"
+                    value={message}
+                    onChangeText={setMessage}/>
 
-        <TouchableOpacity>
-        {camera_icon}
-        </TouchableOpacity>
-        
-        <TouchableOpacity>
-        {microphone_icon}
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity 
-        onPress={onSendPress}
-        style={styles.buttonContainer}>
-        {message? send_icon : plus_icon}
-      </TouchableOpacity>
+                <TouchableOpacity>
+                {camera_icon}
+                </TouchableOpacity>
+                
+                <TouchableOpacity>
+                {microphone_icon}
+                </TouchableOpacity>
+            </View>
+            <TouchableOpacity 
+                onPress={onSendPress}
+                style={styles.buttonContainer}>
+                {message? send_icon : plus_icon}
+            </TouchableOpacity>
+        </View>
+        {emojiPickerOpen && <EmojiSelector onEmojiSelected={emoji => 
+            setMessage(currentMessage => currentMessage + emoji)}
+            columns={8} />}
+
     </KeyboardAvoidingView>
   )
 }
@@ -88,11 +98,11 @@ export default MessageInput
 
 const styles = StyleSheet.create({
     root: {
-        flexDirection: 'row',
+        //flexDirection: 'row',
         padding: 10,
         marginBottom: 10,
         borderTopWidth: 1,
-        borderColor: colors.grey_light
+        borderColor: colors.grey_light,
     },
     inputContainer: {
         flexDirection: 'row',

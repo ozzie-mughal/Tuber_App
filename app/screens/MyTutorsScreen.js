@@ -11,46 +11,63 @@ import { FlatList, ScrollView, Dimensions, StyleSheet, Text, View,
 import Entypo from 'react-native-vector-icons/Entypo';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const MyTutorsScreen = () => {
 
   const arrowRight = <MaterialIcons name={"keyboard-arrow-right"} color={colors.sky_pink} size={40}/>;
+  const search_icon = <Ionicons name={"search"} color={'white'} size={30} style={{marginHorizontal: 5}}/>;
 
+  const [users, setUsers] = useState([]);
+
+  useEffect(()=> {
+    try {DataStore.query(User).then(setUsers);
+    console.log(users)
+    }
+    catch (e) {
+      console.log("Datastory query error: ",e)
+    }
+    },[])
+  
   return (
     <Fragment>
-    <SafeAreaView style={{flex:0, backgroundColor:colors.grey_lightest}}/>
+    <SafeAreaView style={{flex:0, backgroundColor:colors.baby_blue}}/>
     <SafeAreaView style={styles.page}>
     {/* Header Components */}
-      <View style={styles.header_container}>   
+    <View style={styles.header_container}>   
         <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.grey_lightest, colors.grey_light]}
-                locations={[0.5,0.8]}
+                colors={[colors.baby_blue, colors.baby_blue_light]}
+                locations={[0.4,0.8]}
                 style={[styles.background]}
-        />             
-        <Text style={elements.contentHeading_text}>My Tutors</Text>
-        <Text style={{fontSize: 24,
-          fontWeight: '600',
-          color: colors.grey}}>
-            View your favourite tutors.
-        </Text>
-      </View>
-      <View style={styles.contentContainer}>
-        <View style={{alignItems:'center'}}>
+        />         
+        <View style={{flexDirection:'row', justifyContent:'space-between'}}>    
+          <View style={{flexDirection:'row', alignItems:'center'}}>
+            <Text style={elements.contentHeading_text}>My Tutors</Text>
+          </View>
+          <TouchableOpacity style={{justifyContent:'center', alignItems:'center'}}>
+            {search_icon}
+          </TouchableOpacity>
+        </View>
+        <View style={{alignItems:'center', marginTop: 40}}>
           <SegmentedControl
-            tintColor={colors.skyblue_crayola}
-            fontStyle={{color: 'black'}}
+            tintColor={colors.sky_pink_light}
+            fontStyle={{color: 'white'}}
             values={['Favourites', 'Top-Rated', 'All']}
             selectedIndex={0}
-            style={{width:'80%'}}
+            style={{width:'90%'}}
           />
         </View>
+
+    </View>
+
+    {/*Content components*/}
       {/*User Previews */}
       <FlatList
-          data={Users}
-          renderItem={({ item }) => <UserPreview user={item} showButton={true} 
-            buttonTitle={arrowRight} onPress={()=>{
+          data={users}
+          renderItem={({ item }) => <UserPreview user={item} showArrow={true}
+            onPress={()=>{
               try {
                 props.selectTutorAction(item)
               }
@@ -61,7 +78,6 @@ const MyTutorsScreen = () => {
             }}}/> }
           style={styles.messagepreviews_container}
       />
-      </View>
     </SafeAreaView>
     </Fragment>
   )
@@ -70,15 +86,11 @@ const MyTutorsScreen = () => {
 export default MyTutorsScreen
 
 const styles = StyleSheet.create({
-  page: {
-    //flex: 1,
-    backgroundColor: colors.grey_light
-  },
   header_container: {
     paddingHorizontal: 15,
     backgroundColor: colors.grey_lightest,
     width: "100%",
-    height: "10%",
+    height: "17%",
 
   },
   contentContainer: {
@@ -89,9 +101,8 @@ const styles = StyleSheet.create({
   },
   messagepreviews_container: {
     padding: 10,
-    //borderRadius: 30,
+    borderRadius: 30,
     backgroundColor:'white',
-    height: '80%'
 
   },
   background: {
@@ -103,7 +114,7 @@ const styles = StyleSheet.create({
 },
   page: {
     flex: 1,
-    backgroundColor: colors.grey_light
+    backgroundColor: colors.baby_blue_light
   },
   header_container: {
     paddingHorizontal: 15,

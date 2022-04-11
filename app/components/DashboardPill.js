@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import colors from '../styles/colors';
 
 const DashboardPill = ({icon, title, onPress, 
-    backgroundColor}) => {
+    backgroundColor, titleStyle}) => {
     return (
         <TouchableOpacity style={[
             styles.content_card_half,
@@ -14,10 +14,10 @@ const DashboardPill = ({icon, title, onPress,
                 alignItems: "center",
                 padding: 5}}>
                 {icon}
-                <Text style={{
+                <Text style={[{
                     paddingLeft: 7,
                     paddingRight: 14,
-                    fontWeight: "600"}}>
+                    fontWeight: "600"},titleStyle]}>
                     {title}
                 </Text>
             </View>

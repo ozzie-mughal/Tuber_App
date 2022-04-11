@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Auth, DataStore } from 'aws-amplify';
 import { Message as MessageModel, User} from '../../src/models';
+import colors from '../styles/colors';
 
 const Message = ({ message }) => {
 
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 10,
         maxWidth: '70%',
-        backgroundColor: 'dodgerblue',
+        backgroundColor: colors.skyblue_crayola,
         marginLeft: 'auto',
         marginRight: 10,
     },

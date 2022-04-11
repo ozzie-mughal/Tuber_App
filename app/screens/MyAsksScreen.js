@@ -51,8 +51,8 @@ const MyAsksScreen = (props) => {
       <View style={styles.header_container}>   
         <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.orange_light, colors.salmon_light]}
-                locations={[0.5,0.8]}
+                colors={[colors.orange_light, colors.slate_blue_light]}
+                locations={[0.2,0.9]}
                 style={[styles.background]}
         />         
         <View style={{flexDirection:'row', justifyContent:'space-between'}}>    
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
 },
   page: {
     flex: 1,
-    backgroundColor: colors.salmon_light
+    backgroundColor: colors.slate_blue_light
   },
   header_container: {
     paddingHorizontal: 15,

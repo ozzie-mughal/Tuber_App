@@ -4,6 +4,8 @@ import 'react-native-gesture-handler';
 import ChatRoomScreen from '../screens/ChatRoomScreen';
 import MyTabs from '../navigation/BottomTab'
 import colors from '../styles/colors';
+import ChatRoomScreenHeader from '../components/ChatRoomScreenHeader';
+
 
 const AppStack = createNativeStackNavigator();
 
@@ -16,11 +18,12 @@ const AppNavigator = props => {
                 <MyTabs {...screenProps} updateAuthState={props.updateAuthState} />
               )}
         </AppStack.Screen>
-        <AppStack.Screen name="ChatRoom" options={{
+        <AppStack.Screen name="ChatRoom" options={({ route }) => ({
+          headerTitle: () => <ChatRoomScreenHeader id={route.params?.id}/>,
           headerShown:true,
-          headerStyle: {backgroundColor:colors.orange},
+          headerStyle: {backgroundColor:colors.slate_blue},
           headerShadowVisible: false,
-          headerTintColor: colors.skyblue_crayola}}>
+          headerTintColor: colors.skyblue_crayola})}>
           {screenProps => (
             <ChatRoomScreen {...screenProps} updateAuthState={props.updateAuthState} />
           )}

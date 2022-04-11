@@ -2,24 +2,12 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList, Image, ActivityIndicato
 import React, { Fragment, useState, useEffect } from 'react'
 import Message from '../components/Message'
 import { ChatRoom, Message as MessageModel } from '../../src/models'
-import ChatData from '../assets/dummy-data/Chats'
 import MessageInput from '../components/MessageInput'
 import { useRoute, useNavigation } from '@react-navigation/core';
-import { Ionicons, Feather } from '@expo/vector-icons';
 import TimerWidget from '../components/TimerWidget'
 import colors from '../styles/colors'
 import elements from '../styles/elements'
 import { DataStore } from '@aws-amplify/datastore'
-
-const timer_icon = <Ionicons name={"ios-timer-outline"} 
-    color={colors.skyblue_crayola} size={25} style={{marginHorizontal: 5}}/>;
-const call_icon = <Ionicons name={"call"} 
-    color={'white'} size={30} style={{marginHorizontal: 10}}/>;
-const video_icon = <Ionicons name={"videocam"} 
-    color={'white'} size={30} style={{marginHorizontal: 10}}/>;
-const more_icon = <Feather name={"more-vertical"} 
-    color={'white'} size={30} style={{marginHorizontal: 10}}/>;
-
 
 const ChatRoomScreen = () => {
 
@@ -74,13 +62,10 @@ const ChatRoomScreen = () => {
 
     //Subscribe to incoming messages
     useEffect(() => {
-        if (!chatRoom) {
-            return ; //return if chatRoom value still hasn't been retrieved
-        }
 
-        const chatRoomID = chatRoom?.id;
-
-        const subscription = DataStore.observe(MessageModel,chatRoomID=chatRoomID).subscribe(msg => {
+        //console.log(chatRoom?.id)
+        const subscription = DataStore.observe(MessageModel).subscribe(msg => {
+            //console.log(msg.element)
             if (msg.model === MessageModel && msg.opType === "INSERT") {
                 setMessages(existingMessages => [msg.element,...existingMessages])
             }
@@ -89,7 +74,7 @@ const ChatRoomScreen = () => {
         return () => subscription.unsubscribe();
     },[])
 
-    navigation.setOptions({ headerTitle: () => <ChatRoomScreenHeader avatarImage={avatarImage} name={name}/>})
+    //navigation.setOptions({ headerTitle: () => <ChatRoomScreenHeader avatarImage={avatarImage} name={name}/>})
 
   return (
     <Fragment>
@@ -111,38 +96,14 @@ const ChatRoomScreen = () => {
   )
 }
 
-const ChatRoomScreenHeader = (props) => {
 
-    return (
-        <View style={styles.chatRoomScreenHeaderContainer}>
-            <View style={styles.headerAvatar}>
-                <Image source={{uri: props.avatarImage}} style={styles.avatarimage}/>
-                <Text style={styles.headerText}>{props.name}</Text>
-            </View>
-                <View style={{left: 30, flexDirection: 'row',justifyContent:'flex-end'}}>
-
-                    <TouchableOpacity>
-                        {call_icon}
-                    </TouchableOpacity>
-
-                    <TouchableOpacity>
-                        {video_icon}
-                    </TouchableOpacity>
-
-                    <TouchableOpacity>
-                        {more_icon}
-                    </TouchableOpacity>
-                </View>
-        </View>
-    )
-    }
 
 
 export default ChatRoomScreen
 
 const styles = StyleSheet.create({
     page: {
-        backgroundColor: colors.orange,
+        backgroundColor: colors.slate_blue,
         flex: 1
     },
     pageContent: {
@@ -152,54 +113,16 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 30, 
         borderTopRightRadius: 30 
     },
-    chatRoomScreenHeaderContainer: {
-        flexDirection: 'row',
-        flex: 1,
-        marginLeft: 50,
-        alignItems: 'center',
-        //backgroundColor: colors.orange
-    },
-    headerAvatar: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        right: 50,
-        //backgroundColor: colors.orange
-    },
-    headerButtons: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    avatarimage: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        marginRight: 10
-      },
-    headerText: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: 'white'
-    },
-    timerText: {
-        fontSize: 16,
-        fontWeight: '600'
-    },
-    headerTimer: {
-        width: 100,
-        height: 30,
-        backgroundColor: '#FCF57E',
-        flexDirection: 'row',
-        borderRadius: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 1,
-    },
     timerContainer: {
         backgroundColor:colors.grey_light,
         borderTopLeftRadius: 30, 
         borderTopRightRadius: 30,
         height: 40,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        shadowColor: '#000000',
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        shadowOffset : { width: 0, height: 10},
     }
 })

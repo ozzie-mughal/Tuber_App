@@ -38,7 +38,8 @@ const ChatRoomPreview = ({ chatRoom }) => {
 
   //Set preview variables
   const senderAvatarImage = user?.avatarImage;
-  const senderName = user?.givenName;
+  const senderGivenName = user?.givenName;
+  const senderFamilyName = user?.familyName;
   const lastMessageTimestamp = lastMessage?.createdAt;
   const lastMessageContent = lastMessage?.content; 
   const newMessages = chatRoom.newMessages;
@@ -47,7 +48,7 @@ const ChatRoomPreview = ({ chatRoom }) => {
 
   //On chatRoom preview press
   const onChatRoomPress = () => {
-          navigation.navigate('ChatRoom', { id: chatRoom.id, name: senderName, avatarImage: senderAvatarImage });  
+          navigation.navigate('ChatRoom', { id: chatRoom.id, name: senderGivenName, avatarImage: senderAvatarImage });  
         }
 
   return (
@@ -63,7 +64,7 @@ const ChatRoomPreview = ({ chatRoom }) => {
 
       <View style={styles.preview_container}>
         <View style={styles.row}>
-          <Text style={styles.name_text}>{senderName}</Text>
+          <Text style={styles.name_text}>{senderGivenName} {senderFamilyName}</Text>
           <Text style={(newMessages>0) ? styles.timestamp_text_unread: styles.timestamp_text_read }>{lastMessageTimestamp}</Text>
         </View>
         <View style={{flexDirection:'row', justifyContent:'space-between'}}>

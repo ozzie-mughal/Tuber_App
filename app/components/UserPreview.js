@@ -3,8 +3,11 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/core'
 import colors from '../styles/colors';
 import PrimaryActionListButton from './PrimaryActionListButton';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const UserPreview = ({ user, showButton, buttonTitle, onPress }) => {
+const UserPreview = ({ user, showButton, showArrow, buttonTitle, onPress }) => {
+
+  const arrowRight = <MaterialIcons name={"keyboard-arrow-right"} color={colors.sky_pink} size={40}/>;
 
   const userSub = user?.sub;
   const senderAvatarImage = user?.avatarImage;
@@ -32,6 +35,7 @@ const UserPreview = ({ user, showButton, buttonTitle, onPress }) => {
         <View style={styles.row}>
           <Text style={styles.name_text}>{senderGivenName} {senderFamilyName}</Text>
           {showButton && <PrimaryActionListButton title={buttonTitle} onPress={onPress}/>}
+          {showArrow && <TouchableOpacity>{arrowRight}</TouchableOpacity>}
         </View>
       </View>
 

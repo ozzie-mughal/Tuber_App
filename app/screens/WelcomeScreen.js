@@ -100,9 +100,9 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
                         flexDirection: "row",
                         justifyContent: "flex-start",
                         margin: 0}}>
-                            <DashboardPill icon={store} title={coincount} backgroundColor={colors.sky_pink}/>
-                            <DashboardPill icon={lightning} title='8' backgroundColor={colors.grey_light}/>
-                            <DashboardPill title='Get a tour >' backgroundColor={colors.orange}/>
+                            <DashboardPill icon={store} title={coincount} backgroundColor={colors.skyblue_crayola_light}/>
+                            <DashboardPill icon={lightning} title='8' backgroundColor={colors.sky_pink_light}/>
+                            <DashboardPill title='Get a tour >' titleStyle={{color: 'white'}} backgroundColor={colors.orange}/>
                     </View>
 
                 </View>
