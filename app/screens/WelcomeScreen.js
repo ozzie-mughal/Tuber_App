@@ -25,7 +25,7 @@ import AccountMenu from '../components/AccountMenu';
 
 
 const store = <FontAwesome5 name={"coins"} color={'black'} size={20}/>;
-const hamburger_menu = <Entypo name={"menu"} color={colors.skyblue_crayola} size={40}/>;
+const hamburger_menu = <Entypo name={"menu"} color={colors.turquoise} size={40}/>;
 const lightning = <MaterialCommunityIcons name={"lightning-bolt"} color={'gold'} size={20}/>;
 
 
@@ -100,9 +100,9 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
                         flexDirection: "row",
                         justifyContent: "flex-start",
                         margin: 0}}>
-                            <DashboardPill icon={store} title={coincount} backgroundColor={colors.skyblue_crayola_light}/>
+                            <DashboardPill icon={store} title={coincount} backgroundColor={colors.turquoise_light}/>
                             <DashboardPill icon={lightning} title='8' backgroundColor={colors.sky_pink_light}/>
-                            <DashboardPill title='Get a tour >' titleStyle={{color: 'white'}} backgroundColor={colors.orange}/>
+                            <DashboardPill title='Get a tour >' titleStyle={{color: 'white'}} backgroundColor={colors.lavender_blue}/>
                     </View>
 
                 </View>
@@ -125,13 +125,13 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
                 <AnnouncementCard announcementText='Refer a friend and get 20 free coins*' seeAllTitle='Learn More >' seeAllVisible={true}/>
 
                 <DashboardCardFull headerTitle='Live Sessions' seeAllTitle='See All Asks' 
-                    Widget={ActiveAsksWidget} seeAllVisible={true} 
+                    Widget={ActiveAsksWidget} seeAllVisible={true} seeAllOnPress={()=>{navigation.navigate('My Asks')}} 
                     color_1={'white'} color_2={colors.grey_lightest}/>
                 <View style={{flexDirection:'row', width:'100%', justifyContent:'space-between'}}>
                     <DashboardCard_25 
                         Widget={<MetricWidget headingText='11' subHeadingText='Asks' 
                             subSubHeadingText='until Level 3.' seeMoreText='More >'/>} seeAllVisible={false} 
-                        color_1={colors.orange_light} color_2={colors.salmon_light}
+                        color_1={colors.slate_blue_light} color_2={colors.lavender_blue}
                         left={true} />       
                     <DashboardCard_25 
                         Widget={<MetricWidget headingText='4' subHeadingText='Days' 

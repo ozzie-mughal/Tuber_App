@@ -7,9 +7,9 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const TopTutorPreview = ({rank, username, school, rating, answers, badgeVisible, badgeTitle}) => {
 
-    const arrow_right = <MaterialIcons name={"keyboard-arrow-right"} color={colors.skyblue_crayola} size={30}/>;
+    const arrow_right = <MaterialIcons name={"keyboard-arrow-right"} color={colors.turquoise} size={30}/>;
     const star = <MaterialIcons name={"star"} color={'gold'} size={25}/>;
-    const paper_plane = <FontAwesome name={"paper-plane"} color={colors.skyblue_crayola} size={20}/>;
+    const paper_plane = <FontAwesome name={"paper-plane"} color={colors.turquoise} size={20}/>;
     const medal = <FontAwesome5 name={"medal"} color={colors.slate_blue} size={22}/>;
     const randomAvatar = 'https://i.pravatar.cc/300';
 

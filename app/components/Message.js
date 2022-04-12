@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Auth, DataStore } from 'aws-amplify';
+import { S3Image } from 'aws-amplify-react-native'
 import { Message as MessageModel, User} from '../../src/models';
 import colors from '../styles/colors';
 
@@ -8,6 +9,7 @@ const Message = ({ message }) => {
 
   const [user, setUser] = useState(); //set user that message belongs to
   const [isMe, setIsMe] = useState(false) //set toggle for if message belongs to me or other user
+  const { width } = useWindowDimensions();
 
   //Fetch user that owns the message
   useEffect(() => {
@@ -39,7 +41,12 @@ const Message = ({ message }) => {
 
   return (
     <View style={isMe ? styles.rightContainer : styles.leftContainer}>
-      <Text style={[styles.messageText, {color: isMe ? 'white' : 'black'}]}>{message.content}</Text>
+      {!!message.content && (<Text style={[styles.messageText, {color: isMe ? 'white' : 'black'}]}>
+        {message.content}
+      </Text>)}
+      {message.image && <S3Image imgKey={message.image} 
+        style={{width: width*0.7, marginTop: message.content ? 5 : 0, aspectRatio: 4/3}}
+        resizeMode='contain'/>}
     </View>
   )
 }
@@ -60,8 +67,8 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         borderRadius: 10,
-        maxWidth: '70%',
-        backgroundColor: colors.skyblue_crayola,
+        maxWidth: '90%',
+        backgroundColor: colors.slate_blue_light,
         marginLeft: 'auto',
         marginRight: 10,
     },

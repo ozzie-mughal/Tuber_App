@@ -45,13 +45,13 @@ const MyAsksScreen = (props) => {
 
   return (
     <Fragment>
-    <SafeAreaView style={{flex:0, backgroundColor:colors.orange_light}}/>
+    <SafeAreaView style={{flex:0, backgroundColor:colors.slate_blue}}/>
     <SafeAreaView style={styles.page}>
     {/* Header Components */}
       <View style={styles.header_container}>   
         <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.orange_light, colors.slate_blue_light]}
+                colors={[colors.slate_blue, colors.lavender_blue]}
                 locations={[0.2,0.9]}
                 style={[styles.background]}
         />         
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
 },
   page: {
     flex: 1,
-    backgroundColor: colors.slate_blue_light
+    backgroundColor: colors.lavender_blue
   },
   header_container: {
     paddingHorizontal: 15,
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
       fontWeight: "600",
   },
   newAskButton: {
-    backgroundColor: colors.skyblue_crayola,
+    backgroundColor: colors.turquoise,
     borderRadius: 15,
     flexDirection:'row', 
     justifyContent:'center',

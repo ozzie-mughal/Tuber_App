@@ -4,7 +4,7 @@ const elements = {
     primaryButton: {
         width: '100%',
         paddingVertical: 10,
-        backgroundColor: colors.skyblue_crayola,
+        backgroundColor: '#11F3E8',
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -139,7 +139,7 @@ const elements = {
     },
     topSafeAreaContainer: {
         flex: 0,
-        backgroundColor: '#FEAC5E'
+        backgroundColor: colors.lavender_blue
     },
     topSafeAreaContainer_light: {
         flex: 0,

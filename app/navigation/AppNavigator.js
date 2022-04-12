@@ -21,9 +21,9 @@ const AppNavigator = props => {
         <AppStack.Screen name="ChatRoom" options={({ route }) => ({
           headerTitle: () => <ChatRoomScreenHeader id={route.params?.id}/>,
           headerShown:true,
-          headerStyle: {backgroundColor:colors.slate_blue},
+          headerStyle: {backgroundColor:colors.slate_blue_light},
           headerShadowVisible: false,
-          headerTintColor: colors.skyblue_crayola})}>
+          headerTintColor: colors.turquoise})}>
           {screenProps => (
             <ChatRoomScreen {...screenProps} updateAuthState={props.updateAuthState} />
           )}

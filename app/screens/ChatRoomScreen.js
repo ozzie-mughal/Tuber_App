@@ -8,6 +8,7 @@ import TimerWidget from '../components/TimerWidget'
 import colors from '../styles/colors'
 import elements from '../styles/elements'
 import { DataStore } from '@aws-amplify/datastore'
+import { MenuProvider } from 'react-native-popup-menu';
 
 const ChatRoomScreen = () => {
 
@@ -77,6 +78,7 @@ const ChatRoomScreen = () => {
     //navigation.setOptions({ headerTitle: () => <ChatRoomScreenHeader avatarImage={avatarImage} name={name}/>})
 
   return (
+    <MenuProvider>
     <Fragment>
         <SafeAreaView style={styles.page}>
             <View style={styles.pageContent}>
@@ -93,6 +95,7 @@ const ChatRoomScreen = () => {
         </SafeAreaView>
         <SafeAreaView style={{backgroundColor:'white'}}/>
     </Fragment>
+    </MenuProvider>
   )
 }
 
@@ -103,7 +106,7 @@ export default ChatRoomScreen
 
 const styles = StyleSheet.create({
     page: {
-        backgroundColor: colors.slate_blue,
+        backgroundColor: colors.slate_blue_light,
         flex: 1
     },
     pageContent: {

@@ -32,13 +32,13 @@ const MyTutorsScreen = () => {
   
   return (
     <Fragment>
-    <SafeAreaView style={{flex:0, backgroundColor:colors.baby_blue}}/>
+    <SafeAreaView style={{flex:0, backgroundColor:colors.skyblue_crayola}}/>
     <SafeAreaView style={styles.page}>
     {/* Header Components */}
     <View style={styles.header_container}>   
         <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.baby_blue, colors.baby_blue_light]}
+                colors={[colors.skyblue_crayola, colors.baby_blue_light]}
                 locations={[0.4,0.8]}
                 style={[styles.background]}
         />         

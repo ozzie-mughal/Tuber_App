@@ -20,10 +20,10 @@ const Tab = createBottomTabNavigator();
 
 
 //Declare icons
-const inbox = <FontAwesome5 name={"inbox"} color={colors.skyblue_crayola} size={25}/>;
-const store = <FontAwesome5 name={"coins"} color={colors.skyblue_crayola} size={25}/>;
-const myTutors = <MaterialIcons name={"favorite"} color={colors.skyblue_crayola} size={25}/>;
-const home = <MaterialIcons name={"home"} color={colors.skyblue_crayola} size={25}/>;
+const inbox = <FontAwesome5 name={"inbox"} color={colors.turquoise} size={25}/>;
+const store = <FontAwesome5 name={"coins"} color={colors.turquoise} size={25}/>;
+const myTutors = <MaterialIcons name={"favorite"} color={colors.turquoise} size={25}/>;
+const home = <MaterialIcons name={"home"} color={colors.turquoise} size={25}/>;
 const paperPlane = <FontAwesome name={"paper-plane"} color={"white"} size={40}/>
 
 const MyTabs = props => {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     shadowOffset : { width: 2, height: 2}
   },
   bumpIcon: {
-    backgroundColor: colors.skyblue_crayola,
+    backgroundColor: colors.turquoise,
     borderRadius: 40,
     borderWidth: 3,
     borderColor: 'white',
