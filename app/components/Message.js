@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View, ActivityIndicator, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Auth, DataStore } from 'aws-amplify';
+import { Auth, DataStore, Storage } from 'aws-amplify';
 import { S3Image } from 'aws-amplify-react-native'
 import { Message as MessageModel, User} from '../../src/models';
 import colors from '../styles/colors';
+import AudioPlayer from './AudioPlayer';
 
 const Message = ({ message }) => {
 
   const [user, setUser] = useState(); //set user that message belongs to
   const [isMe, setIsMe] = useState(false) //set toggle for if message belongs to me or other user
+  const [soundURI, setSoundURI] = useState(null);
   const { width } = useWindowDimensions();
 
   //Fetch user that owns the message
@@ -34,19 +36,33 @@ const Message = ({ message }) => {
     //console.log(message);
   },[user]); 
 
+  //Load audio message
+  useEffect(() => {
+    if (message.audio) {
+      Storage.get(message.audio).then(setSoundURI);
+    }
+  }, [message]);
+
   //Show loading during user load
   if (!user) {
     return <ActivityIndicator/>
   }
 
   return (
-    <View style={isMe ? styles.rightContainer : styles.leftContainer}>
+    <View style={[isMe ? styles.rightContainer : styles.leftContainer, 
+      {width: soundURI ? '75%' : 'auto'}]}>
+      {/*Text Message*/}
       {!!message.content && (<Text style={[styles.messageText, {color: isMe ? 'white' : 'black'}]}>
         {message.content}
       </Text>)}
+
+      {/*Image Message*/}
       {message.image && <S3Image imgKey={message.image} 
         style={{width: width*0.7, marginTop: message.content ? 5 : 0, aspectRatio: 4/3}}
         resizeMode='contain'/>}
+
+      {/*Audio Message*/}
+      {message.audio && <AudioPlayer soundURI={soundURI}/>}
     </View>
   )
 }
@@ -58,7 +74,7 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         borderRadius: 10,
-        maxWidth: '70%',
+        maxWidth: '90%',
         backgroundColor: 'gainsboro',
         marginLeft: 10,
         marginRight:'auto',

@@ -10,8 +10,6 @@ import TimerWidget from '../components/TimerWidget'
 import colors from '../styles/colors'
 import elements from '../styles/elements'
 import { Auth, DataStore } from 'aws-amplify';
-import ChatScreenMenu from './ChatScreenMenu'
-import { MenuProvider } from 'react-native-popup-menu';
 
 const ChatRoomScreenHeader = ({ id, children }) => {
 
@@ -44,7 +42,6 @@ const ChatRoomScreenHeader = ({ id, children }) => {
       },[])
 
     return (
-        <MenuProvider>
         <View style={styles.chatRoomScreenHeaderContainer}>
             <View style={styles.headerAvatar}>
                 <Image source={{uri: user?.avatarImage}} style={styles.avatarimage}/>
@@ -60,13 +57,11 @@ const ChatRoomScreenHeader = ({ id, children }) => {
                         {video_icon}
                     </TouchableOpacity>
 
-                    {/* <TouchableOpacity>
+                    <TouchableOpacity>
                         {more_icon}
-                    </TouchableOpacity> */}
-                    <ChatScreenMenu moreButton={more_icon}/>
+                    </TouchableOpacity>
                 </View>
         </View>
-        </MenuProvider>
     )
     }
 

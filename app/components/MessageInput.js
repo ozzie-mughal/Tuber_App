@@ -1,60 +1,66 @@
 import { StyleSheet, Text, View, TextInput, Pressable, 
     TouchableOpacity, KeyboardAvoidingView, Platform, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { FontAwesome, SimpleLineIcons, Feather, Ionicons } from '@expo/vector-icons';
 import colors from '../styles/colors';
+import icons from '../styles/icons';
 import { Auth, DataStore, Storage } from 'aws-amplify';
 import { ChatRoom, Message as MessageModel} from '../../src/models';
 import EmojiSelector from 'react-native-emoji-selector'
 import * as ImagePicker from 'expo-image-picker';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import { Audio } from 'expo-av';
+import AudioPlayer from './AudioPlayer';
 
-const plus_icon = <FontAwesome name={"plus-circle"} 
-    color={colors.turquoise} size={40} style={{marginHorizontal: 5}}/>;
-const image_icon = <Feather name={"image"} 
-    color={colors.grey} size={30} style={{marginHorizontal: 5}}/>;
-const camera_icon = <Feather name={"camera"} 
-    color={colors.grey} size={30} style={{marginHorizontal: 5}}/>;
-const microphone_icon = <Feather name={"mic"} 
-    color={colors.grey} size={30} style={{marginHorizontal: 5}}/>;
-const smile_icon = <SimpleLineIcons name={"emotsmile"} 
-    color={colors.grey} size={30} style={{marginHorizontal: 5}}/>;
-const send_icon = <Ionicons name={"send"} 
-    color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>;
-const close_icon = <Ionicons name={"close-circle-outline"} 
-    color={colors.grey} size={30} style={{marginHorizontal: 5}}/>;
 
 const MessageInput = ({ chatRoom }) => {
-
+    
     //Set states of each text type
     const [message, setMessage] = useState('');
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
     const [image, setImage] = useState(null);
-    const [progress, setProgress] = useState(0);
+    const [imageUploadProgress, setImageUploadProgress] = useState(0);
+    const [soundURIUploadProgress, setSoundURIUploadProgress] = useState(0);
+    const [recording, setRecording] = useState(null);
+    const [audio, setAudio] = useState(null);
+    const [soundURI, setSoundURI] = useState(null);
+
 
     //Reset fields on send
     const resetFields = () => {
         setMessage('');
         setImage(null);
         setEmojiPickerOpen(false);
-        setProgress(0);
+        setImageUploadProgress(0);
+        setSoundURIUploadProgress(0);
+        setSoundURI(null);
+        setAudio(null);
     }
     
-    //Image Picker
-    //Check image permissions
+    //Check image and audio permissions
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
                 const cameraRollResponse = await ImagePicker.requestMediaLibraryPermissionsAsync();
                 const cameraResponse = await ImagePicker.requestCameraPermissionsAsync();
-                if (cameraRollResponse.status !== 'granted' || cameraResponse.status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
+                const audioResponse = await Audio.requestPermissionsAsync();
+                if (cameraRollResponse.status !== 'granted' || cameraResponse.status !== 'granted'
+                    || audioResponse.status !== 'granted') {
+                    alert('Sorry, we need camera/microphone permissions to make this work!');
                 }
             }
         })();
     },[]);
 
+
+    //File URI needs to be converted to BLOB for S3 storage
+    const getBlob = async (uri) => {
+        const response = await fetch(uri);
+        const blob = response.blob();
+        return blob;
+    }
+    
+    //Image Picker
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -82,14 +88,18 @@ const MessageInput = ({ chatRoom }) => {
     };
 
     const progressCallback = (progress) => {
-        setProgress(progress.loaded / progress.total);
+        if (image) {
+            setImageUploadProgress(progress.loaded / progress.total);
+        } else if (soundURI) {
+            setSoundURIUploadProgress(progress.loaded / progress.total);
+        }
     }
 
     const sendImage = async () => {
         if (!image) {
             return;
         }
-        const blob = await getImageBlob();
+        const blob = await getBlob(image);
         //UUID is used to create unique image ID
         const { key } = await Storage.put(uuidv4()+'.png',blob, { progressCallback }); 
 
@@ -106,18 +116,56 @@ const MessageInput = ({ chatRoom }) => {
         resetFields();
     }
 
-    //Image URI needs to be converted to BLOB for S3 storage
-    const getImageBlob = async () => {
-        if (!image) {
+    //Audio Maker
+    async function startRecording() {
+        try {
+          await Audio.setAudioModeAsync({
+            allowsRecordingIOS: true,
+            playsInSilentModeIOS: true,
+          }); 
+          console.log('Starting recording..');
+          const { recording } = await Audio.Recording.createAsync(
+             Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+          );
+          setRecording(recording);
+          console.log('Recording started');
+        } catch (err) {
+          console.error('Failed to start recording', err);
+        }
+    }
+    
+      async function stopRecording() {
+        console.log('Stopping recording..');
+        if (!recording) {
             return;
         }
-        const response = await fetch(image);
-        const blob = response.blob();
-        return blob;
-    }
+        setRecording(null);
+        await recording.stopAndUnloadAsync();
 
-    //Audio Maker
-    const [audio, setAudio] = useState(null);
+        setSoundURI(recording.getURI()); 
+        setAudio(true)
+      }
+
+      const sendAudio = async () => {
+        if (!soundURI) {
+            return;
+        }
+        const blob = await getBlob(soundURI);
+        //UUID is used to create unique audio ID
+        const { key } = await Storage.put(uuidv4()+'.m4a',blob, { progressCallback }); 
+
+        //Display uploaded image in chat
+        const senderUser = await Auth.currentAuthenticatedUser();
+        const newMessage = await DataStore.save(new MessageModel({
+            content: message,
+            audio: key,
+            userID: senderUser.attributes.sub,
+            chatroomID: chatRoom?.id,
+        }))
+
+        updateLastMessage(newMessage);
+        resetFields();
+    }
 
 
     //Message Sender
@@ -147,7 +195,7 @@ const MessageInput = ({ chatRoom }) => {
     const onSendPress = () => {
         if (image) {
             sendImage();
-        } else if (audio) {
+        } else if (soundURI) {
             sendAudio();
         } else if (message) {
             sendMessage();
@@ -163,23 +211,31 @@ const MessageInput = ({ chatRoom }) => {
 
         {/*Image Preview (if selected) */}
         {image && 
-        <View style={styles.imagePreviewContainer}>
+        <View style={styles.sendPreviewContainer}>
             <View style={{flexDirection:'row', marginBottom: 5}}>
                 <Image source={{uri: image}} style={{width: 100, height: 100, borderRadius: 10}}/>
                 <TouchableOpacity onPress={()=>setImage(null)}>
-                    {close_icon}
+                    {icons.close}
                 </TouchableOpacity>
             </View>
+            {/*Upload progress bar */}
             <View style={{backgroundColor:colors.turquoise, 
-                height: 4, width: (progress * 100)+'%'}}/>
+                height: 4, width: (imageUploadProgress * 100)+'%'}}/>
         </View>}
+
+        {/*Audio Preview (if selected) */}
+        {audio && <AudioPlayer soundURI={soundURI} setAudio={setAudio} deleteButton={true}/>}
+        {/*Upload progress bar */}
+        {audio && 
+            <View style={{backgroundColor:colors.turquoise, 
+                height: 4, marginVertical: 5, width: (soundURIUploadProgress * 100)+'%'}}/>}
 
         {/*Message Input */}
         <View style={{flexDirection:'row'}}>
             <View style={styles.inputContainer}>
                 <TouchableOpacity onPress={()=> 
                     setEmojiPickerOpen((currentValue) => !currentValue)}>
-                {smile_icon}
+                {emojiPickerOpen ? icons.smile_selected : icons.smile}
                 </TouchableOpacity>
 
                 <TextInput 
@@ -189,21 +245,21 @@ const MessageInput = ({ chatRoom }) => {
                     onChangeText={setMessage}/>
 
                 <TouchableOpacity onPress={pickImage}>
-                {image_icon}
+                {icons.image}
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={takePhoto}>
-                {camera_icon}
+                {icons.camera}
                 </TouchableOpacity>
                 
-                <TouchableOpacity>
-                {microphone_icon}
-                </TouchableOpacity>
+                <Pressable onPressIn={startRecording} onPressOut={stopRecording}>
+                {recording ? icons.microphone_selected : icons.microphone}
+                </Pressable>
             </View>
             <TouchableOpacity 
                 onPress={onSendPress}
                 style={styles.buttonContainer}>
-                {message || image ? send_icon : plus_icon}
+                {message || image || soundURI ? icons.send : icons.plus}
             </TouchableOpacity>
         </View>
         {emojiPickerOpen && <EmojiSelector onEmojiSelected={emoji => 
@@ -235,7 +291,7 @@ const styles = StyleSheet.create({
         padding: 5,
         alignItems: 'center'
     },
-    imagePreviewContainer: {
+    sendPreviewContainer: {
         borderRadius: 10,
         borderColor: colors.grey_light,
         borderWidth: 1,
@@ -243,7 +299,6 @@ const styles = StyleSheet.create({
         padding: 5,
         marginBottom: 5,
         //flexDirection:'row'
-
     },
     buttonContainer: {
         width: 50,
@@ -260,7 +315,19 @@ const styles = StyleSheet.create({
         marginHorizontal:10,
         flex: 1,
     },
-    icon: {
-        marginHorizontal: 5
+    audioPlaybackBar: {
+        backgroundColor:colors.grey_light, 
+        borderRadius: 10, 
+        height: 4, 
+        flex:1, 
+        marginHorizontal:10
+    },
+    audioPlaybackSlider: {
+        backgroundColor: colors.turquoise, 
+        borderRadius: 15, 
+        height: 15,
+        width: 15, 
+        position: 'absolute',
+        top: -5
     }
 })

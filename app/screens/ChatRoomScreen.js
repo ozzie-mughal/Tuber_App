@@ -78,7 +78,6 @@ const ChatRoomScreen = () => {
     //navigation.setOptions({ headerTitle: () => <ChatRoomScreenHeader avatarImage={avatarImage} name={name}/>})
 
   return (
-    <MenuProvider>
     <Fragment>
         <SafeAreaView style={styles.page}>
             <View style={styles.pageContent}>
@@ -95,7 +94,6 @@ const ChatRoomScreen = () => {
         </SafeAreaView>
         <SafeAreaView style={{backgroundColor:'white'}}/>
     </Fragment>
-    </MenuProvider>
   )
 }
 
