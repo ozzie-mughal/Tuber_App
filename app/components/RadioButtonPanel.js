@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         fontWeight: "400",
     },
     selected: {
-        backgroundColor: colors.skyblue_crayola,
+        backgroundColor: colors.turquoise,
         borderWidth: 2,
     },
     unselected: {

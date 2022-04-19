@@ -4,7 +4,7 @@ import colors from '../styles/colors';
 
 const RadioButtonCard = ({
     data,
-    selectedOption
+    selectedValue
 }) => {
 
     const [askOption, setAskOption] = useState(null);
@@ -22,7 +22,7 @@ const RadioButtonCard = ({
                     setAskOptionDesc(item?.desc);
                 }
                 finally {
-                    selectedOption(item?.value);
+                    selectedValue(item?.value);
                     }
                 }}
                 style={[item?.icon !== undefined ? styles.radioButtonCard_withIcon : styles.radioButtonCard, item?.value === askOption ? styles.selected : styles.unselected]}>
@@ -49,7 +49,7 @@ export default RadioButtonCard
 const styles = StyleSheet.create({
     radioButtonCard_withIcon: {
         height: 120,
-        width: 80,
+        width: 70,
         borderRadius: 15,
         padding: 5,
         marginHorizontal: 3,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         fontWeight: "400",
     },
     selected: {
-        backgroundColor: colors.skyblue_crayola,
+        backgroundColor: colors.turquoise,
         borderWidth: 2,
     },
     unselected: {

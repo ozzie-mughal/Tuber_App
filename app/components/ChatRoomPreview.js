@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity} from 'react-native'
+import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity, Pressable} from 'react-native'
 import React, { useState, useEffect } from 'react'
-import ChatRooms from '../assets/dummy-data/ChatRooms';
 import { useNavigation } from '@react-navigation/core'
 import colors from '../styles/colors';
 import { Auth, DataStore } from 'aws-amplify';
 import { ChatRoomUser, User, Message as MessageModel } from '../../src/models';
+import Moment from 'moment';
 
 const ChatRoomPreview = ({ chatRoom }) => {
 
@@ -13,6 +13,7 @@ const ChatRoomPreview = ({ chatRoom }) => {
   //const [users, setUsers] = useState([]); //All users in chatroom
   const [user, setUser] = useState(); //The user displayed as having a chat with
   const [lastMessage, setLastMessage] = useState() //The last message for a given chatRoom
+  const [lastMessageUser, setLastMessageUser] = useState() //The last message for a given chatRoom
 
   //Fetch chatrooms, that current user belongs to, and their users
   useEffect(() => {
@@ -29,11 +30,20 @@ const ChatRoomPreview = ({ chatRoom }) => {
     fetchUsers();
   },[])
 
+  const setLastMessageSent = async (value) => {
+    setLastMessage(value)
+    DataStore.query(User,value.userID).then(setLastMessageUser);
+  }
+
   //Fetch last message for each chatRoom
   useEffect(() => {
+    const fetchLastMessage = async () => {
     if (!chatRoom.chatRoomLastMessageId) { return }
-    
-    DataStore.query(MessageModel,chatRoom.chatRoomLastMessageId).then(setLastMessage);
+      await DataStore.query(MessageModel,chatRoom.chatRoomLastMessageId).then(setLastMessageSent);
+      // if (!lastMessage.userID) { return }
+      // await DataStore.query(User,lastMessage.userID).then(setLastMessageUser);
+    }
+    fetchLastMessage();
   },[])
 
   //Set preview variables
@@ -41,10 +51,24 @@ const ChatRoomPreview = ({ chatRoom }) => {
   const senderGivenName = user?.givenName;
   const senderFamilyName = user?.familyName;
   const lastMessageTimestamp = lastMessage?.createdAt;
-  const lastMessageContent = lastMessage?.content; 
-  const newMessages = chatRoom.newMessages;
-  //const active = chatRoom.active;
-  const active = true;
+  const sinceLastMessageTimestamp = Moment(lastMessageTimestamp).from(Moment())
+  const lastMessageUserGivenName = lastMessageUser?.givenName; 
+  const newMessages = chatRoom?.newMessages;
+  const topic = chatRoom?.topic;
+  const active = chatRoom?.active;
+
+  //Last message previewed (depending on last message type)
+  const getLastMessage = () => {
+    if (lastMessage?.content) {
+      return lastMessage?.content
+    } else if (lastMessage?.image) {
+      return 'Image'
+    } else if (lastMessage?.audio) {
+      return 'Audio'
+    } else {
+      return 'No last message found.'
+    }
+  }
 
   //On chatRoom preview press
   const onChatRoomPress = () => {
@@ -64,12 +88,21 @@ const ChatRoomPreview = ({ chatRoom }) => {
 
       <View style={styles.preview_container}>
         <View style={styles.row}>
-          <Text style={styles.name_text}>{senderGivenName} {senderFamilyName}</Text>
-          <Text style={(newMessages>0) ? styles.timestamp_text_unread: styles.timestamp_text_read }>{lastMessageTimestamp}</Text>
+        <View style={active ? styles.topic_Active : styles.topic_Inactive}>
+          <Text numberOfLines={1} style={(newMessages>0) ? styles.topic_text_unread: styles.topic_text_read}>
+            {topic}
+          </Text>
         </View>
+          <Text style={(newMessages>0) ? styles.timestamp_text_unread: styles.timestamp_text_read }>
+            {sinceLastMessageTimestamp}
+          </Text>
+        </View>
+          <Text style={(newMessages>0) ? styles.name_text_unread: styles.name_text_read}>
+            {lastMessageUserGivenName}
+          </Text>
         <View style={{flexDirection:'row', justifyContent:'space-between'}}>
           <Text numberOfLines={1} style={(newMessages>0) ? styles.message_text_unread: styles.message_text_read }>
-            {lastMessageContent}
+            {getLastMessage()}
           </Text>
           {newMessages ? 
           <View style={styles.badge_container}>
@@ -90,7 +123,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       padding: 10,
       borderBottomWidth: 1,
-      borderColor: colors.grey,
+      borderColor: colors.grey_light,
     },
     preview_container: {
       flex: 1,
@@ -129,9 +162,37 @@ const styles = StyleSheet.create({
       borderRadius: 30,
       marginRight: 10
     },
-    name_text: {
+    topic_Active: {
+      backgroundColor: colors.slate_blue_light,
+      borderRadius: 25,
+      paddingHorizontal: 5,
+      paddingVertical: 2,
+      maxWidth: '65%'
+    },
+    topic_Inactive: {
+      backgroundColor: colors.grey_light,
+      borderRadius: 25,
+      paddingHorizontal: 5,
+      paddingVertical: 2,
+      maxWidth: '65%'
+    },
+    topic_text_unread: {
       fontWeight: "bold",
-      fontSize: 18
+      fontSize: 16,
+      color: 'white'
+    },
+    topic_text_read: {
+      //fontWeight: "bold",
+      fontSize: 16,
+      color: 'white'
+    },
+    name_text_unread: {
+      fontWeight: "bold",
+      fontSize: 16,
+    },
+    name_text_read: {
+      //fontWeight: "bold",
+      fontSize: 16
     },
     timestamp_text_unread: {
       color: "black",
@@ -142,15 +203,16 @@ const styles = StyleSheet.create({
     },
     message_text_unread: {
       color: "black",
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: "bold",
     },
     message_text_read: {
       color: "grey",
-      fontSize: 16
+      fontSize: 14
     },
     row: {
       flexDirection:'row', 
       justifyContent:'space-between',
+      marginBottom: 5
     }
   })

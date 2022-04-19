@@ -16,6 +16,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { LinearGradient } from 'expo-linear-gradient';
+import { color } from 'react-native-reanimated';
 
 
 export default function LoginScreen({ navigation, updateAuthState, isUserLoggedIn}) {
@@ -51,7 +52,7 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
 
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
         validationSchema: LoginSchema,
-        initialValues: {email: '', password: ''},
+        initialValues: {email: 'o.mughal@hotmail.com', password: 'Bumpy12345!'},
         onSubmit: values => {
             try {
                 signIn(values)
@@ -87,10 +88,10 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
                 <LinearGradient
                     // Background Linear Gradient
                     //colors={[colors.orange,colors.sky_pink,colors.skyblue_crayola]}
-                    colors={[colors.lavender_blue,colors.sky_pink,colors.turquoise]}
+                    colors={[colors.turquoise_green, colors.turquoise_blue]}
                     //start={{x:0.2,y:0.1}}
                     //end={{x:0.3,y:0.9}}
-                    locations={[0.1,0.6, 1]}
+                    locations={[0.3,1.0]}
                     style={[styles.background]}
                 />
 
@@ -104,7 +105,7 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
             }}>
                 <WavyHeader
                     customHeight={450}
-                    customFill={colors.turquoise}
+                    customFill={colors.turquoise_blue}
                     customBgColor="white"
                     customWavePattern="m0 0 48 26.7C96 53 192 107 288 144s192 59 288 48 192-53 288-80 192-37 288-26.7c96 10.7 192 42.7 240 58.7l48 16V0H0Z"
                 />

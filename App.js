@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import 'react-native-gesture-handler';
-import Amplify from 'aws-amplify';
+import Amplify, { Auth, Hub, DataStore } from 'aws-amplify';
+import { Message } from './src/models'
 import config from './src/aws-exports';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Initializing from './app/navigation/Initialising';
@@ -17,6 +18,28 @@ function App() {
   useEffect(() => {
     checkAuthState();
   }, []);
+
+  //Check whether latest message is synchronised with DataStore
+  useEffect(() => {
+    //Create listener
+    const listener = Hub.listen('datastore', async hubData => {
+      const { event, data } = hubData.payload;
+      if (event === 'networkStatus') {
+        console.log('User has a network connection:',data.active)
+      }
+      if (event === 'outboxMutationProcessed' && data.model === Message 
+      && !(['DELIVERED','READ'].includes(data.element.status))) {
+          // Set message status to delivered (if not already delivered or read)
+          DataStore.save(
+            Message.copyOf(data.element, (updated) => {
+              updated.status= "DELIVERED"
+            }
+          )
+          )
+      }})
+      //Remove listener
+      return () => listener();
+  },[])
 
   async function checkAuthState() {
     try {

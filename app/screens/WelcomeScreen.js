@@ -79,8 +79,8 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
             <View style={styles.header_container}>
                 <LinearGradient
                     // Background Linear Gradient
-                    colors={[colors.grey_lightest, colors.grey_light]}
-                    locations={[0.1, 0.6]}
+                    colors={[colors.grey_lightest, colors.turquoise_green_light]}
+                    locations={[0, 0.7]}
                     style={[styles.background]}
                 />
                 <View style={{
@@ -100,13 +100,13 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
                         flexDirection: "row",
                         justifyContent: "flex-start",
                         margin: 0}}>
-                            <DashboardPill icon={store} title={coincount} backgroundColor={colors.turquoise_light}/>
-                            <DashboardPill icon={lightning} title='8' backgroundColor={colors.sky_pink_light}/>
-                            <DashboardPill title='Get a tour >' titleStyle={{color: 'white'}} backgroundColor={colors.lavender_blue}/>
+                            <DashboardPill icon={store} title={coincount} backgroundColor={colors.turquoise_blue}/>
+                            <DashboardPill icon={lightning} title='8' backgroundColor={colors.yellow_sun}/>
+                            <DashboardPill title='Get a tour >' titleStyle={{color: 'black'}} backgroundColor={colors.lavender_blue}/>
                     </View>
 
                 </View>
-                <View style={{
+                {/* <View style={{
                     height: 50,
                 }}>
                     <WavyHeader
@@ -115,7 +115,7 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
                         customFill={colors.grey_light}
                         customWavePattern="m0 0 48 26.7C96 53 192 107 288 144s192 59 288 48 192-53 288-80 192-37 288-26.7c96 10.7 192 42.7 240 58.7l48 16V0H0Z"
                     />
-                </View>
+                </View> */}
 
             </View>
 
@@ -136,7 +136,7 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
                     <DashboardCard_25 
                         Widget={<MetricWidget headingText='4' subHeadingText='Days' 
                             subSubHeadingText='until top-up.' seeMoreText='More >'/>} seeAllVisible={false} 
-                        color_1={colors.sky_pink_light} color_2={colors.french_pink_lightest}
+                        color_1={colors.mint_green} color_2={colors.mint_green_light}
                         middle={true}/>       
                     <DashboardCard_25 
                         Widget={<MetricWidget headingText='34' subHeadingText='Tutors' 
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
         //justifyContent: "flex-start", //sets all objects in bg container to start
         //alignItems: "center",
         backgroundColor: '#7AFFDE', 
-        height: 400
+        height: 320
     },
     viewImage: {
         resizeMode: "contain",
@@ -208,8 +208,7 @@ const styles = StyleSheet.create({
     },
     header_titletext: {
         fontSize: 48,
-        fontWeight: "800",
-        
+        fontWeight: "800",        
     },
     content_headercards: {
         flexDirection: "column",

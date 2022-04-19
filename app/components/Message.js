@@ -5,13 +5,17 @@ import { S3Image } from 'aws-amplify-react-native'
 import { Message as MessageModel, User} from '../../src/models';
 import colors from '../styles/colors';
 import AudioPlayer from './AudioPlayer';
+import icons from '../styles/icons';
+import Moment from 'moment';
 
 const Message = ({ message }) => {
 
   const [user, setUser] = useState(); //set user that message belongs to
-  const [isMe, setIsMe] = useState(false) //set toggle for if message belongs to me or other user
+  const [isMe, setIsMe] = useState(null) //set toggle for if message belongs to me or other user
+  const [status, setStatus] = useState(message.status) //set toggle for if message status is updated
   const [soundURI, setSoundURI] = useState(null);
   const { width } = useWindowDimensions();
+  const messageTimestamp = Moment(message.createdAt).format("h:mm A");
 
   //Fetch user that owns the message
   useEffect(() => {
@@ -36,6 +40,32 @@ const Message = ({ message }) => {
     //console.log(message);
   },[user]); 
 
+  //Determine if message has been read by other user
+  useEffect(()=> {
+    setMessageRead();
+  },[isMe])
+
+  const setMessageRead = async () => {
+    if (isMe===false && message.status!=='READ') {
+      await DataStore.save(MessageModel.copyOf(message, (updated) => {
+        updated.status = 'READ'}))
+    }
+  }
+
+  //Subcribe to message status updates
+  useEffect(() => {
+
+    //console.log(chatRoom?.id)
+    const subscription = DataStore.observe(MessageModel, message.id).subscribe(msg => {
+        //console.log(msg.element)
+        if (msg.model === MessageModel && msg.opType === "UPDATE") {
+          setStatus(msg.element.status);
+        }
+    })
+
+    return () => subscription.unsubscribe();
+},[status])
+
   //Load audio message
   useEffect(() => {
     if (message.audio) {
@@ -51,8 +81,18 @@ const Message = ({ message }) => {
   return (
     <View style={[isMe ? styles.rightContainer : styles.leftContainer, 
       {width: soundURI ? '75%' : 'auto'}]}>
+
+      {/*Timestamp*/}
+      <View style={styles.timestampContainer}>
+        <Text style={isMe ? styles.rightTimestampText : styles.leftTimestampText}>
+          {messageTimestamp}
+        </Text>
+      </View>
+
+      <View style={styles.body}>
       {/*Text Message*/}
-      {!!message.content && (<Text style={[styles.messageText, {color: isMe ? 'white' : 'black'}]}>
+      {!!message.content && (<Text style={[isMe ? styles.rightMessageText : styles.leftMessageText, 
+        {color: isMe ? 'white' : 'black'}]}>
         {message.content}
       </Text>)}
 
@@ -63,6 +103,14 @@ const Message = ({ message }) => {
 
       {/*Audio Message*/}
       {message.audio && <AudioPlayer soundURI={soundURI}/>}
+      </View>
+
+      {/*Message Status*/}
+      {isMe && <View style={isMe && styles.messageStatus}>
+        {status==='SENT' ? icons.sent_tick : null}
+        {status==='DELIVERED' ? icons.delivered_tick : null}
+        {status==='READ' ? icons.read_tick : null}
+      </View>}
     </View>
   )
 }
@@ -71,24 +119,51 @@ export default Message
 
 const styles = StyleSheet.create({
     leftContainer: {
-        padding: 10,
-        margin: 10,
-        borderRadius: 10,
-        maxWidth: '90%',
-        backgroundColor: 'gainsboro',
-        marginLeft: 10,
-        marginRight:'auto',
+      margin: 10,
+      paddingBottom: 5,
+      borderRadius: 10,
+      minWidth: '20%',
+      maxWidth: '90%',
+      backgroundColor: 'gainsboro',
+      marginLeft: 10,
+      marginRight:'auto',
     },
     rightContainer: {
-        padding: 10,
-        margin: 10,
-        borderRadius: 10,
-        maxWidth: '90%',
-        backgroundColor: colors.slate_blue_light,
-        marginLeft: 'auto',
-        marginRight: 10,
+      margin: 10,
+      borderRadius: 10,
+      minWidth: '20%',
+      maxWidth: '90%',
+      backgroundColor: colors.slate_blue_light,
+      marginLeft: 'auto',
+      marginRight: 10,
     },
-    messageText: {
-        fontSize: 16
+    body: {
+      paddingHorizontal: 5,
+      paddingTop: 5
+    },
+    messageStatus: {
+      flexDirection: 'row',
+      justifyContent:'flex-end',
+      marginBottom: 5,
+    },
+    timestampContainer: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      marginTop: 5,
+      marginRight: 5
+    },
+    rightTimestampText: {
+      color: colors.grey_light
+    },
+    leftTimestampText: {
+      color: 'white'
+    },
+    rightMessageText: {
+      fontSize: 16,
+      textAlign:'right'
+    },
+    leftMessageText: {
+      fontSize: 16,
+      textAlign:'left'
     }
 })

@@ -8,7 +8,8 @@ import { Entypo, Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ChatRoom, ChatRoomUser } from '../../src/models';
 import { Auth, DataStore } from 'aws-amplify';
-import BumpModal from '../components/BumpModal';
+import NewAsk from '../components/NewAsk';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
 
 //Icons
 const newMessage = <Entypo name={"new-message"} color={'white'} size={20} style={{marginHorizontal: 5}}/>;
@@ -18,6 +19,8 @@ const search_icon = <Ionicons name={"search"} color={'white'} size={30} style={{
 const MyAsksScreen = (props) => {
 
   const [chatRooms, setChatRooms] = useState([]);
+  const [showNewAsk, setShowNewAsk] = useState(false);
+
 
   //Fetch chatRooms
   useEffect(() => {
@@ -36,25 +39,18 @@ const MyAsksScreen = (props) => {
     fetchChatRooms();
   },[])
 
-  //on New Ask press
-  const newAskOnPress = (props) => {
-    return (
-      <BumpModal {...props}/>
-    )
-  }
-
   return (
-    <Fragment>
-    <SafeAreaView style={{flex:0, backgroundColor:colors.slate_blue}}/>
     <SafeAreaView style={styles.page}>
     {/* Header Components */}
-      <View style={styles.header_container}>   
         <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.slate_blue, colors.lavender_blue]}
+                colors={[colors.lavender_blue, colors.turquoise_light]}
                 locations={[0.2,0.9]}
+                start={{x:0.1,y:0.3}}
+                end={{x:0.7,y:0.5}}
                 style={[styles.background]}
         />         
+      <View style={styles.header_container}>   
         <View style={{flexDirection:'row', justifyContent:'space-between'}}>    
           <View style={{flexDirection:'row', alignItems:'center'}}>
             <Text style={elements.contentHeading_text}>My Asks</Text>
@@ -68,11 +64,20 @@ const MyAsksScreen = (props) => {
         <View style={{flexDirection:'row', justifyContent:'flex-start', marginVertical: 20}}>
           <TouchableOpacity 
             style={styles.newAskButton}
-            onPress={newAskOnPress}
+            onPress={()=> {setShowNewAsk(true)}}
           >
             {newMessage}
             <Text style={styles.newAskButtonText}>New Ask</Text>
           </TouchableOpacity>
+        </View>
+        <View style={{alignItems:'center', marginTop: 0}}>
+          <SegmentedControl
+            tintColor={colors.slate_blue_light}
+            fontStyle={{color: 'white'}}
+            values={['Active', 'All']}
+            selectedIndex={0}
+            style={{width:'60%'}}
+          />
         </View>
       </View>
       {/*Message Previews */}
@@ -81,11 +86,8 @@ const MyAsksScreen = (props) => {
           renderItem={({ item }) => <ChatRoomPreview chatRoom={item}/> }
           style={styles.messagepreviews_container}
       />
-
-
-
+      <NewAsk showNewAsk={showNewAsk} setShowNewAsk={setShowNewAsk}/>
     </SafeAreaView>
-    </Fragment>
   )
 }
 
@@ -101,13 +103,13 @@ const styles = StyleSheet.create({
 },
   page: {
     flex: 1,
-    backgroundColor: colors.lavender_blue
+    //backgroundColor: colors.lavender_blue
   },
   header_container: {
     paddingHorizontal: 15,
-    backgroundColor: colors.grey_lightest,
+    //backgroundColor: colors.grey_lightest,
     width: "100%",
-    height: "17%",
+    height: "25%",
 
   },
   messagepreviews_container: {

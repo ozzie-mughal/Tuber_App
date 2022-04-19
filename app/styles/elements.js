@@ -26,7 +26,7 @@ const elements = {
         backgroundColor: 'white',
         borderRadius: 20,
         borderWidth: 2,
-        borderColor: colors.sky_pink,
+        borderColor: colors.lavender,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
@@ -39,13 +39,13 @@ const elements = {
     secondaryButtonText: {
         fontSize: 20,
         fontWeight: "600",
-        color: colors.sky_pink,
+        color: colors.lavender,
     },
     primaryActionButton: {
         width: '45%',
         height: 50,
         paddingVertical: 10,
-        backgroundColor: colors.skyblue_crayola,
+        backgroundColor: colors.turquoise,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -82,7 +82,7 @@ const elements = {
     primaryActionButtonWide: {
         width: '100%',
         paddingVertical: 10,
-        backgroundColor: colors.baby_blue,
+        backgroundColor: colors.lavender_blue,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -100,7 +100,7 @@ const elements = {
     showMoreButton: {
         width: '40%',
         paddingVertical: 5,
-        backgroundColor: colors.orange,
+        backgroundColor: colors.lavender_blue,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -113,7 +113,7 @@ const elements = {
     showMoreButtonText: {
         fontSize: 14,
         fontWeight: "600",
-        color: 'white'
+        color: 'black'
     },
     secondaryActionButton: {
         width: '45%',
@@ -139,7 +139,7 @@ const elements = {
     },
     topSafeAreaContainer: {
         flex: 0,
-        backgroundColor: colors.lavender_blue
+        backgroundColor: colors.turquoise_green
     },
     topSafeAreaContainer_light: {
         flex: 0,
@@ -147,7 +147,7 @@ const elements = {
     },
     generalContainer: {
         flex: 1,
-        backgroundColor: 'white',
+        //backgroundColor: 'white',
     },
     splashHeaderContainer: {
         justifyContent: "center",
@@ -213,7 +213,9 @@ const elements = {
         //posititon: 'absolute',
         bottom: 50,
         //left: 10,
-        width: '100%'
+        width: '100%',
+        borderRadius: 30 ,
+        paddingTop: 20
     },
     stackedGreyContainer: {
         backgroundColor:colors.grey_lightest, 

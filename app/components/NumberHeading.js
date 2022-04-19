@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     numberContainer: {
-        backgroundColor:colors.baby_blue_light, 
+        backgroundColor:colors.mint_green, 
         width: 40,
         height: 40,
         //padding: 20,

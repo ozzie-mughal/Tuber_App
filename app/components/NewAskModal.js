@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { ScrollView, TouchableOpacity, StyleSheet, View, Text } from "react-native";
+import React, { useRef, useState, Fragment, useEffect } from 'react';
+import { ScrollView, ImageBackground, TouchableOpacity, StyleSheet, Image, View, Text } from "react-native";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/core'
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -23,8 +23,10 @@ import { DataStore } from '@aws-amplify/datastore';
 import { User } from '../../src/models';
 import { ChatRoom } from '../../src/models';
 import { ChatRoomUser } from '../../src/models';
-import {Picker} from '@react-native-picker/picker';
 import TextInputBasic from './TextInputBasic';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import DropdownPicker from './Picker';
 
 export default function BumpModal({children, onPress}) {
 
@@ -32,17 +34,32 @@ export default function BumpModal({children, onPress}) {
     const person = <Ionicons name={"person"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
     const store = <FontAwesome5 name={"coins"} color={'black'} size={20}/>;
     const randomAvatar = 'https://i.pravatar.cc/300';
-
-
-    //Dummy tutor chat room data
-    const chatRoom = {
-        id:'1',
-        name:'Elon Musk',
-        avatarImage: randomAvatar
-    }
+    //const askBackgroundImagetest = {uri: Image.resolveAssetSource(askBackgroundImage).uri};
+    //const askBackgroundImage = {uri: 'https://reactjs.org/logo-og.png'};
 
     const refRBSheet = useRef();
     const navigation = useNavigation()
+
+    //Field validation
+    const AskSchema = Yup.object().shape({
+        askType: Yup.string().required('Required'),
+        askSelectedTutor: Yup.string().required('Required'),
+        askWhatYear: Yup.string().required('You must select a Year and Subject for your Ask'),
+        askWhatSubject: Yup.string().required('You must select a Year and Subject for your Ask'),
+        askWhatDesc: Yup.string().max(32,'Description is too long.').required('Required'),
+    });
+
+    const { handleChange, setFieldValue, handleSubmit, handleBlur, values, errors, touched } = useFormik({
+        validationSchema: AskSchema,
+        initialValues: {
+            askType: '',
+            askSelectedTutor: '',
+            askWhatYear: '',
+            askWhatSubject: '',
+            askWhatDesc: ''},
+        onSubmit: values => beginAsk()
+    
+    });
     
     //Modal states
     const [showInfoModal, setShowInfoModal] = useState(false);
@@ -52,36 +69,65 @@ export default function BumpModal({children, onPress}) {
     const [askOptionData, setAskOptionData] = useState('');
     const selectedAskOption = (value) => {
         setAskOptionData(value);
+        values.askType = value;
     } 
 
     //Ask Who states
     const [selectedTutor, setSelectedTutor] = useState(null);
     const [whoOptionData, setWhoOptionData] = useState('');
+
+    //If auto is selected, set askSelectedTutor to a string
     const selectedWhoOption = (value) => {
         setWhoOptionData(value);
-
         if (value==='Suggest best for me') {
-            setSelectedTutor(null)
+            values.askSelectedTutor = value;
+        } else {
+            return;
         }
     } 
 
-    //Ask What states
-    const [selectedSubject, setSelectedSubject] = useState();
+    //If tutor is selected, set askSelectedTutor to them
+    useEffect(() => {
+        if (!selectedTutor){
+            return;
+        }
+        values.askSelectedTutor = selectedTutor.givenName;
 
-    const pickerRef = useRef();
+    },[selectedTutor])
+
+    //Ask What states
+    const [selectYear, setSelectYear] = useState();
+    const [selectSubject, setSelectSubject] = useState();
+    const [topic, setTopic] = useState();
+
+    const selectedYear = (value) => {
+        setSelectYear(value);
+        values.askWhatYear = value;
+    }
+    const selectedSubject = (value) => {
+        setSelectSubject(value);
+        values.askWhatSubject = value;
+    }
+
+    const yearPicker = useRef();
+    const subjectPicker = useRef();
 
     function open() {
-    pickerRef.current.focus();
+        yearPicker.current.focus();
     }
 
     function close() {
-    pickerRef.current.blur();
+        yearPicker.current.blur();
     }
+
+
 
     //Button press functions
     const beginAsk = async () => {
+        try {
         //Create chat room
-        const newChatRoom = await DataStore.save(new ChatRoom({newMessages: 0}));
+        const newChatRoom = await DataStore.save(new ChatRoom({
+            newMessages: 0, topic: values.askWhatDesc, active: true}));
 
         //Connect authenticated user to chat room
         const authUser = await Auth.currentAuthenticatedUser();
@@ -101,11 +147,15 @@ export default function BumpModal({children, onPress}) {
         
         navigation.navigate('ChatRoom', { id: newChatRoom.id, name: selectedTutor.givenName, avatarImage: selectedTutor.avatarImage });  
         //console.log('Pressed ask option');
+        }
+        catch (e) {
+            console.log('Error beginning Ask:',e)
+        }
     };
+
     const closeModal = () => {
         setAskOptionData('');
         setWhoOptionData('');
-        console.log('ask modal is closed');
     };
 
 
@@ -121,47 +171,62 @@ export default function BumpModal({children, onPress}) {
         {key: 1, value: 'Select own tutor', icon: icons.group_medium, desc: "Choose a favourite, top-rated, or any tutor. (NOTE: Tutor availability may differ)."},
     ];
 
+    const yearOptions = [
+        {label: 'K-6', value: 'K-6'},
+        {label: '7-10', value: '7-10'}
+    ]
+    const subjectOptions = [
+        {label: 'Maths', value: 'Maths'},
+        {label: 'Science', value: 'Science'}
+    ]
+
 
   return (
+    <Fragment>
     <TouchableOpacity 
     onPress={()=>{refRBSheet.current.open()}} 
     style={{
         top: -20,
         justifyContent:'center',
-        alignItems:'center'}}>  
+        alignItems:'center',
+        }}>  
         <View>
             {children}
         </View> 
+    </TouchableOpacity>
       <RBSheet
         ref={refRBSheet}
         animationType= "slide"
         closeOnDragDown={false}
-        closeOnPressMask={true}
         onClose={closeModal}
         customStyles={{
           container: {
-              height: 550,
+              height: 650,
               backgroundColor: "white",
               borderRadius: 30,
               top: 0,
-              paddingHorizontal: 20
+              
           },
         }}
       >
         <View>
-            <View style={{marginTop: 15}}>
-
-                <View style={{alignItems:'center'}}>
-                    {/*Collapse bar*/}
-                    <View style={{width:70, height: 5, backgroundColor:colors.skyblue_crayola, borderRadius:15}}/>
-                </View>
+            <ImageBackground source={require('../../app/assets/AskBackground.png')} resizeMode='cover' 
+                style={[styles.imageBG,{padding: 10}]}
+                imageStyle={{opacity:0.5}}>
+                    <TouchableOpacity 
+                        onPress={()=> {refRBSheet.current.close()}}
+                        style={{flexDirection:'row', justifyContent:'flex-end', padding: 0}}
+                        >
+                        {icons.close}
+                    </TouchableOpacity>
 
                 <Text style={{marginVertical: 15, fontSize:24, fontWeight: "700"}}>Stumped on something? Let's sort you out.</Text>
                 <ShowMore title='See how it works >'/>
-                
-            </View>
+            </ImageBackground>
+
             <ScrollView style={{
                 marginVertical:20,
+                paddingHorizontal: 20,
                 height: 350}}>
                 <View style={elements.stackedModalInputContainer}>
 
@@ -170,7 +235,8 @@ export default function BumpModal({children, onPress}) {
                         <NumberHeading number='1' keyword='How' title=' do you want to ask?'
                             onPress={()=>{
                                 setShowInfoModal(true)}}/>
-                        <RadioButtonCard data={askOptions} selectedOption={selectedAskOption}/>
+                        <RadioButtonCard data={askOptions} selectedValue={selectedAskOption}/>
+                        {touched.askType && errors.askType && <Text style={styles.errorText}>{errors.askType}</Text>}
                     </View>
 
                     {/* WHO */}
@@ -178,7 +244,7 @@ export default function BumpModal({children, onPress}) {
                         <NumberHeading number='2' keyword='Who' title=' do you want to ask?'
                             onPress={()=>{
                                 setShowInfoModal(true)}}/>
-                        <ToggleCard data={whoOptions} selectedOption={selectedWhoOption}/>
+                        <ToggleCard data={whoOptions} selectedValue={selectedWhoOption}/>
                         {whoOptionData==='Select own tutor' && !selectedTutor &&
                         <PrimaryActionButtonWide 
                             title='Select my own' 
@@ -197,6 +263,8 @@ export default function BumpModal({children, onPress}) {
                                     setShowActionModal(true)
                                 }}/>
                         </View>}
+                        {touched.askSelectedTutor && errors.askSelectedTutor && 
+                            <Text style={styles.errorText}>{errors.askSelectedTutor}</Text>}
                     </View>
 
                     {/* WHAT */}
@@ -206,47 +274,33 @@ export default function BumpModal({children, onPress}) {
                                 setShowInfoModal(true)}}/>
                         <View style={{flexDirection:'row'}}>
                             <View style={{width: '40%'}}>
-                            <Text style={{fontSize:20, fontWeight: "800"}}>Year </Text>
-                            <Picker
-                            ref={pickerRef}
-                            selectedValue={selectedSubject}
-                            onValueChange={(itemValue, itemIndex) =>
-                            setSelectedSubject(itemValue)
-                            }
-                            itemStyle={{fontSize:18}}>
-                            <Picker.Item label="K-6" value="K-6" />
-                            <Picker.Item label="7-10" value="7-10" />
-                            <Picker.Item label="Prelim" value="Prelim" />
-                            <Picker.Item label="HSC" value="HSC" />
-                            </Picker>
+                                <Text style={{fontSize:20, fontWeight: "800"}}>Year </Text>
+                                <DropdownPicker pickerData={yearOptions}
+                                    selectedOption={selectYear} setSelectedOption={selectedYear}/>
                             </View>
 
                             <View style={{width: '60%'}}>
-                            <Text style={{fontSize:20, fontWeight: "800"}}>Subject </Text>
-                            <Picker
-                            ref={pickerRef}
-                            selectedValue={selectedSubject}
-                            onValueChange={(itemValue, itemIndex) =>
-                            setSelectedSubject(itemValue)
-                            }
-                            itemStyle={{fontSize:18}}>
-                            <Picker.Item label="Mathematics" value="maths" />
-                            <Picker.Item label="Science" value="science" />
-                            <Picker.Item label="Chemistry" value="chemistry" />
-                            <Picker.Item label="English" value="english" />
-                            </Picker>
+                                <Text style={{fontSize:20, fontWeight: "800"}}>Subject </Text>
+                                <DropdownPicker pickerData={subjectOptions}
+                                    selectedOption={selectSubject} setSelectedOption={selectedSubject}/>
+
+
                             </View>
 
                         </View>
+                        {touched.askWhatSubject && errors.askWhatSubject && 
+                            <Text style={styles.errorText}>{errors.askWhatSubject}</Text>}
                         <View>
                             <TextInputBasic
                                 label={'Brief Description of Ask'}                        
-                                //value={values.username}
-                                //onChangeText={handleChange('username')}
-                                //onBlur={handleBlur('username')}
-                                //error={errors.username}
-                                //touched={touched.username}
+                                value={values.askWhatDesc}
+                                onChangeText={handleChange('askWhatDesc')}
+                                onBlur={handleBlur('askWhatDesc')}
+                                error={errors.askWhatDesc}
+                                touched={touched.askWhatDesc}
                             />
+                            {touched.askWhatDesc && errors.askWhatDesc && 
+                                <Text style={styles.errorText}>{errors.askWhatDesc}</Text>}
                         </View>
                     </View>
 
@@ -298,7 +352,7 @@ export default function BumpModal({children, onPress}) {
                 <View style={{flexDirection:'row', marginBottom: 35, 
                 justifyContent:'space-evenly'}}>
                     <SecondaryActionButton title='Cancel' onPress={closeModal}/>
-                    <PrimaryActionButton title='Begin' onPress={beginAsk}/>
+                    <PrimaryActionButton title='Begin' onPress={handleSubmit}/>
                 </View>
 
                 {/* Modals */}
@@ -318,8 +372,8 @@ export default function BumpModal({children, onPress}) {
             </ScrollView>
         </View>
       </RBSheet>
-    </TouchableOpacity>
-
+    
+    </Fragment>
   );
 }
 
@@ -339,5 +393,12 @@ const styles = StyleSheet.create({
         },
         pickerItem: {
             fontSize: 12
+        },
+        imageBG: {
+            justifyContent:'center'
+        },
+        errorText: {
+            color: 'red',
+            paddingTop: 5
         }
 })

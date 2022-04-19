@@ -1,14 +1,13 @@
 {
   "expo": {
-    "name": "Bump_App",
-    "slug": "bump_app",
+    "name": "Nemo",
+    "slug": "nemo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "splash": {
-      "image": "./app/assets/nemo-bannerlogo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#11D3F3"
+      "image": "./app/assets/nemo_splashscreen_v1.png",
+      "resizeMode": "contain"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

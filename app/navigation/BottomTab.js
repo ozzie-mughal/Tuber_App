@@ -7,16 +7,18 @@ import StoreScreen from '../screens/StoreScreen';
 import MyTutorsScreen from '../screens/MyTutorsScreen';
 import MyAsksScreen from '../screens/MyAsksScreen'
 import BumpComponent from '../components/BumpComponent';
-import BumpModal from '../components/BumpModal';
+import NewAskModal from '../components/NewAskModal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
+import { useNavigation } from '@react-navigation/core'
 import colors from '../styles/colors';
 import { Auth } from 'aws-amplify';
 
 
 const Tab = createBottomTabNavigator();
+
+//const navigation = useNavigation();
 
 
 //Declare icons
@@ -52,7 +54,7 @@ const MyTabs = props => {
       <Tab.Screen name="My Tutors" options={{
         tabBarLabel: 'My Tutors',
         tabBarIcon: ({focused, color, size}) => (
-          <View style={{right: 10, alignItems:'center'}}>
+          <View style={{alignItems:'center', right: 15}}>
           {myTutors}
           <Text style={styles.tablabel}>My Tutors</Text>
           </View>
@@ -65,15 +67,15 @@ const MyTabs = props => {
       <Tab.Screen name="Store" options={{
         tabBarLabel: 'Store',
         tabBarIcon: ({focused, color, size}) => (
-          <View style={{left: 10, alignItems:'center'}}>
+          <View style={{alignItems:'center', left: 15}}>
           {store}
           <Text style={styles.tablabel}>Store</Text>
           </View>
         ),
       }}>
         {screenProps => (
-                <StoreScreen {...screenProps} updateAuthState={props.updateAuthState} />
-              )}
+          <StoreScreen {...screenProps} updateAuthState={props.updateAuthState} />
+          )}
       </Tab.Screen>
 
       <Tab.Screen name="My Asks" options={{
@@ -85,15 +87,15 @@ const MyTabs = props => {
           </View>
           )}} >
         {screenProps => (
-                <MyAsksScreen {...screenProps} updateAuthState={props.updateAuthState} />
-              )}
+          <MyAsksScreen {...screenProps} updateAuthState={props.updateAuthState} />
+          )}
       </Tab.Screen>
 
-      <Tab.Screen name="Bump" 
+      <Tab.Screen name="New Ask" 
         component={BumpComponent}
         options={{
           tabBarShowLabel: false,
-          tabBarButton: (props) => (<BumpModal {...props}/>),
+          tabBarButton: (props) => (<NewAskModal {...props}/>),
           tabBarIcon: ({tintColor}) => (
             <View style={[styles.bumpIcon,styles.shadow]}>
               {paperPlane}

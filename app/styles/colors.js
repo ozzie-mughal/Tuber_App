@@ -3,6 +3,7 @@ const colors = {
     french_pink: '#FF70A6',
     salmon: '#FF9770',
     yellow_crayola: '#FFD670',
+    yellow_sun: '#fff269',
     mindaro: '#E9FF70',
     grey: 'grey',
     baby_blue_light: '#A4E5FF',
@@ -12,7 +13,7 @@ const colors = {
     salmon_light: '#FFC9B5',
     yellow_crayola_light: '#FFEBB7',
     mindaro_light: '#F4FFB5',
-    grey_light: '#DEDEDE',
+    grey_light: '#D1D1D1',
     grey_lightest: '#F5F5F5',
 
     //Ocean palette
@@ -22,10 +23,12 @@ const colors = {
     slate_blue: '#5E60CE',
     slate_blue_light: '#8A8CFF',
     lavender_blue: '#CCCCFF',
+    lavender_blue_light: '#E3E3FF',
     UN_blue: '#5390D9',
     UN_blue_light: '#98B5D9',
     UN_blue_lightest: '#B8C7D9',
     carolina_blue: '#4EA8DE',
+    cornflower_blue: '#5C95F8',
     cyan_process: '#48BFE3',
     skyblue_crayola: '#11D3F3',
     skyblue_crayola_light: '#80EDFF',
@@ -37,15 +40,24 @@ const colors = {
     aquamarine: '#79EFBD',
     aquamarine_light: '#ABEDD1',
     light_green: '#93F6B0',
-    mint_green: '#ADFDA2',
-    mint_green_light: '#CEFFC7',
+    mint_green: '#A7FCC1',
+    mint_green_light: '#C9FFDA',
     //#F8F8F8 - lightest white
 
     //Atlas palette
     orange: '#FEAC5E',
     orange_light: '#FACEA5',
     sky_pink: '#e38aed',
-    sky_pink_light: '#e9c2ed'
+    sky_pink_light: '#e9c2ed',
+
+    //Fun palette
+    yellow_gold: '#FFE600',
+    turquoise_blue: '#01FDF6',
+    lavender: '#CBBAED',
+    yellow_fluoro: '#FFF30A',
+    turquoise_green: '#03FCBA',
+    turquoise_green_lightest: '#D1FFF3', 
+    turquoise_green_light: '#96FFE3'
 }
 
 export default colors

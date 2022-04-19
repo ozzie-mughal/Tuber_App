@@ -4,7 +4,7 @@ import colors from '../styles/colors';
 
 const ToggleCard = ({
     data,
-    selectedOption
+    selectedValue
 }) => {
 
     const [toggleOption, setToggleOption] = useState(null);
@@ -21,7 +21,7 @@ const ToggleCard = ({
                     setToggleOptionDesc(item?.desc);
                 }
                 finally {
-                    selectedOption(item?.value);
+                    selectedValue(item?.value);
                     }
                 }}
                 style={[styles.toggleCard, item.value === toggleOption ? styles.selected : styles.unselected]}>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         fontWeight: "400",
     },
     selected: {
-        backgroundColor: colors.skyblue_crayola,
+        backgroundColor: colors.turquoise,
         borderWidth: 2,
     },
     unselected: {

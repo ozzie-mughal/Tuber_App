@@ -8,13 +8,13 @@ import colors from './colors';
 
 const icons = {
     chalkboard_medium : <FontAwesome5 name={"chalkboard-teacher"} 
-        color={"black"} size={40}/>,
+        color={"black"} size={35}/>,
     group_medium : <MaterialCommunityIcons name={"account-group"} 
-        color={"black"} size={40}/>,
+        color={"black"} size={35}/>,
     video_medium : <FontAwesome5 name={"video"} 
-        color={"black"} size={40}/>,
+        color={"black"} size={35}/>,
     text_medium : <MaterialCommunityIcons name={"message-text"} 
-        color={"black"} size={40}/>,
+        color={"black"} size={35}/>,
     plus : <FontAwesome name={"plus-circle"} 
         color={colors.turquoise} size={40} style={{marginHorizontal: 5}}/>,
     image : <Ionicons name={"image-outline"} 
@@ -37,6 +37,12 @@ const icons = {
         color={colors.grey} size={30} style={{marginHorizontal: 5}}/>,
     pause : <Feather name={"pause"} 
         color={colors.grey} size={30} style={{marginHorizontal: 5}}/>,
+    sent_tick : <Ionicons name={"ios-checkmark-outline"} 
+        color={colors.grey_light} size={15} style={{marginHorizontal: 5}}/>,
+    delivered_tick : <Ionicons name={"ios-checkmark-done-outline"} 
+        color={colors.grey_light} size={15} style={{marginHorizontal: 5}}/>,
+    read_tick : <Ionicons name={"ios-checkmark-done-sharp"} 
+        color={colors.turquoise} size={15} style={{marginHorizontal: 5}}/>,   
 }
 
 export default icons
