@@ -15,6 +15,7 @@ import SecondaryActionButton from '../components/SecondaryActionButton';
 import { LinearGradient } from 'expo-linear-gradient';
 import TextInputWithIcon from '../components/TextInputWithIcon';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FrontDoorBanner from '../components/FrontDoorBanner';
 
 
 export default function ResetPasswordScreen({ navigation }) {
@@ -72,31 +73,7 @@ export default function ResetPasswordScreen({ navigation }) {
                             behavior='padding'>
             <SafeAreaView style={elements.generalContainer}>
                 {/* Header Components */}
-                <View style={elements.screenHeaderContainer}>                
-                    <LinearGradient
-                        // Background Linear Gradient
-                        colors={[colors.orange,colors.sky_pink,colors.skyblue_crayola]}
-                        //start={{x:0.2,y:0.1}}
-                        //end={{x:0.3,y:0.9}}
-                        locations={[0.1,0.6, 1]}
-                        style={[styles.background]}
-                    />
-
-                    <Image 
-                        source={require('../assets/nemo-bannerlogo.png')}
-                        style={{resizeMode: 'contain', flex:1, width: 500, height: 500}}
-                    />
-                </View>
-                <View style={{
-                    height: 30,
-                }}>
-                    <WavyHeader
-                        customHeight={450}
-                        customFill={colors.skyblue_crayola}
-                        customBgColor="white"
-                        customWavePattern="m0 0 48 26.7C96 53 192 107 288 144s192 59 288 48 192-53 288-80 192-37 288-26.7c96 10.7 192 42.7 240 58.7l48 16V0H0Z"
-                    />
-                </View>
+                <FrontDoorBanner/>
 
 
             {/* Forgot Password Components */}

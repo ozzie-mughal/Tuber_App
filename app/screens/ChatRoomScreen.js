@@ -9,6 +9,8 @@ import colors from '../styles/colors'
 import elements from '../styles/elements'
 import { DataStore } from '@aws-amplify/datastore'
 import { MenuProvider } from 'react-native-popup-menu';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+
 
 const ChatRoomScreen = () => {
 
@@ -78,6 +80,7 @@ const ChatRoomScreen = () => {
     //navigation.setOptions({ headerTitle: () => <ChatRoomScreenHeader avatarImage={avatarImage} name={name}/>})
 
   return (
+    <ActionSheetProvider>
     <Fragment>
         <SafeAreaView style={styles.page}>
             <View style={styles.pageContent}>
@@ -94,6 +97,7 @@ const ChatRoomScreen = () => {
         </SafeAreaView>
         <SafeAreaView style={{backgroundColor:'white'}}/>
     </Fragment>
+    </ActionSheetProvider>
   )
 }
 
@@ -115,9 +119,9 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30 
     },
     timerContainer: {
-        backgroundColor:colors.grey_light,
-        borderTopLeftRadius: 30, 
-        borderTopRightRadius: 30,
+        backgroundColor:colors.yellow_sun,
+        borderBottomLeftRadius: 30, 
+        borderBottomRightRadius: 30,
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',

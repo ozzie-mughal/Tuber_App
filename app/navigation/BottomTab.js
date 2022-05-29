@@ -1,48 +1,49 @@
-import * as React from 'react';
-import { Text, View, Image, StyleSheet, Dimensions } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import StoreScreen from '../screens/StoreScreen';
 import MyTutorsScreen from '../screens/MyTutorsScreen';
 import MyAsksScreen from '../screens/MyAsksScreen'
 import BumpComponent from '../components/BumpComponent';
-import NewAskModal from '../components/NewAskModal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/core'
 import colors from '../styles/colors';
-import { Auth } from 'aws-amplify';
-
 
 const Tab = createBottomTabNavigator();
 
-//const navigation = useNavigation();
-
-
 //Declare icons
-const inbox = <FontAwesome5 name={"inbox"} color={colors.turquoise} size={25}/>;
-const store = <FontAwesome5 name={"coins"} color={colors.turquoise} size={25}/>;
-const myTutors = <MaterialIcons name={"favorite"} color={colors.turquoise} size={25}/>;
-const home = <MaterialIcons name={"home"} color={colors.turquoise} size={25}/>;
-const paperPlane = <FontAwesome name={"paper-plane"} color={"white"} size={40}/>
+const inbox = <FontAwesome5 name={"inbox"} color={colors.grey_light} size={25}/>;
+const store = <FontAwesome5 name={"coins"} color={colors.grey_light} size={25}/>;
+const myTutors = <MaterialIcons name={"favorite"} color={colors.grey_light} size={25}/>;
+const home = <MaterialIcons name={"home"} color={colors.grey_light} size={25}/>;
+const paperPlane = <FontAwesome name={"paper-plane"} color={'white'} size={40}/>
+const inbox_active = <FontAwesome5 name={"inbox"} color={colors.turquoise_blue} size={25}/>;
+const store_active = <FontAwesome5 name={"coins"} color={colors.turquoise_blue} size={25}/>;
+const myTutors_active = <MaterialIcons name={"favorite"} color={colors.turquoise_blue} size={25}/>;
+const home_active= <MaterialIcons name={"home"} color={colors.turquoise_blue} size={25}/>;
+const paperPlane_active = <FontAwesome name={"paper-plane"} color={'white'} size={40}/>
+
 
 const MyTabs = props => {
-  
+
   return (
     <Tab.Navigator
       screenOptions={{
       headerShown: false, 
-      tabBarActiveBackgroundColor: '#c0c2c4',
+      tabBarActiveTintColor: colors.turquoise_blue,
+      tabBarInactiveTintColor: 'transparent',
+      //tabBarActiveBackgroundColor: '#c0c2c4',
       tabBarLabelStyle: styles.tablabel,
       tabBarShowLabel: false,
-      tabBarStyle: { position: 'absolute' },
+      tabBarStyle: { position: 'absolute', borderTopWidth: 2, bottom:-5,borderColor:colors.grey },
   }}>
       <Tab.Screen name="Home" options={{tabBarLabel: 'Home',
+        
         tabBarIcon: ({focused, color, size}) => (
           <View style={{alignItems:'center'}}>
-          {home}
+          {focused ? home_active : home}
           <Text style={styles.tablabel}>Home</Text>
           </View>
           )}} >
@@ -54,8 +55,8 @@ const MyTabs = props => {
       <Tab.Screen name="My Tutors" options={{
         tabBarLabel: 'My Tutors',
         tabBarIcon: ({focused, color, size}) => (
-          <View style={{alignItems:'center', right: 15}}>
-          {myTutors}
+          <View style={{alignItems:'center'}}>
+          {focused ? myTutors_active : myTutors}
           <Text style={styles.tablabel}>My Tutors</Text>
           </View>
           )}} >
@@ -64,11 +65,31 @@ const MyTabs = props => {
               )}
       </Tab.Screen>
 
+      <Tab.Screen name="New Ask" options={{
+        tabBarShowLabel: false,
+        unmountOnBlur: true,
+        tabBarItemStyle: {backgroundColor: colors.turquoise_blue, 
+          borderWidth:3, borderColor:'white',
+        borderRadius: 30, shadowColor: '#000000',
+        shadowOpacity: 0.7,
+        shadowRadius: 7,
+        shadowOffset : { width: 0, height: 2}},
+        tabBarIcon: ({focused, color, size}) => (
+          <View style={{alignItems:'center'}}>
+          {paperPlane}
+          </View>
+        ),
+      }}>
+        {screenProps => (
+          <BumpComponent {...screenProps} updateAuthState={props.updateAuthState} />
+          )}
+      </Tab.Screen>
+
       <Tab.Screen name="Store" options={{
         tabBarLabel: 'Store',
         tabBarIcon: ({focused, color, size}) => (
-          <View style={{alignItems:'center', left: 15}}>
-          {store}
+          <View style={{alignItems:'center'}}>
+          {focused ? store_active : store}
           <Text style={styles.tablabel}>Store</Text>
           </View>
         ),
@@ -82,7 +103,7 @@ const MyTabs = props => {
         tabBarLabel: 'My Asks',
         tabBarIcon: ({focused, color, size}) => (
           <View style={{alignItems:'center'}}>
-            {inbox}
+            {focused ? inbox_active : inbox}
             <Text style={styles.tablabel}>My Asks</Text>
           </View>
           )}} >
@@ -91,18 +112,8 @@ const MyTabs = props => {
           )}
       </Tab.Screen>
 
-      <Tab.Screen name="New Ask" 
-        component={BumpComponent}
-        options={{
-          tabBarShowLabel: false,
-          tabBarButton: (props) => (<NewAskModal {...props}/>),
-          tabBarIcon: ({tintColor}) => (
-            <View style={[styles.bumpIcon,styles.shadow]}>
-              {paperPlane}
-            </View>
-          )
-        }}
-      />
+              
+
     </Tab.Navigator>
   );
 }
@@ -120,7 +131,7 @@ const styles = StyleSheet.create({
     shadowOffset : { width: 2, height: 2}
   },
   bumpIcon: {
-    backgroundColor: colors.turquoise,
+    backgroundColor: colors.turquoise_blue,
     borderRadius: 40,
     borderWidth: 3,
     borderColor: 'white',

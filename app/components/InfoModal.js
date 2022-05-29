@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
-import { View, Pressable, Button, StyleSheet, Alert, Text, Modal } from 'react-native';
+import { View, Pressable, Button, StyleSheet, Alert, Text, ScrollView, Modal } from 'react-native';
 import {
   BottomSheetModal,
   BottomSheetBackdrop,
@@ -10,7 +10,6 @@ import withModalProvider from './withModalProvider';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import elements from '../styles/elements';
 import colors from '../styles/colors'; 
-import information from '../assets/content-info/information'
 
 const InfoModal = ({showInfoModal, setShowInfoModal, headerTitle, ModalContent}) => {
 
@@ -33,15 +32,15 @@ const InfoModal = ({showInfoModal, setShowInfoModal, headerTitle, ModalContent})
               {headerTitle}
             </Text>
           </View>
-          <View style={styles.modalContent}>
-          {ModalContent}
+          <ScrollView style={styles.modalContent}>
+            {ModalContent}
+          </ScrollView>
           <Pressable
             style={[styles.button, styles.buttonClose]}
             onPress={() => setShowInfoModal(!showInfoModal)}
           >
             <Text style={styles.textStyle}>Got it!</Text>
           </Pressable>
-          </View>
         </View>
       </View>
     </Modal>
@@ -55,12 +54,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 0
+    marginTop: 0,
   },
   modalHeader: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: colors.salmon_light,
+    backgroundColor: colors.lavender_blue,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
@@ -75,6 +74,8 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
+    maxHeight:'60%',
+    paddingBottom: 20,
 
     alignItems: "center",
     shadowColor: "#000",
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
   modalContent: {
     paddingBottom: 20,
     paddingHorizontal: 35,
+    marginBottom: 10
   },
   button: {
     borderRadius: 20,
@@ -98,10 +100,10 @@ const styles = StyleSheet.create({
     elevation: 2
   },
   buttonOpen: {
-    backgroundColor: colors.salmon,
+    backgroundColor: colors.slate_blue_light,
   },
   buttonClose: {
-    backgroundColor: colors.salmon,
+    backgroundColor: colors.slate_blue_light,
   },
   textStyle: {
     color: "white",

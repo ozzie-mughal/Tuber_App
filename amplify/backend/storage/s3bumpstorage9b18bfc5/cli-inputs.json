@@ -2,10 +2,13 @@
   "resourceName": "s3bumpstorage9b18bfc5",
   "bucketName": "bump-storage-9b18bfc5",
   "policyUUID": "00e48aa0",
-  "storageAccess": "auth",
-  "guestAccess": [],
-  "authAccess": [
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
     "CREATE_AND_UPDATE",
     "READ"
+  ],
+  "authAccess": [
+    "READ",
+    "CREATE_AND_UPDATE"
   ]
 }

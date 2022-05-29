@@ -1,4 +1,4 @@
-import React, { useRef, useState, Fragment } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { ScrollView, ImageBackground, TouchableOpacity, StyleSheet, Modal, View, Text } from "react-native";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/core'
@@ -10,7 +10,7 @@ import elements from '../styles/elements';
 import PrimaryActionButton from './PrimaryActionButton';
 import PrimaryActionButtonWide from './PrimaryActionButtonWide';
 import SecondaryActionButton from './SecondaryActionButton';
-import NumberHeading from './NumberHeading';
+import NumberHeading from '../components/NumberHeading';
 import ShowMore from './ShowMore';
 import InfoModal from './InfoModal';
 import ActionModal from './ActionModal';
@@ -22,16 +22,43 @@ import { DataStore } from '@aws-amplify/datastore';
 import { User } from '../../src/models';
 import { ChatRoom } from '../../src/models';
 import { ChatRoomUser } from '../../src/models';
-import {Picker} from '@react-native-picker/picker';
 import TextInputBasic from './TextInputBasic';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import DialPicker from './DialPicker';
 
 export default NewAsk = ({ ...props }) => {
 
     const timer_icon = <Ionicons name={"ios-timer-outline"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
     const person = <Ionicons name={"person"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
     const store = <FontAwesome5 name={"coins"} color={'black'} size={20}/>;
+    const randomAvatar = 'https://i.pravatar.cc/300';
+    //const askBackgroundImagetest = {uri: Image.resolveAssetSource(askBackgroundImage).uri};
+    //const askBackgroundImage = {uri: 'https://reactjs.org/logo-og.png'};
 
+    const refRBSheet = useRef();
     const navigation = useNavigation()
+
+    //Field validation
+    const AskSchema = Yup.object().shape({
+        askType: Yup.string().required('Required'),
+        askSelectedTutor: Yup.string().required('Required'),
+        askWhatYear: Yup.string().required('You must select a Year and Subject for your Ask'),
+        askWhatSubject: Yup.string().required('You must select a Year and Subject for your Ask'),
+        askWhatDesc: Yup.string().max(32,'Description is too long.').required('Required'),
+    });
+
+    const { handleChange, setFieldValue, handleSubmit, handleBlur, values, errors, touched } = useFormik({
+        validationSchema: AskSchema,
+        initialValues: {
+            askType: '',
+            askSelectedTutor: '',
+            askWhatYear: '',
+            askWhatSubject: '',
+            askWhatDesc: ''},
+        onSubmit: values => beginAsk()
+    
+    });
     
     //Modal states
     const [showInfoModal, setShowInfoModal] = useState(false);
@@ -41,36 +68,52 @@ export default NewAsk = ({ ...props }) => {
     const [askOptionData, setAskOptionData] = useState('');
     const selectedAskOption = (value) => {
         setAskOptionData(value);
+        values.askType = value;
     } 
 
     //Ask Who states
     const [selectedTutor, setSelectedTutor] = useState(null);
     const [whoOptionData, setWhoOptionData] = useState('');
+
+    //If auto is selected, set askSelectedTutor to a string
     const selectedWhoOption = (value) => {
         setWhoOptionData(value);
-
         if (value==='Suggest best for me') {
-            setSelectedTutor(null)
+            values.askSelectedTutor = value;
+        } else {
+            return;
         }
     } 
 
+    //If tutor is selected, set askSelectedTutor to them
+    useEffect(() => {
+        if (!selectedTutor){
+            return;
+        }
+        values.askSelectedTutor = selectedTutor.givenName;
+
+    },[selectedTutor])
+
     //Ask What states
-    const [selectedSubject, setSelectedSubject] = useState();
+    const [selectYear, setSelectYear] = useState();
+    const [selectSubject, setSelectSubject] = useState();
 
-    const pickerRef = useRef();
-
-    function open() {
-    pickerRef.current.focus();
+    const selectedYear = (value) => {
+        setSelectYear(value);
+        values.askWhatYear = value;
+    }
+    const selectedSubject = (value) => {
+        setSelectSubject(value);
+        values.askWhatSubject = value;
     }
 
-    function close() {
-    pickerRef.current.blur();
-    }
 
     //Button press functions
     const beginAsk = async () => {
+        try {
         //Create chat room
-        const newChatRoom = await DataStore.save(new ChatRoom({newMessages: 0}));
+        const newChatRoom = await DataStore.save(new ChatRoom({
+            newMessages: 0, topic: values.askWhatDesc, active: true}));
 
         //Connect authenticated user to chat room
         const authUser = await Auth.currentAuthenticatedUser();
@@ -85,9 +128,17 @@ export default NewAsk = ({ ...props }) => {
             user: selectedTutor,
             chatRoom: newChatRoom,
         }))
+
+        refRBSheet.current.close();
         
         navigation.navigate('ChatRoom', { id: newChatRoom.id, name: selectedTutor.givenName, avatarImage: selectedTutor.avatarImage });  
+        //console.log('Pressed ask option');
+        }
+        catch (e) {
+            console.log('Error beginning Ask:',e)
+        }
     };
+
     const closeModal = () => {
         setAskOptionData('');
         setWhoOptionData('');
@@ -106,6 +157,15 @@ export default NewAsk = ({ ...props }) => {
         {key: 1, value: 'Select own tutor', icon: icons.group_medium, desc: "Choose a favourite, top-rated, or any tutor. (NOTE: Tutor availability may differ)."},
     ];
 
+    const yearOptions = [
+        {name: 'K-6', value: 'K-6'},
+        {name: '7-10', value: '7-10'}
+    ]
+    const subjectOptions = [
+        {name: 'Maths', value: 'Maths'},
+        {name: 'Science', value: 'Science'}
+    ]
+
 
   return (
     <Modal
@@ -122,7 +182,11 @@ export default NewAsk = ({ ...props }) => {
             style={[styles.imageBG,{padding: 10}]}
             imageStyle={{opacity:0.5}}>
                 <TouchableOpacity 
-                    onPress={() => props.setShowNewAsk(!props.showNewAsk)}
+                    onPress={()=> {
+                        props.setShowNewAsk(!props.showNewAsk);
+                        closeModal();
+                        props.navigation.navigate('Home');
+                    }}
                     style={{flexDirection:'row', justifyContent:'flex-end', padding: 0}}
                     >
                     {icons.close}
@@ -143,7 +207,8 @@ export default NewAsk = ({ ...props }) => {
                     <NumberHeading number='1' keyword='How' title=' do you want to ask?'
                         onPress={()=>{
                             setShowInfoModal(true)}}/>
-                    <RadioButtonCard data={askOptions} selectedOption={selectedAskOption}/>
+                    <RadioButtonCard data={askOptions} selectedValue={selectedAskOption}/>
+                    {touched.askType && errors.askType && <Text style={styles.errorText}>{errors.askType}</Text>}
                 </View>
 
                 {/* WHO */}
@@ -151,7 +216,7 @@ export default NewAsk = ({ ...props }) => {
                     <NumberHeading number='2' keyword='Who' title=' do you want to ask?'
                         onPress={()=>{
                             setShowInfoModal(true)}}/>
-                    <ToggleCard data={whoOptions} selectedOption={selectedWhoOption}/>
+                    <ToggleCard data={whoOptions} selectedValue={selectedWhoOption}/>
                     {whoOptionData==='Select own tutor' && !selectedTutor &&
                     <PrimaryActionButtonWide 
                         title='Select my own' 
@@ -170,6 +235,8 @@ export default NewAsk = ({ ...props }) => {
                                 setShowActionModal(true)
                             }}/>
                     </View>}
+                    {touched.askSelectedTutor && errors.askSelectedTutor && 
+                        <Text style={styles.errorText}>{errors.askSelectedTutor}</Text>}
                 </View>
 
                 {/* WHAT */}
@@ -179,47 +246,33 @@ export default NewAsk = ({ ...props }) => {
                             setShowInfoModal(true)}}/>
                     <View style={{flexDirection:'row'}}>
                         <View style={{width: '40%'}}>
-                        <Text style={{fontSize:20, fontWeight: "800"}}>Year </Text>
-                        <Picker
-                        ref={pickerRef}
-                        selectedValue={selectedSubject}
-                        onValueChange={(itemValue, itemIndex) =>
-                        setSelectedSubject(itemValue)
-                        }
-                        itemStyle={{fontSize:18}}>
-                        <Picker.Item label="K-6" value="K-6" />
-                        <Picker.Item label="7-10" value="7-10" />
-                        <Picker.Item label="Prelim" value="Prelim" />
-                        <Picker.Item label="HSC" value="HSC" />
-                        </Picker>
+                            <Text style={{fontSize:20, fontWeight: "800"}}>Year </Text>
+                            <DialPicker pickerData={yearOptions}
+                                selectedOption={selectYear} setSelectedOption={selectedYear}/>
                         </View>
 
                         <View style={{width: '60%'}}>
-                        <Text style={{fontSize:20, fontWeight: "800"}}>Subject </Text>
-                        <Picker
-                        ref={pickerRef}
-                        selectedValue={selectedSubject}
-                        onValueChange={(itemValue, itemIndex) =>
-                        setSelectedSubject(itemValue)
-                        }
-                        itemStyle={{fontSize:18}}>
-                        <Picker.Item label="Mathematics" value="maths" />
-                        <Picker.Item label="Science" value="science" />
-                        <Picker.Item label="Chemistry" value="chemistry" />
-                        <Picker.Item label="English" value="english" />
-                        </Picker>
+                            <Text style={{fontSize:20, fontWeight: "800"}}>Subject </Text>
+                            <DialPicker pickerData={subjectOptions}
+                                selectedOption={selectSubject} setSelectedOption={selectedSubject}/>
+
+
                         </View>
 
                     </View>
+                    {touched.askWhatSubject && errors.askWhatSubject && 
+                        <Text style={styles.errorText}>{errors.askWhatSubject}</Text>}
                     <View>
                         <TextInputBasic
                             label={'Brief Description of Ask'}                        
-                            //value={values.username}
-                            //onChangeText={handleChange('username')}
-                            //onBlur={handleBlur('username')}
-                            //error={errors.username}
-                            //touched={touched.username}
+                            value={values.askWhatDesc}
+                            onChangeText={handleChange('askWhatDesc')}
+                            onBlur={handleBlur('askWhatDesc')}
+                            error={errors.askWhatDesc}
+                            touched={touched.askWhatDesc}
                         />
+                        {touched.askWhatDesc && errors.askWhatDesc && 
+                            <Text style={styles.errorText}>{errors.askWhatDesc}</Text>}
                     </View>
                 </View>
 
@@ -268,49 +321,53 @@ export default NewAsk = ({ ...props }) => {
             </View>
 
 
-            <View style={{flexDirection:'row', marginBottom: 35, 
-            justifyContent:'space-evenly'}}>
-                <SecondaryActionButton title='Cancel' onPress={closeModal}/>
-                <PrimaryActionButton title='Begin' onPress={beginAsk}/>
-            </View>
+                <View style={{flexDirection:'row', marginBottom: 35, 
+                justifyContent:'space-evenly'}}>
+                    <SecondaryActionButton title='Cancel' onPress={closeModal}/>
+                    <PrimaryActionButton title='Begin' onPress={handleSubmit}/>
+                </View>
 
-            {/* Modals */}
-            <InfoModal 
-                showInfoModal={showInfoModal} 
-                setShowInfoModal={setShowInfoModal} 
-                headerTitle={'Some title'}
-                ModalContent={<Text>some extra information</Text>}
-            />
-            <ActionModal 
-                showActionModal={showActionModal} 
-                setShowActionModal={setShowActionModal} 
-                headerTitle={'Find A Tutor'}
-                ModalContent={SelectTutorScreen}
-                selectTutorAction={setSelectedTutor}
-            />
-        </ScrollView>
+                {/* Modals */}
+                <InfoModal 
+                    showInfoModal={showInfoModal} 
+                    setShowInfoModal={setShowInfoModal} 
+                    headerTitle={'Some title'}
+                    ModalContent={<Text>some extra information</Text>}
+                />
+                <ActionModal 
+                    showActionModal={showActionModal} 
+                    setShowActionModal={setShowActionModal} 
+                    headerTitle={'Find A Tutor'}
+                    ModalContent={SelectTutorScreen}
+                    selectTutorAction={setSelectedTutor}
+                />
+            </ScrollView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-        timerText: {
-            fontSize: 14,
-            fontWeight: '600'
-        },
-        headerTimer: {
-            padding: 5,
-            backgroundColor: colors.grey_light,
-            width: 120,
-            flexDirection: 'row',
-            borderRadius: 15,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
-        pickerItem: {
-            fontSize: 12
-        },
-        imageBG: {
-            justifyContent:'center'
-        }
+    timerText: {
+        fontSize: 14,
+        fontWeight: '600'
+    },
+    headerTimer: {
+        padding: 5,
+        backgroundColor: colors.grey_light,
+        width: 120,
+        flexDirection: 'row',
+        borderRadius: 15,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    pickerItem: {
+        fontSize: 12
+    },
+    imageBG: {
+        justifyContent:'center'
+    },
+    errorText: {
+        color: 'red',
+        paddingTop: 5
+    }
 })

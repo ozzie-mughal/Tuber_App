@@ -6,7 +6,7 @@ import getCountDown from '../functions/getCountDown'
 import { Audio } from 'expo-av';
 
 
-const AudioPlayer = ({ soundURI, setAudio, deleteButton }) => {
+const AudioPlayer = ({ soundURI, setSoundURI, setAudio, deleteButton }) => {
     //Set states
     const [audioProgress, setAudioProgress] = useState(0);
     const [audioDuration, setAudioDuration] = useState(0);
@@ -80,7 +80,8 @@ const AudioPlayer = ({ soundURI, setAudio, deleteButton }) => {
                 {deleteButton &&
                 <TouchableOpacity onPress={()=>{
                     setSound(null)
-                    setAudio(null)}}>
+                    setAudio(null)
+                    setSoundURI(null)}}>
                     {icons.close}
                 </TouchableOpacity>}
             </View>

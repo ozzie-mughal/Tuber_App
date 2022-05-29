@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ActivityIndicator, useWindowDimensions } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator, useWindowDimensions, Pressable, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Auth, DataStore, Storage } from 'aws-amplify';
 import { S3Image } from 'aws-amplify-react-native'
@@ -7,15 +7,19 @@ import colors from '../styles/colors';
 import AudioPlayer from './AudioPlayer';
 import icons from '../styles/icons';
 import Moment from 'moment';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import { Svg, Path } from 'react-native-svg';
 
 const Message = ({ message }) => {
 
   const [user, setUser] = useState(); //set user that message belongs to
-  const [isMe, setIsMe] = useState(null) //set toggle for if message belongs to me or other user
-  const [status, setStatus] = useState(message.status) //set toggle for if message status is updated
+  const [isMe, setIsMe] = useState(null); //set toggle for if message belongs to me or other user
+  const [isDeleted, setIsDeleted] = useState(false); //set toggle for if message is deleted or not
+  const [status, setStatus] = useState(message.status); //set toggle for if message status is updated
   const [soundURI, setSoundURI] = useState(null);
   const { width } = useWindowDimensions();
   const messageTimestamp = Moment(message.createdAt).format("h:mm A");
+  const { showActionSheetWithOptions } = useActionSheet(); //to toggle action menu on message options (eg. delete)
 
   //Fetch user that owns the message
   useEffect(() => {
@@ -52,7 +56,7 @@ const Message = ({ message }) => {
     }
   }
 
-  //Subcribe to message status updates
+  //Subscribe to message status updates
   useEffect(() => {
 
     //console.log(chatRoom?.id)
@@ -78,9 +82,57 @@ const Message = ({ message }) => {
     return <ActivityIndicator/>
   }
 
+  //Action sheet
+  //Option functions
+
+  const deleteMessage = () => {
+    if (!isMe) {
+      Alert.alert(
+        'This message was not sent by you. You can only delete your own messages.'
+      )
+      return;
+    }
+    DataStore.delete(message);
+    setIsDeleted(true);
+  }
+  const confirmDeleteMessage = () => {
+    Alert.alert(
+      'Confirm Delete',
+      'Are you sure you want to delete this message?',
+      [
+        {
+          text: 'Delete',
+          onPress: deleteMessage,
+          style: 'destructive'
+        },
+        {
+          text: 'Cancel',
+        }
+      ]
+    )
+  }
+  
+  const showActionSheet = () => {
+    const options = ['Delete','Cancel'];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
+    const onActionPress = (index) => {
+      if (index===0) {
+        confirmDeleteMessage();
+      }
+    }
+    showActionSheetWithOptions({
+      options,
+      cancelButtonIndex,
+      destructiveButtonIndex,
+      },
+      onActionPress);
+  }
+
   return (
-    <View style={[isMe ? styles.rightContainer : styles.leftContainer, 
-      {width: soundURI ? '75%' : 'auto'}]}>
+    <Pressable onLongPress={showActionSheet}
+      style={[isMe ? styles.rightContainer : styles.leftContainer, 
+        {width: soundURI ? '75%' : 'auto'}]}>
 
       {/*Timestamp*/}
       <View style={styles.timestampContainer}>
@@ -90,20 +142,28 @@ const Message = ({ message }) => {
       </View>
 
       <View style={styles.body}>
-      {/*Text Message*/}
-      {!!message.content && (<Text style={[isMe ? styles.rightMessageText : styles.leftMessageText, 
-        {color: isMe ? 'white' : 'black'}]}>
-        {message.content}
-      </Text>)}
+        {/*Text Message*/}
+        {!!message.content && !isDeleted && (<Text style={[isMe ? styles.rightMessageText : styles.leftMessageText, 
+          {color: isMe ? 'white' : 'black'}]}>
+          {message.content}
+        </Text>)}
 
-      {/*Image Message*/}
-      {message.image && <S3Image imgKey={message.image} 
-        style={{width: width*0.7, marginTop: message.content ? 5 : 0, aspectRatio: 4/3}}
-        resizeMode='contain'/>}
+        {/*Image Message*/}
+        {message.image && !isDeleted && (<S3Image imgKey={message.image} 
+          style={{width: width*0.7, marginTop: message.content ? 5 : 0, aspectRatio: 4/3}}
+          resizeMode='contain'/>)}
 
-      {/*Audio Message*/}
-      {message.audio && <AudioPlayer soundURI={soundURI}/>}
+        {/*Audio Message*/}
+        {message.audio && !isDeleted && <AudioPlayer soundURI={soundURI}/>}
+
+        {/*Message deleted message (if message is deleted, show this)*/}
+        {isDeleted && <Text style={[isMe ? styles.rightMessageText : styles.leftMessageText, 
+          {color: isMe ? 'white' : 'black', fontStyle:'italic'}]}>
+          message deleted
+        </Text>}
       </View>
+
+
 
       {/*Message Status*/}
       {isMe && <View style={isMe && styles.messageStatus}>
@@ -111,7 +171,26 @@ const Message = ({ message }) => {
         {status==='DELIVERED' ? icons.delivered_tick : null}
         {status==='READ' ? icons.read_tick : null}
       </View>}
-    </View>
+
+      <View
+          style={[
+            styles.arrowContainer,
+            isMe ? styles.arrowRightContainer : styles.arrowLeftContainer,
+          ]}
+        >
+
+           <Svg style={isMe ? styles.arrowRight : styles.arrowLeft} width={15.5} 
+            height={17.5} viewBox="32.484 17.5 15.515 17.5"  
+            enable-background="new 32.485 17.5 15.515 17.5">
+                <Path
+                    d={isMe ? "M48,35c-7-4-6-8.75-6-17.5C28,17.5,29,35,48,35z" : "M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"}
+                    fill={isMe ? colors.slate_blue_light : "gainsboro"}
+                    x={isMe ? "-0.35" : "0"}
+                    y="0"
+                />
+            </Svg>
+        </View>
+    </Pressable>
   )
 }
 
@@ -119,7 +198,8 @@ export default Message
 
 const styles = StyleSheet.create({
     leftContainer: {
-      margin: 10,
+      marginHorizontal: 10,
+      marginVertical: 5,
       paddingBottom: 5,
       borderRadius: 10,
       minWidth: '20%',
@@ -129,7 +209,8 @@ const styles = StyleSheet.create({
       marginRight:'auto',
     },
     rightContainer: {
-      margin: 10,
+      marginHorizontal: 10,
+      marginVertical: 5,
       borderRadius: 10,
       minWidth: '20%',
       maxWidth: '90%',
@@ -164,6 +245,35 @@ const styles = StyleSheet.create({
     },
     leftMessageText: {
       fontSize: 16,
-      textAlign:'left'
+      textAlign:'left',
+      paddingBottom: 5
+    },
+    arrowContainer: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: -1,
+      flex: 1
+    },
+    arrowLeftContainer: {
+        justifyContent: 'flex-end',
+        alignItems: 'flex-start'
+    },
+
+    arrowRightContainer: {
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+    },
+
+    arrowLeft: {
+        left: -6,
+        bottom: -6
+    },
+
+    arrowRight: {
+        right: -6,
+        bottom: -6
     }
 })

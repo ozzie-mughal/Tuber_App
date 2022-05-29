@@ -33,7 +33,7 @@ const DateTimePickerBasic = ({icon, label, error, touched, ...otherProps}) => {
 
   return (
     <View>
-        <Text style={[{fontWeight:'500'}, {color: validationColor}]}>
+        <Text style={[elements.formLabelText, {color: validationColor}]}>
             {label}
         </Text>
         <View>

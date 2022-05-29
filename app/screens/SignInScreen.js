@@ -17,6 +17,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { LinearGradient } from 'expo-linear-gradient';
 import { color } from 'react-native-reanimated';
+import getCurrentUserInfo from '../functions/getCurrentUserInfo';
 
 
 export default function LoginScreen({ navigation, updateAuthState, isUserLoggedIn}) {
@@ -48,6 +49,10 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
         catch(error) {
             console.log('Sign-In error',error)
         }
+        finally {
+            //Grab details on User Role, based on sub ID, and store in AsyncStorage
+            await getCurrentUserInfo(values.email);
+        }
     }
 
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
@@ -74,17 +79,7 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
         <SafeAreaView style={elements.generalContainer}>
             {/* Header Components */}
             <View style={elements.splashHeaderContainer}>                
-                {/* <LinearGradient
-                    // Background Linear Gradient
-                    colors={[colors.skyblue_crayola, colors.dark_turquoise
-                        , colors.turquoise, colors.turquoise_green
-                        , colors.aquamarine, colors.light_green
-                        , colors.mint_green]}
-                    start={{x:0.2,y:0.1}}
-                    end={{x:0.3,y:0.9}}
-                    locations={[0.1, 0.3, 0.4, 0.7, 0.8, 0.9, 0.98]}
-                    style={[styles.background]}
-                /> */}
+
                 <LinearGradient
                     // Background Linear Gradient
                     //colors={[colors.orange,colors.sky_pink,colors.skyblue_crayola]}
@@ -97,14 +92,14 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
 
                 <Image 
                     source={require('../assets/nemo-logo.png')}
-                    style={{resizeMode: 'contain', flex:1, width: 450, height: 450}}
+                    style={{resizeMode: 'contain', width: 250, height: 250, bottom:25}}
                 />
             </View>
             <View style={{
                 height: 30,
             }}>
                 <WavyHeader
-                    customHeight={450}
+                    customHeight={250}
                     customFill={colors.turquoise_blue}
                     customBgColor="white"
                     customWavePattern="m0 0 48 26.7C96 53 192 107 288 144s192 59 288 48 192-53 288-80 192-37 288-26.7c96 10.7 192 42.7 240 58.7l48 16V0H0Z"
@@ -138,6 +133,7 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
                         onBlur={handleBlur('password')}
                         error={errors.password}
                         touched={touched.password}
+                        value={values.password}
                     />
                     <View style={{alignItems:"flex-end", marginTop: 5}}>
                         <TouchableOpacity
@@ -197,6 +193,7 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
 
                     </View>
                     <SecondaryButton title="Register" onPress={() => navigation.navigate('SignUp')}/>
+                    
                 </View>
             </View>
         </SafeAreaView>

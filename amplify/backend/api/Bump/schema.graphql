@@ -1,3 +1,24 @@
+type UserRole @model @auth(rules: [{allow: public}]) {
+  username: String!
+  roleType: String!
+  org: String!
+  year: String
+  subjects: [String]
+  voucherApplied: String
+  User: User @hasOne
+  id: ID!
+  partnerCentre: String
+  availabilities: [String]
+}
+
+type Voucher @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  code: String!
+  active: Boolean!
+  value: Float
+}
+
 enum MessageStatus {
   SENT
   DELIVERED
@@ -33,5 +54,6 @@ type User @model @auth(rules: [{allow: public}]) {
   familyName: String!
   avatarImage: String
   lastOnlineAt: AWSTimestamp
+  UserRole: UserRole @belongsTo
 }
  

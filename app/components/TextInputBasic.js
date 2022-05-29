@@ -5,19 +5,19 @@ import React from 'react'
 import elements from '../styles/elements';
 import colors from '../styles/colors';
 
-const TextInputBasic = ({icon, label, error, touched, ...otherProps}) => {
+const TextInputBasic = ({icon, InputWidth, label, error, touched, ...otherProps}) => {
 
     const validationColor = !touched ? 'black' : error ? 'red' : 'limegreen';
 
 
   return (
     <View>
-        <Text style={[{fontWeight:'500'}, {color: validationColor}]}>
+        <Text style={[{fontWeight:'500'}, {color: validationColor},elements.formLabelText]}>
             {label}
         </Text>
         <View style={[{borderColor: validationColor}, styles.textInputContainer]}>
             {icon}
-            <TextInput {...otherProps} style={styles.input}/>
+            <TextInput {...otherProps} style={[styles.input, {width: InputWidth ? InputWidth : '100%'}]}/>
         </View>
         {touched && error && <Text style={styles.errorText}>{error}</Text>}
     </View>
@@ -33,12 +33,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 10,
         borderRadius: 10,
-        marginTop: 2,
+        marginVertical: 2,
         backgroundColor:'white'
     },
     input: {
         paddingHorizontal: 15,
-        width:'100%'
+        //width: {width} ? {width} : '100%'
     },
     errorText: {
         color: 'red',

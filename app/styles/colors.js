@@ -34,8 +34,8 @@ const colors = {
     skyblue_crayola_light: '#80EDFF',
     dark_turquoise: '#2BDAE6',
     med_turquoise: '#64DFDF',
-    turquoise: '#11F3E8',
-    turquoise_green: '#5FE8CB',
+    //turquoise: '#11F3E8',
+    turquoise: '#01FDF6',
     turquoise_light: '#7DF0EA',
     aquamarine: '#79EFBD',
     aquamarine_light: '#ABEDD1',
@@ -52,12 +52,16 @@ const colors = {
 
     //Fun palette
     yellow_gold: '#FFE600',
-    turquoise_blue: '#01FDF6',
-    lavender: '#CBBAED',
-    yellow_fluoro: '#FFF30A',
     turquoise_green: '#03FCBA',
+    turquoise_green_light: '#96FFE3',
     turquoise_green_lightest: '#D1FFF3', 
-    turquoise_green_light: '#96FFE3'
+    turquoise_blue: '#01FDF6',
+    turquoise_blue_light: '#7DFFFB',
+    turquoise_blue_lightest: '#BFFFFD',
+    pastel_blue: '#A1E5FF',
+    lavender: '#CDD9FF',
+    bubblegum_pink: '#FFCCF1',
+    yellow_fluoro: '#FFF30A',
 }
 
 export default colors

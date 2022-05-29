@@ -1,62 +1,71 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity, Pressable} from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable, ActivityIndicator} from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/core'
 import colors from '../styles/colors';
-import { Auth, DataStore } from 'aws-amplify';
-import { ChatRoomUser, User, Message as MessageModel } from '../../src/models';
+import { Hub, Auth, DataStore } from 'aws-amplify';
+import { ChatRoomUser, ChatRoom, User, Message as MessageModel } from '../../src/models';
 import Moment from 'moment';
+import setUnreadMessages from '../functions/setUnreadMessages';
 
 const ChatRoomPreview = ({ chatRoom }) => {
-
+  ///////////////////////////////////////////////////////
+  //STATE
   const navigation = useNavigation();
 
-  //const [users, setUsers] = useState([]); //All users in chatroom
   const [user, setUser] = useState(); //The user displayed as having a chat with
+  const [senderAvatarImage, setSenderAvatarImage] = useState(); //The user displayed as having a chat with
+  const [senderGivenName, setSenderGivenName] = useState(); //The user displayed as having a chat with
+  const [senderFamilyName, setSenderFamilyName] = useState(); //The user displayed as having a chat with
+
   const [lastMessage, setLastMessage] = useState() //The last message for a given chatRoom
   const [lastMessageUser, setLastMessageUser] = useState() //The last message for a given chatRoom
+  const [lastMessageTimestamp, setLastMessageTimestamp] = useState() //The last message for a given chatRoom
+  const [sinceLastMessageTimestamp, setSinceLastMessageTimestamp] = useState() //The last message for a given chatRoom
+  const [lastMessageUserGivenName, setLastMessageUserGivenName] = useState() //The last message for a given chatRoom
 
-  //Fetch chatrooms, that current user belongs to, and their users
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const authUser = await Auth.currentAuthenticatedUser();
-      const fetchedUsers = (await DataStore.query(ChatRoomUser))
-        .filter(chatRoomUser => chatRoomUser.chatRoom.id === chatRoom.id)
-        .map(chatRoomUser => chatRoomUser.user);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
+  const [newMessages, setNewMessages] = useState();
+  const [topic, setTopic] = useState();
+  const [active, setActive] = useState();
 
-      //console.log(fetchedUsers);
-      //setUsers(fetchedUsers);
-      setUser(fetchedUsers.find(user => user.id !== authUser.attributes.sub) || null);
-    };
-    fetchUsers();
-  },[])
-
-  const setLastMessageSent = async (value) => {
-    setLastMessage(value)
-    DataStore.query(User,value.userID).then(setLastMessageUser);
-  }
-
-  //Fetch last message for each chatRoom
-  useEffect(() => {
-    const fetchLastMessage = async () => {
-    if (!chatRoom.chatRoomLastMessageId) { return }
-      await DataStore.query(MessageModel,chatRoom.chatRoomLastMessageId).then(setLastMessageSent);
-      // if (!lastMessage.userID) { return }
-      // await DataStore.query(User,lastMessage.userID).then(setLastMessageUser);
-    }
-    fetchLastMessage();
-  },[])
-
+  ///////////////////////////////////////////////////////
+  //LOCAL FUNCTIONS
   //Set preview variables
-  const senderAvatarImage = user?.avatarImage;
-  const senderGivenName = user?.givenName;
-  const senderFamilyName = user?.familyName;
-  const lastMessageTimestamp = lastMessage?.createdAt;
-  const sinceLastMessageTimestamp = Moment(lastMessageTimestamp).from(Moment())
-  const lastMessageUserGivenName = lastMessageUser?.givenName; 
-  const newMessages = chatRoom?.newMessages;
-  const topic = chatRoom?.topic;
-  const active = chatRoom?.active;
-
+  const setUserPreviewVariables = async (chatRoom) => {
+    if (!user) {
+      return;
+    }
+    setSenderAvatarImage(user?.avatarImage);
+    setSenderGivenName(user?.givenName);
+    setSenderFamilyName(user?.familyName);
+    setTopic(chatRoom?.topic);
+    setActive(chatRoom?.active);
+  }
+  const setLastMessagePreviewVariables = async (chatRoom) => {
+    if (!lastMessage) {
+      return;
+    }
+    setLastMessageTimestamp(lastMessage?.createdAt);
+    setSinceLastMessageTimestamp(Moment(lastMessageTimestamp).from(Moment()));
+    setLastMessageUserGivenName(lastMessageUser?.givenName); 
+    setNewMessages(chatRoom?.newMessages);
+  }
+  //Fetch chatroom users (that are not current user)
+  const fetchUsers = async () => {
+    const authUser = await Auth.currentAuthenticatedUser();
+    const fetchedUsers = (await DataStore.query(ChatRoomUser))
+      .filter(chatRoomUser => chatRoomUser.chatRoom.id === chatRoom.id)
+      .map(chatRoomUser => chatRoomUser.user);
+    setUser(fetchedUsers.find(user => user.id !== authUser.attributes.sub) || null);
+  };
+  //Fetch last message for each chatRoom
+  const fetchLastMessage = async (chatRoom) => {
+  if (!chatRoom.chatRoomLastMessageId) { return }
+    await DataStore.query(MessageModel,chatRoom.chatRoomLastMessageId).then((value) => {
+      setLastMessage(value)
+      DataStore.query(User,value?.userID).then(setLastMessageUser);
+    });
+  }
   //Last message previewed (depending on last message type)
   const getLastMessage = () => {
     if (lastMessage?.content) {
@@ -70,18 +79,137 @@ const ChatRoomPreview = ({ chatRoom }) => {
     }
   }
 
+  const setNewMessagesCount = async (count) => {
+    try {
+      if (count === unreadMessagesCount) {
+        return;
+      }   
+      await DataStore.save(
+        ChatRoom.copyOf(chatRoom, (updated) => {
+          updated.newMessages= parseInt(count)
+        }
+        ) 
+      )
+    }
+    catch (e) {
+      console.log('Error in saving message count ',e)
+    }
+    finally {
+    //console.log('updated unread message count in DB to ',count)
+    }
+  }
+  
   //On chatRoom preview press
   const onChatRoomPress = () => {
-          navigation.navigate('ChatRoom', { id: chatRoom.id, name: senderGivenName, avatarImage: senderAvatarImage });  
+    navigation.navigate('ChatRoom', { id: chatRoom.id, name: senderGivenName, avatarImage: senderAvatarImage });  
+  }
+
+  ///////////////////////////////////////////////////////
+  //USEEFFECT HOOKS
+  //Fetch chatrooms, that current user belongs to, and their users, on component mount
+  useEffect(() => {
+    fetchUsers();
+    fetchLastMessage(chatRoom);
+  },[])
+
+  //Set chatroom preview variables, on chatroom user or last message change
+  useEffect(() => {
+    setUserPreviewVariables(chatRoom);
+    setLastMessagePreviewVariables(chatRoom);
+  },[user, lastMessage, lastMessageUser, chatRoom])
+
+  //Subscribe to chatRoom updates
+  useEffect(() => {
+  if (!chatRoom) {
+    return;
+  }
+  const subscription = DataStore.observe(ChatRoom, chatRoom.id).subscribe((updatedChatRoom) => {
+    if (updatedChatRoom.model === ChatRoom && updatedChatRoom.opType === "UPDATE" && updatedChatRoom.element.active === true){
+        //console.log('chatroom is updated for chatroom ID ',chatRoom.id)
+        try {
+          fetchLastMessage(updatedChatRoom.element)
         }
+        finally {
+          // setUnreadMessages(user,updatedChatRoom.element)
+          //   .then(value => setUnreadMessagesCount(value));
+          if (!user) {
+            //console.log('could not find user')
+            return ; //return if chatRoom value still hasn't been retrieved
+          }
+
+          //const [unreadCount, setUnreadCount] = useState(0);
+          //const [lastUnreadMessage, setLastUnreadMessage] = useState();
+          const setUnreadMessages = async () => {
+          const fetchedMessages = await DataStore.query(MessageModel,
+              message => message
+                          .chatroomID("eq", chatRoom.id)
+                          .status("eq","DELIVERED")
+                          )
+          const deliveredMessagesCount = fetchedMessages.length;
+          if (deliveredMessagesCount === unreadMessagesCount) {
+            //console.log('previous unread count is ',unreadMessagesCount, 'and latest count is ',deliveredMessagesCount, 'so function is returned')
+            return;
+          }          
+          //console.log('unread message count is ',deliveredMessagesCount)
+          //setNewMessagesCount(deliveredMessagesCount);
+
+          setUnreadMessagesCount(deliveredMessagesCount);
+        }
+        setUnreadMessages();
+
+          //console.log(user)
+          //console.log('updated chatroom details are ',updatedChatRoom.element)
+        }
+        
+      }
+  });
+
+  return () => subscription.unsubscribe();
+  }, [chatRoom.chatRoomLastMessageId,user]);
+
+  useEffect(() => {
+    setNewMessagesCount(unreadMessagesCount)
+  },[unreadMessagesCount])
+  
+
+
+
+// useEffect(() => {
+//   //Create listener
+//   const listener = Hub.listen('datastore', async hubData => {
+//     const { event, data } = hubData.payload;
+//     console.log(event, data)
+//     if (event === 'outboxMutationProcessed' && data.model === ChatRoom) {
+//       const setUnreadMessages = async () => {
+//         const fetchedMessages = await DataStore.query(MessageModel,
+//             message => message
+//                         .chatroomID("eq", chatRoom.id)
+//                         .status("eq","DELIVERED")
+//                         )
+//         const deliveredMessagesCount = fetchedMessages.length;
+//         if (deliveredMessagesCount === unreadMessagesCount) {
+//           return;
+//         }
+//         DataStore.save(
+//           ChatRoom.copyOf(data.element, (updated) => {
+//             updated.newMessages= deliveredMessagesCount
+//           }
+//         )
+//         )
+//         console.log('unread message count is ',unreadMessagesCount)
+//         }
+//         setUnreadMessages();
+
+//         // Set unread message count (messages delivered)
+//     }})
+//     //Remove listener
+//     return () => listener();
+// },[])
 
   return (
     <TouchableOpacity onPress={onChatRoomPress} style={styles.container}>
 
       <Image style={styles.avatarimage} source={{uri: senderAvatarImage}}/>
-
-
-
       {active ? 
       <View style={styles.activebadge_container}/>
       : null}

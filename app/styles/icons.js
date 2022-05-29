@@ -22,17 +22,23 @@ const icons = {
     camera : <Ionicons name={"camera-outline"} 
         color={colors.grey} size={30} style={{marginHorizontal: 5}}/>,
     microphone_selected : <Ionicons name={"mic"} 
-        color={colors.turquoise } size={30} style={{marginHorizontal: 5}}/>,
+        color={'white'} size={30}/>,
     microphone : <Ionicons name={"mic-outline"} 
-        color={colors.grey} size={30} style={{marginHorizontal: 5}}/>,
+        color={colors.turquoise} size={30}/>,
     smile_selected : <SimpleLineIcons name={"emotsmile"} 
         color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>,
+    arrow_down : <SimpleLineIcons name={"arrow-down"} 
+        color={colors.turquoise} size={20} style={{marginHorizontal: 5}}/>,
+    arrow_up : <SimpleLineIcons name={"arrow-up"} 
+        color={'white'} size={20} style={{marginHorizontal: 5}}/>,
     smile : <SimpleLineIcons name={"emotsmile"} 
         color={colors.grey} size={30} style={{marginHorizontal: 5}}/>,
     send : <Ionicons name={"send"} 
         color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>,
     close : <Ionicons name={"close-circle-outline"} 
         color={colors.grey} size={30} style={{marginHorizontal: 5}}/>,
+    close_small : <Ionicons name={"close-circle-outline"} 
+        color={colors.grey} size={20} style={{marginHorizontal: 5}}/>,
     play : <Feather name={"play"} 
         color={colors.grey} size={30} style={{marginHorizontal: 5}}/>,
     pause : <Feather name={"pause"} 
@@ -43,6 +49,8 @@ const icons = {
         color={colors.grey_light} size={15} style={{marginHorizontal: 5}}/>,
     read_tick : <Ionicons name={"ios-checkmark-done-sharp"} 
         color={colors.turquoise} size={15} style={{marginHorizontal: 5}}/>,   
+    selected_tick : <FontAwesome name={"check-circle"} 
+        color={'lime'} size={15} style={{marginLeft: 5}}/>,   
 }
 
 export default icons

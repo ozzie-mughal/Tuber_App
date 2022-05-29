@@ -11,6 +11,7 @@ const DashboardPill = ({icon, title, onPress,
             {backgroundColor: backgroundColor}]}>
             <View style={{
                 flexDirection: "row",
+                justifyContent:'flex-start',
                 alignItems: "center",
                 padding: 5}}>
                 {icon}
@@ -32,8 +33,10 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginBottom: 15,
         marginRight: 10,
-        justifyContent:'center',
-        alignItems:'center',
+        justifyContent:'flex-start',
+        //alignItems:'center',
+        paddingLeft: 20,
+        width: 200,
         shadowColor: '#000000',
         shadowOpacity: 0.5,
         shadowRadius: 7,

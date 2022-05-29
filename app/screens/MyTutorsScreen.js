@@ -44,7 +44,7 @@ const MyTutorsScreen = () => {
         />         
         <View style={{flexDirection:'row', justifyContent:'space-between'}}>    
           <View style={{flexDirection:'row', alignItems:'center'}}>
-            <Text style={elements.contentHeading_text}>My Tutors</Text>
+            <Text style={elements.pageHeading_text}>My Tutors</Text>
           </View>
           <TouchableOpacity style={{justifyContent:'center', alignItems:'center'}}>
             {search_icon}

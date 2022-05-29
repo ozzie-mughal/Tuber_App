@@ -1,14 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { View, SafeAreaView, Image, ImageBackground, 
     StyleSheet, Button, Text, TouchableOpacity,
-    ScrollView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+    ScrollView, Dimensions } from 'react-native';
 import { Auth } from 'aws-amplify';
 import elements from '../styles/elements';
 import colors from '../styles/colors';
-import { useNavigation } from '@react-navigation/core'
-import WavyHeader from '../components/WavyHeader';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -22,20 +18,25 @@ import AnnouncementCard from '../components/AnnouncementCard';
 import GradientText from '../components/GradientText';
 import { MenuProvider } from 'react-native-popup-menu';
 import AccountMenu from '../components/AccountMenu';
-
+import readAsyncData from '../functions/AsyncStorage/readAsyncData';
+import AskNowWidget from '../components/AskNowWidget';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import NewsWidget from '../components/carousel'; 
+import ScheduledAsksWidget from '../components/ScheduledAsksWidget';
 
 const store = <FontAwesome5 name={"coins"} color={'black'} size={20}/>;
-const hamburger_menu = <Entypo name={"menu"} color={colors.turquoise} size={40}/>;
-const lightning = <MaterialCommunityIcons name={"lightning-bolt"} color={'gold'} size={20}/>;
+const hamburger_menu = <Entypo name={"menu"} color={colors.turquoise_blue} size={40}/>;
+const lightning = <MaterialCommunityIcons name={"lightning-bolt"} color={'black'} size={20}/>;
 
 
 export default function WelcomeScreen({ navigation, updateAuthState }) {
 
-    //const navigation = useNavigation()
-
     const [coincount, setCoinCount] = useState(0);
     const [givenName, setGivenName] = useState('');
-    const [picture, setAvatarImage] = useState('placedholder')
+    const [picture, setAvatarImage] = useState(null);
+    const [userAsyncData, setUserAsyncData] = useState([]);
+    const width = Dimensions.get('window').width;
+    const tabBarHeight = useBottomTabBarHeight();
 
     async function signOut() {
         try {
@@ -48,13 +49,41 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
         }
         }
 
+    async function readAsyncUserData() {
+        try {
+            const roleKeys = [
+                'avatarImage'
+            ]
+            const asyncValues = readAsyncData(roleKeys)
+                .then((res) => {
+                    res.map((array,key) => {
+                        array.map((obj) => {
+                            [key] = obj;
+                        })
+                })
+                });
+
+            if (!asyncValues) {
+                console.log('No role information found');  
+                return;          
+            }
+
+            const avatarImage = asyncValues[0];
+
+            return avatarImage;
+        } catch (e) {
+            console.log('Error in fetching async user data: ',e);
+        }
+    }
+
     async function getUserInfo() {
         try {
             let user = await Auth.currentAuthenticatedUser();
             const { attributes } = user;
             setGivenName(attributes.given_name);
-            setAvatarImage(attributes.picture);
-            //console.log(attributes)
+            //setAvatarImage(attributes.picture);
+            // const avatarImage = await readAsyncUserData();
+            // setAvatarImage(avatarImage);
         } catch(error) {
             console.log('Error in getting user info:',error)
         }
@@ -64,95 +93,96 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
         getUserInfo()
     },[])
 
-    const avatar = <Image source={{uri:picture}} style={styles.viewImage_medium}/>;
+    useEffect(() => {
+        readAsyncData(['avatarImage']).then((res) => {
+            setAvatarImage(res[0][1]);
+        })
+    },[])
 
-    
+    const defaultAvatarImage = <Image source={require('../assets/'+'avatar_icon.png')} style={styles.viewImage_medium}/>;
 
     return (
         <MenuProvider>
         <Fragment>
-        <SafeAreaView style={elements.topSafeAreaContainer_light}/>
+        <ImageBackground
+            source={require('../assets/stacked-waves-haikei.png')}
+            style={{height: '32%',
+                    width: '100%',
+                    resizeMode: "cover",
+                    overflow: "hidden",
+                    flex: 1}}>
+            <SafeAreaView style={{opacity: 0}} />
 
-        <SafeAreaView style={elements.generalContainer}>
-
-        <ScrollView style={elements.generalContainer}>
-            <View style={styles.header_container}>
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={[colors.grey_lightest, colors.turquoise_green_light]}
-                    locations={[0, 0.7]}
-                    style={[styles.background]}
-                />
-                <View style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",}}>
-                    <View style={{marginTop: 10,marginLeft: 10,}}>
-                        {hamburger_menu}
+                    <View>                
+                        <View style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",}}>
+                            <View style={{marginTop: 10,marginLeft: 10,}}>
+                                {hamburger_menu}
+                            </View>
+                            <AccountMenu avatar={picture ? 
+                                <Image source={require('../assets/'+'avatar-student.png')} style={styles.viewImage_medium}/> : 
+                                defaultAvatarImage} signOut={signOut}/>
+                        </View>
+                        <View style={{flexDirection:'row', marginBottom: 20}}>
+                        <View style={styles.header_title}>
+                            <GradientText style={styles.header_titletext}>Hello,{"\n"}{givenName}!</GradientText>
+                        </View>
+                        <View style={styles.content_headercards}>
+                            <View style={{
+                                flexDirection: "column",
+                                justifyContent: "flex-start",
+                                marginHorizontal: 10}}>
+                                    <DashboardPill icon={store} title={coincount} backgroundColor={colors.turquoise_green}/>
+                                    <DashboardPill icon={lightning} title='8' backgroundColor={colors.yellow_sun}/>
+                            </View>
+                        </View>
+                        </View>
                     </View>
-                    <AccountMenu avatar={avatar} signOut={signOut}/>
+
+                    {/* Dashboard Content */}
+
+                    <View style={[elements.generalDashboardContainer]}>
+                        <View style={{position:'absolute',top:-10, left:0.12*width,
+                            justifyContent:'center',alignItems:'center', 
+                            zIndex: 999}}>
+                            <AskNowWidget navigation={navigation}/>
+                        </View>
+                    <ScrollView contentContainerStyle={{justifyContent:'center', alignItems:'center',paddingBottom:tabBarHeight+20}}
+                        style={elements.dashboardContentContainer}>
+                        <NewsWidget/>
+                        
+                        <DashboardCardFull headerTitle='Live Asks' seeAllTitle='See All Asks' 
+                            Widget={ActiveAsksWidget} seeAllVisible={true} seeAllOnPress={()=>{navigation.navigate('My Asks')}} 
+                            color_1={'white'} color_2={colors.grey_lightest}/>
+                        <DashboardCardFull headerTitle='Scheduled Asks' seeAllTitle='See All Asks' 
+                            Widget={ScheduledAsksWidget} seeAllVisible={true} seeAllOnPress={()=>{navigation.navigate('My Asks')}} 
+                            color_1={'white'} color_2={colors.grey_lightest}/>
+                        {/* <View style={{flexDirection:'row', width:'100%', justifyContent:'space-between'}}>
+                            <DashboardCard_25 
+                                Widget={<MetricWidget headingText='11' subHeadingText='Asks' 
+                                    subSubHeadingText='until Level 3.' seeMoreText='More >'/>} seeAllVisible={false} 
+                                color_1={colors.lavender_blue} color_2={colors.lavender_blue_light}
+                                left={true} />       
+                            <DashboardCard_25 
+                                Widget={<MetricWidget headingText='4' subHeadingText='Days' 
+                                    subSubHeadingText='until top-up.' seeMoreText='More >'/>} seeAllVisible={false} 
+                                color_1={colors.yellow_sun} color_2={colors.yellow_crayola_light}
+                                middle={true}/>       
+                            <DashboardCard_25 
+                                Widget={<MetricWidget headingText='34' subHeadingText='Tutors' 
+                                    subSubHeadingText='online now.' seeMoreText='More >'/>} seeAllVisible={false} 
+                                color_1={colors.turquoise_blue_light} color_2={colors.turquoise_blue_lightest}
+                                right={true}/>       
+                        </View> */}
+                        <DashboardCardFull headerTitle='Top-Rated Tutors' seeAllTitle='See All' 
+                            Widget={TopTutorsWidget} seeAllVisible={true} 
+                            color_1={'white'} color_2={colors.grey_lightest}/>                       
+                        
+                    </ScrollView>
                 </View>
-                <View style={styles.header_title}>
-                    <GradientText style={styles.header_titletext}>Hello,{"\n"}{givenName}!</GradientText>
-                    
-                </View>
-                <View style={styles.content_headercards}>
-                    <View style={{
-                        flexDirection: "row",
-                        justifyContent: "flex-start",
-                        margin: 0}}>
-                            <DashboardPill icon={store} title={coincount} backgroundColor={colors.turquoise_blue}/>
-                            <DashboardPill icon={lightning} title='8' backgroundColor={colors.yellow_sun}/>
-                            <DashboardPill title='Get a tour >' titleStyle={{color: 'black'}} backgroundColor={colors.lavender_blue}/>
-                    </View>
-
-                </View>
-                {/* <View style={{
-                    height: 50,
-                }}>
-                    <WavyHeader
-                        customHeight={450}
-                        customBgColor="white"
-                        customFill={colors.grey_light}
-                        customWavePattern="m0 0 48 26.7C96 53 192 107 288 144s192 59 288 48 192-53 288-80 192-37 288-26.7c96 10.7 192 42.7 240 58.7l48 16V0H0Z"
-                    />
-                </View> */}
-
-            </View>
-
-            {/* Dashboard Content */}
-
-            <View style={elements.dashboardContentContainer}>
-                <AnnouncementCard announcementText='Refer a friend and get 20 free coins*' seeAllTitle='Learn More >' seeAllVisible={true}/>
-
-                <DashboardCardFull headerTitle='Live Sessions' seeAllTitle='See All Asks' 
-                    Widget={ActiveAsksWidget} seeAllVisible={true} seeAllOnPress={()=>{navigation.navigate('My Asks')}} 
-                    color_1={'white'} color_2={colors.grey_lightest}/>
-                <View style={{flexDirection:'row', width:'100%', justifyContent:'space-between'}}>
-                    <DashboardCard_25 
-                        Widget={<MetricWidget headingText='11' subHeadingText='Asks' 
-                            subSubHeadingText='until Level 3.' seeMoreText='More >'/>} seeAllVisible={false} 
-                        color_1={colors.slate_blue_light} color_2={colors.lavender_blue}
-                        left={true} />       
-                    <DashboardCard_25 
-                        Widget={<MetricWidget headingText='4' subHeadingText='Days' 
-                            subSubHeadingText='until top-up.' seeMoreText='More >'/>} seeAllVisible={false} 
-                        color_1={colors.mint_green} color_2={colors.mint_green_light}
-                        middle={true}/>       
-                    <DashboardCard_25 
-                        Widget={<MetricWidget headingText='34' subHeadingText='Tutors' 
-                            subSubHeadingText='online now.' seeMoreText='More >'/>} seeAllVisible={false} 
-                        color_1={colors.skyblue_crayola_light} color_2={colors.baby_blue}
-                        right={true}/>       
-                </View>
-                <DashboardCardFull headerTitle='Top-Rated' seeAllTitle='See All' 
-                    Widget={TopTutorsWidget} seeAllVisible={true} 
-                    color_1={'white'} color_2={colors.grey_lightest}/>                       
-                <DashboardCardFull headerTitle='Recent Asks' seeAllVisible={true}/>
-                <DashboardCardFull headerTitle='Resources / How-To' seeAllVisible={true}/>
-                
-            </View>
-        </ScrollView>
-        </SafeAreaView>
+            <SafeAreaView style={{opacity: 0}} />
+        </ImageBackground>        
         </Fragment>
         </MenuProvider>
     );
@@ -161,9 +191,6 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: "center", //sets all objects in bg container to start
-        //alignItems: "center",
-        //backgroundColor: '#0AFFC2' 
     },
     background: {
         position: 'absolute',
@@ -174,8 +201,6 @@ const styles = StyleSheet.create({
     },
     header_container: {
         flex: 1,
-        //justifyContent: "flex-start", //sets all objects in bg container to start
-        //alignItems: "center",
         backgroundColor: '#7AFFDE', 
         height: 320
     },
@@ -201,19 +226,21 @@ const styles = StyleSheet.create({
         borderRadius: 32
     },
     header_title: {
-        width: "100%",
+        width: "70%",
         flexDirection:"row",
         paddingHorizontal: 30,
         justifyContent:"flex-start",
+        alignItems:'flex-start'
     },
     header_titletext: {
         fontSize: 48,
-        fontWeight: "800",        
+        fontWeight: "800", 
+     
     },
     content_headercards: {
         flexDirection: "column",
         justifyContent: "space-between",
         paddingTop: 15,
-        paddingHorizontal: 30,
+        paddingHorizontal: 15,
     },
 })

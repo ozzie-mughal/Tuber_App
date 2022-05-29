@@ -11,6 +11,9 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { Audio } from 'expo-av';
 import AudioPlayer from './AudioPlayer';
+import getBlob from '../functions/getBlob';
+import takePhoto from '../functions/takePhoto';
+import pickImage from '../functions/pickImage';
 
 
 const MessageInput = ({ chatRoom }) => {
@@ -52,40 +55,15 @@ const MessageInput = ({ chatRoom }) => {
         })();
     },[]);
 
-
-    //File URI needs to be converted to BLOB for S3 storage
-    const getBlob = async (uri) => {
-        const response = await fetch(uri);
-        const blob = response.blob();
-        return blob;
-    }
     
     //Image Picker
-    const pickImage = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-        });
 
-        if (!result.cancelled) {
-        setImage(result.uri);
-        }
-    };
-
-    const takePhoto = async () => {
-        const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-        });
-
-        if (!result.cancelled) {
-        setImage(result.uri);
-        }
-    };
+    const takePhotoMessage = () => {
+        takePhoto(setImage);
+    }
+    const pickImageMessage = () => {
+        pickImage(setImage);
+    }
 
     const progressCallback = (progress) => {
         if (image) {
@@ -124,19 +102,16 @@ const MessageInput = ({ chatRoom }) => {
             allowsRecordingIOS: true,
             playsInSilentModeIOS: true,
           }); 
-          console.log('Starting recording..');
           const { recording } = await Audio.Recording.createAsync(
              Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
           );
           setRecording(recording);
-          console.log('Recording started');
         } catch (err) {
           console.error('Failed to start recording', err);
         }
     }
     
       async function stopRecording() {
-        console.log('Stopping recording..');
         if (!recording) {
             return;
         }
@@ -186,7 +161,7 @@ const MessageInput = ({ chatRoom }) => {
 
     const updateLastMessage = async (newMessage) => {
         //Create copy of chatroom (to update lastMessage) as entity is immutable
-        DataStore.save(ChatRoom.copyOf(chatRoom, updatedChatRoom => {
+        await DataStore.save(ChatRoom.copyOf(chatRoom, updatedChatRoom => {
             updatedChatRoom.LastMessage = newMessage;
         }))
     }
@@ -226,8 +201,14 @@ const MessageInput = ({ chatRoom }) => {
                 height: 4, width: (imageUploadProgress * 100)+'%'}}/>
         </View>}
 
+        {/*Audio Recording in Progress Alert (if selected) */}
+        {recording && <View style={styles.sendPreviewContainer}>
+            <View style={{flexDirection:'row', marginBottom: 5}}>
+                <Text>Recording in progress. Release to preview.</Text>
+            </View>
+        </View>}
         {/*Audio Preview (if selected) */}
-        {audio && <AudioPlayer soundURI={soundURI} setAudio={setAudio} deleteButton={true}/>}
+        {audio && <AudioPlayer soundURI={soundURI} setAudio={setAudio} deleteButton={true} setSoundURI={setSoundURI}/>}
         {/*Upload progress bar */}
         {audio && 
             <View style={{backgroundColor:colors.turquoise, 
@@ -243,26 +224,28 @@ const MessageInput = ({ chatRoom }) => {
 
                 <TextInput 
                     style={styles.input}
-                    placeholder="Type message"
+                    placeholder="Type message..."
                     value={message}
                     onChangeText={setMessage}/>
 
-                <TouchableOpacity onPress={pickImage}>
+                <TouchableOpacity onPress={pickImageMessage}>
                 {icons.image}
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={takePhoto}>
+                <TouchableOpacity onPress={takePhotoMessage}>
                 {icons.camera}
                 </TouchableOpacity>
                 
-                <Pressable onPressIn={startRecording} onPressOut={stopRecording}>
-                {recording ? icons.microphone_selected : icons.microphone}
-                </Pressable>
+
             </View>
             <TouchableOpacity 
                 onPress={onSendPress}
                 style={styles.buttonContainer}>
-                {message || image || soundURI ? icons.send : icons.plus}
+                {message || image || soundURI ? icons.send : 
+                    <Pressable onPressIn={startRecording} onPressOut={stopRecording}
+                        style={recording ? styles.micButtonPressed : styles.micButton}>
+                        {recording ? icons.microphone_selected : icons.microphone}
+                    </Pressable>}
             </TouchableOpacity>
         </View>
         {emojiPickerOpen && <EmojiSelector onEmojiSelected={emoji => 
@@ -280,6 +263,7 @@ const styles = StyleSheet.create({
         //flexDirection: 'row',
         padding: 10,
         marginBottom: 10,
+        marginTop: 5,
         borderTopWidth: 1,
         borderColor: colors.grey_light,
     },
@@ -332,5 +316,23 @@ const styles = StyleSheet.create({
         width: 15, 
         position: 'absolute',
         top: -5
+    },
+    micButton: {
+        backgroundColor:'whitesmoke',
+        padding: 10,
+        borderRadius: 25,
+        borderWidth: 2,
+        borderColor: colors.turquoise,
+        justifyContent: 'center',
+        alignItems:'center'
+    },
+    micButtonPressed: {
+        backgroundColor: colors.turquoise,
+        padding: 10,
+        borderRadius: 25,
+        borderWidth: 2,
+        borderColor: colors.turquoise,
+        justifyContent: 'center',
+        alignItems:'center'
     }
 })

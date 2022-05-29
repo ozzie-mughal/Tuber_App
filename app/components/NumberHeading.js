@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import colors from '../styles/colors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import InfoModal from './InfoModal';
 
 
-const NumberHeading = ({keyword, title, number, onPress}) => {
+const NumberHeading = ({keyword, title, number, headerTitle, hideHelp, ModalContent}) => {
 
     const help_icon = <MaterialCommunityIcons name={"help-circle"} color={colors.grey} size={25}/>;
+    const [showInfoModal, setShowInfoModal] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -19,9 +21,18 @@ const NumberHeading = ({keyword, title, number, onPress}) => {
                 <Text style={styles.headingText}>{title}</Text>
             </Text>
         </View>
-        <TouchableOpacity style={styles.helpContainer} onPress={onPress}>
+        {!hideHelp && <TouchableOpacity style={styles.helpContainer} onPress={()=>{
+            setShowInfoModal(true);
+        }}>
             {help_icon}
-        </TouchableOpacity>
+        </TouchableOpacity>}
+
+
+        <InfoModal 
+            showInfoModal={showInfoModal}
+            setShowInfoModal={setShowInfoModal}
+            headerTitle={headerTitle}
+            ModalContent={ModalContent}/>
     </View>
   )
 }
@@ -35,7 +46,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     numberContainer: {
-        backgroundColor:colors.mint_green, 
+        backgroundColor:colors.yellow_sun, 
         width: 40,
         height: 40,
         //padding: 20,

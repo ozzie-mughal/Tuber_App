@@ -4,7 +4,9 @@ import colors from '../styles/colors'
 
 const RadioButtonPanel = ({
     data,
-    selectedOption
+    selectedOption,
+    error,
+    touched
 }) => {
 
     const [askOption, setAskOption] = useState(null);
@@ -42,6 +44,7 @@ const RadioButtonPanel = ({
     <View style={{marginVertical: 15}}>
         <Text style={styles.radioButtonCard_title_selected}>{askOptionDesc}</Text>
     </View>
+    {touched && error && <Text style={styles.errorText}>{error}</Text>}
     </View>
 
   )
@@ -60,7 +63,7 @@ const styles = StyleSheet.create({
     },
     radioButtonHeader_selected: {
         alignItems:'center',
-        backgroundColor: colors.sky_pink,
+        backgroundColor: colors.turquoise_green,
         width: '100%',
         height: '50%',
         borderTopLeftRadius:15,
@@ -68,7 +71,7 @@ const styles = StyleSheet.create({
     },
     radioButtonHeader_unselected: {
         alignItems:'center',
-        backgroundColor: colors.sky_pink_light,
+        backgroundColor: colors.turquoise_green_light,
         width: '100%',
         height: '50%',
         borderTopLeftRadius:15,
@@ -88,6 +91,10 @@ const styles = StyleSheet.create({
     },
     unselected: {
         backgroundColor: colors.grey_light
+    },
+    errorText: {
+        color: 'red',
+        paddingTop: 5
     }
 
 })

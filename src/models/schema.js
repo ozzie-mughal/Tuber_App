@@ -1,5 +1,257 @@
 export const schema = {
     "models": {
+        "UserRole": {
+            "name": "UserRole",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "username": {
+                    "name": "username",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "roleType": {
+                    "name": "roleType",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "org": {
+                    "name": "org",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "year": {
+                    "name": "year",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "subjects": {
+                    "name": "subjects",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "voucherApplied": {
+                    "name": "voucherApplied",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "User": {
+                    "name": "User",
+                    "isArray": false,
+                    "type": {
+                        "model": "User"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "UserRole",
+                        "targetName": "userRoleUserId"
+                    }
+                },
+                "partnerCentre": {
+                    "name": "partnerCentre",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "availabilities": {
+                    "name": "availabilities",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "userRoleUserId": {
+                    "name": "userRoleUserId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "UserRoles",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "User": {
+            "name": "User",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "givenName": {
+                    "name": "givenName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Messages": {
+                    "name": "Messages",
+                    "isArray": true,
+                    "type": {
+                        "model": "Message"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "userID"
+                    }
+                },
+                "chatrooms": {
+                    "name": "chatrooms",
+                    "isArray": true,
+                    "type": {
+                        "model": "ChatRoomUser"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "user"
+                    }
+                },
+                "familyName": {
+                    "name": "familyName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "avatarImage": {
+                    "name": "avatarImage",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "lastOnlineAt": {
+                    "name": "lastOnlineAt",
+                    "isArray": false,
+                    "type": "AWSTimestamp",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "UserRole": {
+                    "name": "UserRole",
+                    "isArray": false,
+                    "type": {
+                        "model": "UserRole"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "userUserRoleId"
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Users",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "Message": {
             "name": "Message",
             "fields": {
@@ -243,8 +495,8 @@ export const schema = {
                 }
             ]
         },
-        "User": {
-            "name": "User",
+        "Voucher": {
+            "name": "Voucher",
             "fields": {
                 "id": {
                     "name": "id",
@@ -253,59 +505,31 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "givenName": {
-                    "name": "givenName",
+                "name": {
+                    "name": "name",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
                     "attributes": []
                 },
-                "Messages": {
-                    "name": "Messages",
-                    "isArray": true,
-                    "type": {
-                        "model": "Message"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "userID"
-                    }
-                },
-                "chatrooms": {
-                    "name": "chatrooms",
-                    "isArray": true,
-                    "type": {
-                        "model": "ChatRoomUser"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "user"
-                    }
-                },
-                "familyName": {
-                    "name": "familyName",
+                "code": {
+                    "name": "code",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
                     "attributes": []
                 },
-                "avatarImage": {
-                    "name": "avatarImage",
+                "active": {
+                    "name": "active",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": "Boolean",
+                    "isRequired": true,
                     "attributes": []
                 },
-                "lastOnlineAt": {
-                    "name": "lastOnlineAt",
+                "value": {
+                    "name": "value",
                     "isArray": false,
-                    "type": "AWSTimestamp",
+                    "type": "Float",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -327,7 +551,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Users",
+            "pluralName": "Vouchers",
             "attributes": [
                 {
                     "type": "model",
@@ -361,19 +585,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "chatRoom": {
-                    "name": "chatRoom",
-                    "isArray": false,
-                    "type": {
-                        "model": "ChatRoom"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "chatRoomID"
-                    }
-                },
                 "user": {
                     "name": "user",
                     "isArray": false,
@@ -385,6 +596,19 @@ export const schema = {
                     "association": {
                         "connectionType": "BELONGS_TO",
                         "targetName": "userID"
+                    }
+                },
+                "chatRoom": {
+                    "name": "chatRoom",
+                    "isArray": false,
+                    "type": {
+                        "model": "ChatRoom"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "chatRoomID"
                     }
                 },
                 "createdAt": {
@@ -425,5 +649,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "19df99513a3ce7eaf227a4c8a4b2aef3"
+    "version": "c82ab45f5bcf28bef81c0724cf283e05"
 };

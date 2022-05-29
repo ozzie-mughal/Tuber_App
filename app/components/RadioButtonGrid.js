@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
 
     },
     selected: {
-        backgroundColor: colors.sky_pink,
+        backgroundColor: colors.turquoise,
         borderWidth: 2,
     },
     unselected: {

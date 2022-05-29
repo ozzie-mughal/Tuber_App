@@ -5,7 +5,7 @@ import ChatRoomScreen from '../screens/ChatRoomScreen';
 import MyTabs from '../navigation/BottomTab'
 import colors from '../styles/colors';
 import ChatRoomScreenHeader from '../components/ChatRoomScreenHeader';
-import NewAskModal from '../components/NewAskModal';
+import NewAsk from '../components/NewAsk';
 
 
 const AppStack = createNativeStackNavigator();
@@ -21,7 +21,7 @@ const AppNavigator = props => {
         </AppStack.Screen>
         <AppStack.Screen name="New Ask" options={{headerShown: false}}>
             {screenProps => (
-                <NewAskModal {...screenProps} updateAuthState={props.updateAuthState} />
+                <NewAsk {...screenProps} updateAuthState={props.updateAuthState} />
               )}
         </AppStack.Screen>
         <AppStack.Screen name="ChatRoom" options={({ route }) => ({
