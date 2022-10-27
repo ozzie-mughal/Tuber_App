@@ -40,6 +40,9 @@ const AskNowWidget = (props) => {
 
     });
 
+    const [showSubmitModal, setShowSubmitModal] = useState(false);
+
+
     const { handleChange, setFieldValue, handleSubmit, handleBlur, isValid, submitCount,
         values, errors, touched } = useFormik({
             validationSchema: AskNowSchema,
@@ -54,9 +57,10 @@ const AskNowWidget = (props) => {
             onSubmit: values => {
                 try {
                     submitAskNow(values)
+                    //setShowSubmitModal(true)
                 }
                 finally {
-                    navigation.navigate('Quick Ask');
+                    navigation.navigate('Quick Ask', { quickAskValues: values });
                 }
                 }
     

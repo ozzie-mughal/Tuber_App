@@ -24,7 +24,7 @@ const icons = {
     microphone_selected : <Ionicons name={"mic"} 
         color={'white'} size={30}/>,
     microphone : <Ionicons name={"mic-outline"} 
-        color={colors.startup_purple} size={30}/>,
+        color={colors.primary} size={30}/>,
     smile_selected : <SimpleLineIcons name={"emotsmile"} 
         color={colors.startup_purple} size={30} style={{marginHorizontal: 5}}/>,
     arrow_down : <SimpleLineIcons name={"arrow-down"} 

@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         marginHorizontal:10
     },
     audioPlaybackSlider: {
-        backgroundColor: colors.startup_purple, 
+        backgroundColor: colors.primary, 
         borderRadius: 15, 
         height: 15,
         width: 15, 

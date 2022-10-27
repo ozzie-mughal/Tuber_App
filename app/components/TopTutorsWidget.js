@@ -13,7 +13,7 @@ const TopTutorsWidget = ({selectedOption}) => {
     return (
         <View>
             <SegmentedControl
-            tintColor={colors.turquoise_green}
+            tintColor={colors.primary}
             fontStyle={{fontFamily:'Nunito-Bold', color:'black'}}
             activeFontStyle={{color:'black'}}
             values={['Weekly', 'Monthly', 'All-Time']}

@@ -13,11 +13,11 @@ import getLastOnlineParser from '../functions/getLastOnlineParser';
 
 const UserPreview = ({ user, showButton, showArrow, showBadges, buttonTitle, onPress }) => {
 
-  const arrow_right = <MaterialIcons name={"keyboard-arrow-right"} color={colors.startup_purple} size={40}/>;
+  const arrow_right = <MaterialIcons name={"keyboard-arrow-right"} color={colors.secondary} size={40}/>;
   const star = <MaterialIcons name={"star"} color={'gold'} size={20}/>;
-  const asks_badge = <Ionicons name={"chatbubble"} color={colors.turquoise_green} size={20}/>;
+  const asks_badge = <Ionicons name={"chatbubble"} color={colors.primary} size={20}/>;
   const certified_tick = <MaterialIcons name={"verified"} color={'black'} size={15}/>;
-  const trophy = <Ionicons name={"ios-trophy-sharp"} color={colors.startup_purple} size={20}/>;
+  const trophy = <Ionicons name={"ios-trophy-sharp"} color={colors.turquoise_green} size={20}/>;
   
   const [active, setActive] = useState();
   const userSub = user?.sub;
@@ -49,7 +49,7 @@ const UserPreview = ({ user, showButton, showArrow, showBadges, buttonTitle, onP
                       style={styles.viewImage}/>
               <View style={{paddingLeft:5}}>
                   <View style={[styles.usernameContainer, 
-                      certified ? {backgroundColor:colors.yellow_sun} : {backgroundColor:'transparent'}]}>
+                      certified ? {backgroundColor:colors.primary} : {backgroundColor:'transparent'}]}>
                       <Text style={styles.usernameText}>
                         {senderGivenName} {senderFamilyName}
                       </Text>

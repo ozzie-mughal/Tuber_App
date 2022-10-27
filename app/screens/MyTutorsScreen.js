@@ -45,7 +45,7 @@ const MyTutorsScreen = (props) => {
     {/* Header Components */}
     <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.bubblegum_pink, colors.bubblegum_pink_lightest]}
+                colors={[colors.primary, colors.primary]}
                 locations={[0,0.3]}
                 //start={{x:0,y:0.3}}
                 //end={{x:0.7,y:0.4}}
@@ -67,8 +67,9 @@ const MyTutorsScreen = (props) => {
 
         <View style={{alignItems:'center', marginTop: 30}}>
           <SegmentedControl
-            tintColor={colors.bubblegum_pink}
-            fontStyle={{color: 'white'}}
+            tintColor={colors.secondary}
+            fontStyle={{color: 'black'}}
+            activeFontStyle={{color:'white'}}
             values={['Favourites', 'Top-Rated', 'All']}
             selectedIndex={0}
             // onValueChange={(value) => {

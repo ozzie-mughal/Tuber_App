@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
       marginRight: 10
     },
     topic_Active: {
-      backgroundColor: colors.turquoise_green,
+      backgroundColor: colors.primary,
       borderRadius: 25,
       paddingHorizontal: 5,
       paddingVertical: 2,

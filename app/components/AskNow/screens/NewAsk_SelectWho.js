@@ -15,8 +15,8 @@ export default function NewAsk_SelectWho( { ...props } ) {
 
   const [users, setUsers] = useState([]);
   const [tutors, setTutors] = useState([]);
+  const [selectedTutor, setSelectedTutor] = useState(null);
 
-  props.test = 'testprop';
 
   useEffect(()=> {
     try {
@@ -37,6 +37,14 @@ export default function NewAsk_SelectWho( { ...props } ) {
       setTutors(tutors);
     }
   },[users])
+
+  useEffect(()=> {
+    if (selectedTutor) {
+      props.navigation.navigate('NewAsk_Summary', 
+          { selectedTutor: selectedTutor});
+
+    }
+  },[selectedTutor])
 
 
   return (
@@ -61,12 +69,12 @@ export default function NewAsk_SelectWho( { ...props } ) {
             showButton={false} showArrow={true} showBadges={true}
               onPress={()=>{
                 try {
-                  //props.selectTutorAction(item)
+                  setSelectedTutor(item);
                 }
                 finally {
                   //console.log('the tutor selected is ',selectedTutor)
                   //props.setShowActionModal(false);
-                  props.navigation.navigate('NewAsk_Summary');
+                  
 
               }}}/> }
             style={styles.messagepreviews_container}

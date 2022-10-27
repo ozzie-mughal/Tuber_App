@@ -22,6 +22,10 @@ const BottomNavSheet = ({Content}) => {
         index={0}
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
+        style={{shadowColor: '#000000',
+        shadowOpacity: 0.5,
+        shadowRadius: 6,
+        shadowOffset : { width: 0, height: -4}}}
         handleIndicatorStyle={{width:50}}
       >
         <View style={styles.contentContainer}>
@@ -41,6 +45,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     flex: 1,
     alignItems: 'center',
+    
   },
 });
 

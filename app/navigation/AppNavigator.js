@@ -45,10 +45,10 @@ const AppNavigator = props => {
         <AppStack.Screen name="Quick Ask" options={{
           headerTitle: "Quick Ask",
           headerShown:true,
-          headerStyle: {backgroundColor:colors.startup_purple},
+          headerStyle: {backgroundColor:colors.primary},
           headerTitleStyle: {fontFamily: 'Nunito-Bold',fontSize: 24},
           headerShadowVisible: false,
-          headerTintColor: colors.yellow_sun}}>
+          headerTintColor: colors.secondary}}>
             {screenProps => (
                 <NewAskNavigator {...screenProps} updateAuthState={props.updateAuthState} />
               )}
@@ -56,9 +56,9 @@ const AppNavigator = props => {
         <AppStack.Screen name="ChatRoom" options={({ route }) => ({
           headerTitle: () => <ChatRoomScreenHeader id={route.params?.id}/>,
           headerShown:true,
-          headerStyle: {backgroundColor:colors.startup_purple},
+          headerStyle: {backgroundColor:colors.primary},
           headerShadowVisible: false,
-          headerTintColor: colors.yellow_sun})}>
+          headerTintColor: colors.secondary})}>
           {screenProps => (
             <ChatRoomScreen {...screenProps} updateAuthState={props.updateAuthState} />
           )}

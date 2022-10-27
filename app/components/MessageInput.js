@@ -197,7 +197,7 @@ const MessageInput = ({ chatRoom }) => {
                 </TouchableOpacity>
             </View>
             {/*Upload progress bar */}
-            <View style={{backgroundColor:colors.turquoise, 
+            <View style={{backgroundColor:colors.primary, 
                 height: 4, width: (imageUploadProgress * 100)+'%'}}/>
         </View>}
 
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
         marginHorizontal:10
     },
     audioPlaybackSlider: {
-        backgroundColor: colors.startup_purple, 
+        backgroundColor: colors.primary, 
         borderRadius: 15, 
         height: 15,
         width: 15, 
@@ -322,16 +322,16 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 25,
         borderWidth: 2,
-        borderColor: colors.startup_purple,
+        borderColor: colors.primary,
         justifyContent: 'center',
         alignItems:'center'
     },
     micButtonPressed: {
-        backgroundColor: colors.startup_purple,
+        backgroundColor: colors.primary,
         padding: 10,
         borderRadius: 25,
         borderWidth: 2,
-        borderColor: colors.startup_purple,
+        borderColor: colors.primary,
         justifyContent: 'center',
         alignItems:'center'
     }

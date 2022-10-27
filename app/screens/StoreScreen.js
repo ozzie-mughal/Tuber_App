@@ -63,7 +63,7 @@ const StoreScreen = (props) => {
     {/* Header Components */}
         <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.turquoise_green, colors.turquoise_green_lightest]}
+                colors={[colors.primary, colors.primary]}
                 locations={[0,0.3]}
                 //start={{x:0.1,y:0.3}}
                 //end={{x:0.7,y:0.5}}

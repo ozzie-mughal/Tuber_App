@@ -39,7 +39,7 @@ export default function SelectTutorScreen( { ...props } ) {
     {/* Header Components */}
       <View style={styles.header_container}>   
         <SegmentedControl
-          tintColor={colors.turquoise_green}
+          tintColor={colors.primary}
           fontStyle={{color: 'black'}}
           values={['Favourites', 'Top-Rated', 'All']}
           selectedIndex={0}

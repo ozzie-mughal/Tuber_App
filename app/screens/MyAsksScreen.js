@@ -15,9 +15,9 @@ import moment from 'moment';
 
 
 //Icons
-const newMessage = <Ionicons name={"ios-create-outline"} color={colors.yellow_sun} size={35} style={{marginHorizontal: 5}}/>;
+const newMessage = <Ionicons name={"ios-create-outline"} color={colors.tertiary} size={35} style={{marginHorizontal: 5}}/>;
 const search_icon = <Ionicons name={"search"} color={colors.yellow_sun} size={30} style={{marginHorizontal: 5}}/>;
-const hamburger_menu = <Entypo name={"menu"} color={colors.yellow_sun} size={40}/>;
+const hamburger_menu = <Entypo name={"menu"} color={colors.tertiary} size={40}/>;
 
 
 const MyAsksScreen = (props) => {
@@ -95,7 +95,7 @@ const MyAsksScreen = (props) => {
     {/* Header Components */}
         <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.startup_purple, colors.startup_purple]}
+                colors={[colors.primary, colors.primary]}
                 locations={[0,0.3]}
                 //start={{x:0.1,y:0.3}}
                 //end={{x:0.7,y:0.5}}
@@ -119,9 +119,9 @@ const MyAsksScreen = (props) => {
 
         <View style={{alignItems:'center', marginTop: 30}}>
           <SegmentedControl
-            tintColor={colors.turquoise_green}
-            fontStyle={{fontFamily:'Nunito-Bold', color:'black'}}
-            activeFontStyle={{color:'black'}}
+            tintColor={colors.secondary}
+            fontStyle={{fontFamily:'Nunito-Bold', color:'white'}}
+            activeFontStyle={{color:'white'}}
             values={['Active', 'All']}
             selectedIndex={0}
             onValueChange={(value) => {

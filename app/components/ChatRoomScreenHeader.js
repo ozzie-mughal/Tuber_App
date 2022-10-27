@@ -18,11 +18,11 @@ const ChatRoomScreenHeader = ({ id, children }) => {
     const timer_icon = <Ionicons name={"ios-timer-outline"} 
         color={colors.skyblue_crayola} size={25} style={{marginHorizontal: 5}}/>;
     const call_icon = <Ionicons name={"call"} 
-        color={'white'} size={30} style={{marginHorizontal: 10}}/>;
+        color={colors.secondary} size={30} style={{marginHorizontal: 10}}/>;
     const video_icon = <Ionicons name={"videocam"} 
-        color={'white'} size={30} style={{marginHorizontal: 10}}/>;
+        color={colors.secondary} size={30} style={{marginHorizontal: 10}}/>;
     const more_icon = <Feather name={"more-vertical"} 
-        color={'white'} size={30} style={{marginHorizontal: 10}}/>;
+        color={colors.secondary} size={30} style={{marginHorizontal: 10}}/>;
 
     const callDisabled = true;
     const videoDisabled = true;
@@ -70,7 +70,7 @@ const ChatRoomScreenHeader = ({ id, children }) => {
                         <Text style={styles.headerText}>{user?.givenName}</Text>
                         {lastOnlineAtText==='Online' ? <ActiveIndicator/> : null}
                     </View>
-                    <Text style={{color:'white', fontFamily:'Nunito-Medium'}}>
+                    <Text style={{color:colors.secondary, fontFamily:'Nunito-Light'}}>
                         {lastOnlineAtText}
                     </Text>
                 </View>
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         right: 50,
-        bottom: 5
+        bottom: 2
         //backgroundColor: colors.orange
     },
 
@@ -116,12 +116,12 @@ const styles = StyleSheet.create({
         borderRadius: 45,
         marginRight: 10,
         borderWidth:2,
-        borderColor:colors.yellow_sun
+        borderColor:colors.tertiary
       },
     headerText: {
         fontSize: 18,
         fontWeight: '600',
-        color: 'white',
+        color: colors.secondary,
         paddingRight: 5,
         fontFamily: 'Nunito-Bold'
     },

@@ -137,7 +137,7 @@ const Message = ({ message }) => {
     >
       {isMe && <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.turquoise_green,colors.turquoise_green]}
+                colors={[colors.primary,colors.primary]}
                 start={{x:0.1,y:0}}
                 end={{x:0.8,y:0.8}}
                 locations={[0,1]}
@@ -194,7 +194,7 @@ const Message = ({ message }) => {
             enable-background="new 32.485 17.5 15.515 17.5">
                 <Path
                     d={isMe ? "M48,35c-7-4-6-8.75-6-17.5C28,17.5,29,35,48,35z" : "M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"}
-                    fill={isMe ? colors.turquoise_green : "gainsboro"}
+                    fill={isMe ? colors.primary : "gainsboro"}
                     x={isMe ? "-0.35" : "0"}
                     y="0"
                 />

@@ -50,13 +50,12 @@ const elements = {
         alignItems: 'center',
         marginTop: 20,
         marginHorizontal: 5,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: 'white',
         
     },
     askNowSecondaryButtonText: {
         fontSize: 17,
-        fontWeight: "600",
         fontFamily: 'Nunito-Bold',
         color:'white'
     },
@@ -91,7 +90,7 @@ const elements = {
         alignItems: 'center',
         marginTop: 20,
         marginHorizontal: 5,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: 'white',
     },
     secondaryButtonInline: {
@@ -120,7 +119,7 @@ const elements = {
         width: '45%',
         height: 50,
         paddingVertical: 10,
-        backgroundColor: colors.turquoise_green,
+        backgroundColor: colors.primary,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -193,7 +192,7 @@ const elements = {
         height: 50,
         paddingVertical: 10,
         backgroundColor: 'white',
-        borderColor: colors.grey,
+        borderColor: colors.secondary,
         borderWidth: 2,
         borderRadius: 20,
         justifyContent: 'center',
@@ -208,7 +207,7 @@ const elements = {
     secondaryActionButtonText: {
         fontSize: 16,
         fontWeight: "600",
-        color: colors.grey
+        color: colors.secondary
     },
     topSafeAreaContainer: {
         flex: 0,
@@ -262,13 +261,13 @@ const elements = {
     pageHeading_text: {
         fontSize: 34,
         fontWeight: "600",
-        color: 'white',
+        color: colors.secondary,
         fontFamily: 'Nunito-Bold'
     },
     pageSubheading_text: {
         fontSize: 24,
         fontWeight: "600",
-        color: 'white',
+        color: colors.secondary,
         fontFamily: 'Nunito-SemiBold'
     },
     contentHeading_text: {
@@ -276,13 +275,13 @@ const elements = {
         fontWeight: '600',
         fontFamily: 'Nunito-ExtraBold',
         marginVertical: 5,
-        color: 'black',
+        color: colors.secondary,
     },
     contentSubheading_text: {
         fontSize: 24,
         fontWeight: '600',
         fontFamily: 'Nunito-Bold',
-        color: 'black',
+        color: colors.secondary,
     },
     pageSectionContainer: {
         flex: 1,      
