@@ -74,6 +74,13 @@ const colors = {
     grey: 'grey',
     grey_light: '#D1D1D1',
     grey_lightest: '#EDEDED',
+
+    //APP PALETTE
+    primary: '#FBCC41',
+    secondary: '#000000',
+    tertiary: '#D1D1D1',
+    error: '',
+    confirmation: ''
 }
 
 export default colors

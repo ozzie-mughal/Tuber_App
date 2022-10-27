@@ -6,8 +6,9 @@
     "orientation": "portrait",
     "icon": "./app/assets/brand/nimble_icononly.png",
     "splash": {
-      "image": "./app/assets/brand/Nimble_SplashPage.png",
-      "resizeMode": "contain"
+      "image": "./app/assets/brand/uplift-education/UpliftEd_Logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FBCC41"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,7 +22,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#FBCC41"
       }
     },
     "web": {
