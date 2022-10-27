@@ -6,6 +6,8 @@ import { Hub, Auth, DataStore } from 'aws-amplify';
 import { ChatRoomUser, ChatRoom, User, Message as MessageModel } from '../../src/models';
 import Moment from 'moment';
 import setUnreadMessages from '../functions/setUnreadMessages';
+import { S3Image } from 'aws-amplify-react-native'
+import getLastOnlineParser from '../functions/getLastOnlineParser';
 
 const ChatRoomPreview = ({ chatRoom }) => {
   ///////////////////////////////////////////////////////
@@ -27,6 +29,7 @@ const ChatRoomPreview = ({ chatRoom }) => {
   const [newMessages, setNewMessages] = useState();
   const [topic, setTopic] = useState();
   const [active, setActive] = useState();
+  const [chatActive, setChatActive] = useState();
 
   ///////////////////////////////////////////////////////
   //LOCAL FUNCTIONS
@@ -39,7 +42,7 @@ const ChatRoomPreview = ({ chatRoom }) => {
     setSenderGivenName(user?.givenName);
     setSenderFamilyName(user?.familyName);
     setTopic(chatRoom?.topic);
-    setActive(chatRoom?.active);
+    setChatActive(chatRoom?.active);
   }
   const setLastMessagePreviewVariables = async (chatRoom) => {
     if (!lastMessage) {
@@ -110,6 +113,12 @@ const ChatRoomPreview = ({ chatRoom }) => {
   useEffect(() => {
     fetchUsers();
     fetchLastMessage(chatRoom);
+  },[])
+
+  //Set online status as active if logged in within past 5min
+  useEffect(() => {
+    const active = getLastOnlineParser(user);
+    setActive(active==='Online' ? true : false);
   },[])
 
   //Set chatroom preview variables, on chatroom user or last message change
@@ -209,14 +218,18 @@ const ChatRoomPreview = ({ chatRoom }) => {
   return (
     <TouchableOpacity onPress={onChatRoomPress} style={styles.container}>
 
-      <Image style={styles.avatarimage} source={{uri: senderAvatarImage}}/>
+      {user?.avatarImage ? 
+      <S3Image imgKey={user.avatarImage} 
+      style={styles.avatarimage}
+      resizeMode='cover'/> :
+          <ActivityIndicator color='black' size='large'/>}
       {active ? 
       <View style={styles.activebadge_container}/>
       : null}
 
       <View style={styles.preview_container}>
         <View style={styles.row}>
-        <View style={active ? styles.topic_Active : styles.topic_Inactive}>
+        <View style={chatActive ? styles.topic_Active : styles.topic_Inactive}>
           <Text numberOfLines={1} style={(newMessages>0) ? styles.topic_text_unread: styles.topic_text_read}>
             {topic}
           </Text>
@@ -291,7 +304,7 @@ const styles = StyleSheet.create({
       marginRight: 10
     },
     topic_Active: {
-      backgroundColor: colors.slate_blue_light,
+      backgroundColor: colors.turquoise_green,
       borderRadius: 25,
       paddingHorizontal: 5,
       paddingVertical: 2,
@@ -307,36 +320,44 @@ const styles = StyleSheet.create({
     topic_text_unread: {
       fontWeight: "bold",
       fontSize: 16,
-      color: 'white'
+      color: 'black',
+      fontFamily: 'Nunito-Bold'
     },
     topic_text_read: {
       //fontWeight: "bold",
       fontSize: 16,
-      color: 'white'
+      color: 'black',
+      fontFamily: 'Nunito-Medium'
     },
     name_text_unread: {
       fontWeight: "bold",
       fontSize: 16,
+      fontFamily: 'Nunito-Bold'
     },
     name_text_read: {
       //fontWeight: "bold",
-      fontSize: 16
+      fontSize: 16,
+      fontFamily: 'Nunito-Medium'
     },
     timestamp_text_unread: {
       color: "black",
-      fontWeight: "bold"
+      fontWeight: "bold",
+      fontFamily: 'Nunito-Bold'
     },
     timestamp_text_read: {
-      color: "grey"
+      color: "grey",
+      fontFamily: 'Nunito-Medium'
     },
     message_text_unread: {
       color: "black",
       fontSize: 14,
       fontWeight: "bold",
+      fontFamily: 'Nunito-Bold'
     },
     message_text_read: {
       color: "grey",
-      fontSize: 14
+      fontSize: 14,
+      fontFamily: 'Nunito-Medium'
     },
     row: {
       flexDirection:'row', 

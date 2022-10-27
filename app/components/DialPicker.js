@@ -1,23 +1,31 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState} from 'react'
+import React, { useState, useEffect} from 'react'
 import {Picker} from '@react-native-picker/picker';
 
-const DialPicker = ({ pickerRef, pickerData, selectedOption, setSelectedOption }) => {
+const DialPicker = ({ pickerRef, pickerData, selectedOption, 
+    setSelectedOption, fontSize, hideSelectValue, filterCategory }) => {
 
-    const [selectedLanguage, setSelectedLanguage] = useState();
+    const [data, setData] = useState(pickerData)
+
+    useEffect(() => {
+        if (filterCategory) {
+            setData(pickerData.filter(item => item.category === filterCategory));
+        }
+    },[filterCategory])
 
     return (
         <Picker
         ref={pickerRef}
         selectedValue={selectedOption}
-        itemStyle={{fontSize:18}}
+        style={{marginVertical:5}}
+        itemStyle={{fontSize:fontSize,}}
         onValueChange={(itemValue, itemIndex) =>
             setSelectedOption(itemValue)
         }>
-            <Picker.Item label='Select...' value='Select' />
-            {pickerData.map((item)=> {
+            {hideSelectValue !== false ? <Picker.Item label='Select...' value='Select' /> : null}
+            {data.map((item)=> {
                 return (
-                    <Picker.Item label={item.name} value={item.value} />
+                    <Picker.Item key={item.key} label={item.name} value={item.value} />
 
                 )
             })}

@@ -9,6 +9,8 @@ import icons from '../styles/icons';
 import Moment from 'moment';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { Svg, Path } from 'react-native-svg';
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 const Message = ({ message }) => {
 
@@ -131,8 +133,16 @@ const Message = ({ message }) => {
 
   return (
     <Pressable onLongPress={showActionSheet}
-      style={[isMe ? styles.rightContainer : styles.leftContainer, 
-        {width: soundURI ? '75%' : 'auto'}]}>
+      style={[isMe ? styles.rightContainer : styles.leftContainer, {width: soundURI ? '75%' : 'auto'}]}
+    >
+      {isMe && <LinearGradient
+                // Background Linear Gradient
+                colors={[colors.turquoise_green,colors.turquoise_green]}
+                start={{x:0.1,y:0}}
+                end={{x:0.8,y:0.8}}
+                locations={[0,1]}
+                style={[styles.background]}
+            />}
 
       {/*Timestamp*/}
       <View style={styles.timestampContainer}>
@@ -144,7 +154,7 @@ const Message = ({ message }) => {
       <View style={styles.body}>
         {/*Text Message*/}
         {!!message.content && !isDeleted && (<Text style={[isMe ? styles.rightMessageText : styles.leftMessageText, 
-          {color: isMe ? 'white' : 'black'}]}>
+          {color: isMe ? 'black' : 'black'}]}>
           {message.content}
         </Text>)}
 
@@ -158,7 +168,7 @@ const Message = ({ message }) => {
 
         {/*Message deleted message (if message is deleted, show this)*/}
         {isDeleted && <Text style={[isMe ? styles.rightMessageText : styles.leftMessageText, 
-          {color: isMe ? 'white' : 'black', fontStyle:'italic'}]}>
+          {color: isMe ? 'black' : 'black', fontStyle:'italic'}]}>
           message deleted
         </Text>}
       </View>
@@ -184,7 +194,7 @@ const Message = ({ message }) => {
             enable-background="new 32.485 17.5 15.515 17.5">
                 <Path
                     d={isMe ? "M48,35c-7-4-6-8.75-6-17.5C28,17.5,29,35,48,35z" : "M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"}
-                    fill={isMe ? colors.slate_blue_light : "gainsboro"}
+                    fill={isMe ? colors.turquoise_green : "gainsboro"}
                     x={isMe ? "-0.35" : "0"}
                     y="0"
                 />
@@ -197,7 +207,15 @@ const Message = ({ message }) => {
 export default Message
 
 const styles = StyleSheet.create({
-    leftContainer: {
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: "100%",
+    borderRadius: 10
+  },  
+  leftContainer: {
       marginHorizontal: 10,
       marginVertical: 5,
       paddingBottom: 5,
@@ -214,7 +232,7 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       minWidth: '20%',
       maxWidth: '90%',
-      backgroundColor: colors.slate_blue_light,
+      //backgroundColor: colors.slate_blue_light,
       marginLeft: 'auto',
       marginRight: 10,
     },
@@ -234,19 +252,23 @@ const styles = StyleSheet.create({
       marginRight: 5
     },
     rightTimestampText: {
-      color: colors.grey_light
+      color: colors.grey,
+      fontFamily: 'Nunito-Medium'
     },
     leftTimestampText: {
-      color: 'white'
+      color: 'white',
+      fontFamily: 'Nunito-Medium'
     },
     rightMessageText: {
       fontSize: 16,
-      textAlign:'right'
+      textAlign:'right',
+      fontFamily: 'Nunito-Medium'
     },
     leftMessageText: {
       fontSize: 16,
       textAlign:'left',
-      paddingBottom: 5
+      paddingBottom: 5,
+      fontFamily: 'Nunito-Medium'
     },
     arrowContainer: {
       position: 'absolute',

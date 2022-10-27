@@ -24,17 +24,17 @@ const icons = {
     microphone_selected : <Ionicons name={"mic"} 
         color={'white'} size={30}/>,
     microphone : <Ionicons name={"mic-outline"} 
-        color={colors.turquoise} size={30}/>,
+        color={colors.startup_purple} size={30}/>,
     smile_selected : <SimpleLineIcons name={"emotsmile"} 
-        color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>,
+        color={colors.startup_purple} size={30} style={{marginHorizontal: 5}}/>,
     arrow_down : <SimpleLineIcons name={"arrow-down"} 
-        color={colors.turquoise} size={20} style={{marginHorizontal: 5}}/>,
+        color={colors.startup_purple} size={20} style={{marginHorizontal: 5}}/>,
     arrow_up : <SimpleLineIcons name={"arrow-up"} 
         color={'white'} size={20} style={{marginHorizontal: 5}}/>,
     smile : <SimpleLineIcons name={"emotsmile"} 
         color={colors.grey} size={30} style={{marginHorizontal: 5}}/>,
     send : <Ionicons name={"send"} 
-        color={colors.turquoise} size={30} style={{marginHorizontal: 5}}/>,
+        color={colors.startup_purple} size={30} style={{marginHorizontal: 5}}/>,
     close : <Ionicons name={"close-circle-outline"} 
         color={colors.grey} size={30} style={{marginHorizontal: 5}}/>,
     close_small : <Ionicons name={"close-circle-outline"} 
@@ -44,13 +44,15 @@ const icons = {
     pause : <Feather name={"pause"} 
         color={colors.grey} size={30} style={{marginHorizontal: 5}}/>,
     sent_tick : <Ionicons name={"ios-checkmark-outline"} 
-        color={colors.grey_light} size={15} style={{marginHorizontal: 5}}/>,
+        color={colors.grey} size={15} style={{marginHorizontal: 5}}/>,
     delivered_tick : <Ionicons name={"ios-checkmark-done-outline"} 
-        color={colors.grey_light} size={15} style={{marginHorizontal: 5}}/>,
+        color={colors.grey} size={15} style={{marginHorizontal: 5}}/>,
     read_tick : <Ionicons name={"ios-checkmark-done-sharp"} 
         color={colors.turquoise} size={15} style={{marginHorizontal: 5}}/>,   
     selected_tick : <FontAwesome name={"check-circle"} 
         color={'lime'} size={15} style={{marginLeft: 5}}/>,   
+    search_icon : <Ionicons name={"search"} color={'white'} size={30} style={{marginHorizontal: 5}}/>,
+
 }
 
 export default icons

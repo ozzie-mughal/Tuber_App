@@ -11,7 +11,7 @@ import colors from '../styles/colors';
 import elements from '../styles/elements';
 import { Auth, DataStore } from 'aws-amplify';
 import getLastOnlineParser from '../functions/getLastOnlineParser';
-import ActiveIndicator from './ActiveIndicator';
+import { S3Image } from 'aws-amplify-react-native'
 
 const ChatRoomScreenHeader = ({ id, children }) => {
 
@@ -23,6 +23,10 @@ const ChatRoomScreenHeader = ({ id, children }) => {
         color={'white'} size={30} style={{marginHorizontal: 10}}/>;
     const more_icon = <Feather name={"more-vertical"} 
         color={'white'} size={30} style={{marginHorizontal: 10}}/>;
+
+    const callDisabled = true;
+    const videoDisabled = true;
+    const moreDisabled = false;
 
     const [user, setUser] = useState(); //The user displayed as having a chat with
     const [lastOnlineAtText, setLastOnlineAtText] = useState();
@@ -56,28 +60,32 @@ const ChatRoomScreenHeader = ({ id, children }) => {
     return (
         <View style={styles.chatRoomScreenHeaderContainer}>
             <View style={styles.headerAvatar}>
-                <Image source={{uri: user?.avatarImage}} style={styles.avatarimage}/>
+            {user?.avatarImage ? 
+                <S3Image imgKey={user.avatarImage} 
+                style={styles.avatarimage}
+                resizeMode='cover'/> :
+                    <ActivityIndicator color='black' size='large'/>}
                 <View style={{flexDirection:'column'}}>
                     <View style={{flexDirection:'row', alignItems:'center'}}>
                         <Text style={styles.headerText}>{user?.givenName}</Text>
                         {lastOnlineAtText==='Online' ? <ActiveIndicator/> : null}
                     </View>
-                    <Text style={{color:'white'}}>
+                    <Text style={{color:'white', fontFamily:'Nunito-Medium'}}>
                         {lastOnlineAtText}
                     </Text>
                 </View>
             </View>
                 <View style={{position: 'absolute', right: 50, flexDirection: 'row',justifyContent:'flex-end'}}>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity style={callDisabled ? styles.disabled : null}>
                         {call_icon}
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity style={videoDisabled ? styles.disabled : null}>
                         {video_icon}
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity style={moreDisabled ? styles.disabled : null}>
                         {more_icon}
                     </TouchableOpacity>
                 </View>
@@ -98,19 +106,26 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         right: 50,
+        bottom: 5
         //backgroundColor: colors.orange
     },
 
     avatarimage: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        marginRight: 10
+        width: 45,
+        height: 45,
+        borderRadius: 45,
+        marginRight: 10,
+        borderWidth:2,
+        borderColor:colors.yellow_sun
       },
     headerText: {
         fontSize: 18,
         fontWeight: '600',
         color: 'white',
-        paddingRight: 5
+        paddingRight: 5,
+        fontFamily: 'Nunito-Bold'
     },
+    disabled: {
+        opacity:0.5
+    }
 })

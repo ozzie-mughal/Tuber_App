@@ -43,6 +43,8 @@ export declare class UserRole {
   readonly User?: User;
   readonly partnerCentre?: string;
   readonly availabilities?: (string | null)[];
+  readonly rating?: number;
+  readonly asks?: number;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly userRoleUserId?: string;

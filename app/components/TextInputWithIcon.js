@@ -7,14 +7,14 @@ import colors from '../styles/colors';
 
 const TextInputWithIcon = ({icon, error, touched, ...otherProps}) => {
 
-    const validationColor = !touched ? 'black' : error ? 'red' : colors.UN_blue;
+    const validationColor = !touched ? 'white' : error ? 'red' : colors.UN_blue;
 
 
   return (
     <View>
         <View style={[{borderColor: validationColor}, styles.textInputWithIconContainer]}>
             {icon}
-            <TextInput {...otherProps} style={styles.input}/>
+            <TextInput {...otherProps} style={styles.input} placeholderTextColor={colors.grey_light}/>
         </View>
         {touched && error && <Text style={styles.errorText}>{error}</Text>}
     </View>
@@ -34,7 +34,10 @@ const styles = StyleSheet.create({
     },
     input: {
         paddingHorizontal: 15,
-        width:'100%'
+        width:'100%',
+        color:'white',
+        fontFamily: 'Nunito-SemiBold',
+        fontSize: 17
     },
     errorText: {
         color: 'red',

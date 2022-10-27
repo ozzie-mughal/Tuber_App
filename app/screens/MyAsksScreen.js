@@ -1,5 +1,5 @@
 import { FlatList, ScrollView, Dimensions, StyleSheet, Text, View, 
-  Image, SafeAreaView, TouchableOpacity } from 'react-native';
+  Image, SafeAreaView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import React, { Fragment, useState, useEffect } from 'react';
 import ChatRoomPreview from '../components/ChatRoomPreview';
 import colors from '../styles/colors';
@@ -15,17 +15,37 @@ import moment from 'moment';
 
 
 //Icons
-const newMessage = <Ionicons name={"ios-create-outline"} color={'white'} size={35} style={{marginHorizontal: 5}}/>;
-const search_icon = <Ionicons name={"search"} color={'white'} size={30} style={{marginHorizontal: 5}}/>;
-const hamburger_menu = <Entypo name={"menu"} color={'white'} size={40}/>;
+const newMessage = <Ionicons name={"ios-create-outline"} color={colors.yellow_sun} size={35} style={{marginHorizontal: 5}}/>;
+const search_icon = <Ionicons name={"search"} color={colors.yellow_sun} size={30} style={{marginHorizontal: 5}}/>;
+const hamburger_menu = <Entypo name={"menu"} color={colors.yellow_sun} size={40}/>;
 
 
 const MyAsksScreen = (props) => {
+  const [isLoading, setIsLoading] = useState(true)
 
   const [chatRooms, setChatRooms] = useState([]);
+  const [activeChatCount, setActiveChatCount] = useState(0);
   const [showNewAsk, setShowNewAsk] = useState(false);
   const [toggleActiveAsks, setToggleActiveAsks] = useState(0);
   const [showActiveAsks, setShowActiveAsks] = useState(true);
+
+  const renderLoading = () =>  {
+    if (isLoading) {
+        return (         
+        <SafeAreaView style = {{flex:1,justifyContent: 'center', backgroundColor: 'white', textAlign: 'center',}}>
+        <ActivityIndicator
+        color = {colors.turquoise_blue}
+        size = 'large'
+        animated = {false}
+      />
+      <Text style = {[{fontWeight:'600',textAlign: 'center'}]}>Loading Dashboard</Text>
+      </SafeAreaView>
+
+        );
+    }else {
+        return null;
+    }
+}
 
 
   //Fetch chatRooms
@@ -54,6 +74,7 @@ const MyAsksScreen = (props) => {
         .sort((a, b) => (a._lastChangedAt > b._lastChangedAt) ? -1 : 1);
           
       setChatRooms(chatRooms);
+      setActiveChatCount(chatRooms.length);
     }
     //console.log(chatRooms);
   };
@@ -62,26 +83,33 @@ const MyAsksScreen = (props) => {
     fetchChatRooms('Active');
   },[])
 
+  useEffect(() => {
+    if (isLoading){
+        setIsLoading(!isLoading);
+    }
+})
+
 
   return (
     <SafeAreaView style={styles.page}>
     {/* Header Components */}
         <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.lavender_blue, colors.turquoise_light]}
-                locations={[0.2,0.9]}
-                start={{x:0.1,y:0.3}}
-                end={{x:0.7,y:0.5}}
+                colors={[colors.startup_purple, colors.startup_purple]}
+                locations={[0,0.3]}
+                //start={{x:0.1,y:0.3}}
+                //end={{x:0.7,y:0.5}}
                 style={[styles.background]}
         />         
       <View style={styles.header_container}>   
         <View style={{flexDirection:'row', justifyContent:'center'}}>   
-          <TouchableOpacity style={{justifyContent:'center', alignItems:'center', position:'absolute', left: 0}}>
+          <TouchableOpacity style={{justifyContent:'center', alignItems:'center', position:'absolute', left: 0}}
+            onPress={()=>props.navigation.toggleDrawer()}>
               {hamburger_menu}
           </TouchableOpacity>
           <View style={{flexDirection:'row', alignItems:'center'}}>
             <Text style={elements.pageHeading_text}>My Asks</Text>
-            <Text style={elements.pageSubheading_text}> (2)</Text>
+            <Text style={elements.pageSubheading_text}> ({activeChatCount})</Text>
           </View>
           <TouchableOpacity style={{justifyContent:'center', alignItems:'center', position:'absolute', right: 0}}
             onPress={()=> {setShowNewAsk(true)}}>
@@ -91,8 +119,9 @@ const MyAsksScreen = (props) => {
 
         <View style={{alignItems:'center', marginTop: 30}}>
           <SegmentedControl
-            tintColor={colors.slate_blue_light}
-            fontStyle={{color: 'white'}}
+            tintColor={colors.turquoise_green}
+            fontStyle={{fontFamily:'Nunito-Bold', color:'black'}}
+            activeFontStyle={{color:'black'}}
             values={['Active', 'All']}
             selectedIndex={0}
             onValueChange={(value) => {
@@ -103,12 +132,13 @@ const MyAsksScreen = (props) => {
         </View>
       </View>
       {/*Message Previews */}
-      <FlatList
+      {renderLoading()}
+      {!isLoading && <FlatList
           data={chatRooms}
           renderItem={({ item }) => <ChatRoomPreview chatRoom={item}/> }
           style={styles.messagepreviews_container}
-      />
-      <NewAsk showNewAsk={showNewAsk} navigation={props.navigation} setShowNewAsk={setShowNewAsk}/>
+      />}
+      {/* <NewAsk showNewAsk={showNewAsk} navigation={props.navigation} setShowNewAsk={setShowNewAsk}/> */}
     </SafeAreaView>
   )
 }

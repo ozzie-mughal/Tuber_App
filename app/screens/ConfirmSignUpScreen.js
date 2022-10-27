@@ -81,14 +81,14 @@ return (
                     behavior='padding'>
     <SafeAreaView style={elements.generalContainer}>
         {/* Header Components */}
-        <FrontDoorBanner/>
+        <FrontDoorBanner 
+                    heading='Email Confirmation'
+                    subHeading='Please verify your identity.'/>
 
         {/* Register Components */}
 
         <View style={elements.splashContentContainer}>
                 <View style={elements.stackedInputContainer}>
-                    <Text style={elements.contentHeading_text}>Email Confirmation</Text>
-                    <Text style={elements.contentSubheading_text}>Please verify your identity.</Text>
                     <View style={{marginVertical:10}}>
                         <FloatingLabelInput
                             label={'Verification Code'}
@@ -99,8 +99,7 @@ return (
                         />
                     </View>
             </View>
-                <View style={elements.inlineButtonContainer}>
-                    <SecondaryActionButton title="Return to Register" onPress={() => navigation.navigate('SignUp')}/>
+                <View style={elements.submitButtonContainer}>
                     <PrimaryActionButton title="Verify Code" onPress={confirmSignUp} />
                 </View>
                 {/* <View style={elements.inlineButtonContainer}>

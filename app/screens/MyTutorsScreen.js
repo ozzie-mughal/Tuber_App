@@ -12,55 +12,75 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import SearchBar from '../components/SearchBar';
 
-
-const MyTutorsScreen = () => {
+const MyTutorsScreen = (props) => {
 
   const arrowRight = <MaterialIcons name={"keyboard-arrow-right"} color={colors.sky_pink} size={40}/>;
   const search_icon = <Ionicons name={"search"} color={'white'} size={30} style={{marginHorizontal: 5}}/>;
+  const hamburger_menu = <Entypo name={"menu"} color={'white'} size={40}/>;
 
   const [users, setUsers] = useState([]);
+  const [tutors, setTutors] = useState([]);
 
   useEffect(()=> {
-    try {DataStore.query(User).then(setUsers);
-    console.log(users)
+    try {
+      DataStore.query(User,user => user.UserRole("ne",null))
+        .then(setUsers);
     }
     catch (e) {
       console.log("Datastory query error: ",e)
     }
     },[])
+
+  useEffect(()=>{
+    if (users.length > 0) {
+      const tutors = users.map(user => {return user.UserRole.roleType === 'Tutor' ? user : null});
+      setTutors(tutors);
+    }
+  },[users])
   
   return (
-    <Fragment>
-    <SafeAreaView style={{flex:0, backgroundColor:colors.skyblue_crayola}}/>
     <SafeAreaView style={styles.page}>
     {/* Header Components */}
-    <View style={styles.header_container}>   
-        <LinearGradient
+    <LinearGradient
                 // Background Linear Gradient
-                colors={[colors.skyblue_crayola, colors.baby_blue_light]}
-                locations={[0.4,0.8]}
+                colors={[colors.bubblegum_pink, colors.bubblegum_pink_lightest]}
+                locations={[0,0.3]}
+                //start={{x:0,y:0.3}}
+                //end={{x:0.7,y:0.4}}
                 style={[styles.background]}
         />         
-        <View style={{flexDirection:'row', justifyContent:'space-between'}}>    
+      <View style={styles.header_container}>   
+        <View style={{flexDirection:'row', justifyContent:'center'}}>   
+          <TouchableOpacity style={{justifyContent:'center', alignItems:'center', position:'absolute', left: 0}}
+            onPress={()=>props.navigation.toggleDrawer()}>
+              {hamburger_menu}
+          </TouchableOpacity>
           <View style={{flexDirection:'row', alignItems:'center'}}>
             <Text style={elements.pageHeading_text}>My Tutors</Text>
           </View>
-          <TouchableOpacity style={{justifyContent:'center', alignItems:'center'}}>
+          <TouchableOpacity style={{justifyContent:'center', alignItems:'center', position:'absolute', right: 0}}>
             {search_icon}
           </TouchableOpacity>
         </View>
-        <View style={{alignItems:'center', marginTop: 40}}>
+
+        <View style={{alignItems:'center', marginTop: 30}}>
           <SegmentedControl
-            tintColor={colors.sky_pink_light}
+            tintColor={colors.bubblegum_pink}
             fontStyle={{color: 'white'}}
             values={['Favourites', 'Top-Rated', 'All']}
             selectedIndex={0}
+            // onValueChange={(value) => {
+            //   fetchChatRooms(value);
+            // }}
             style={{width:'90%'}}
           />
         </View>
-
-    </View>
+        <View style={{marginTop:10, alignItems:'center'}}>
+          <SearchBar/>
+        </View>
+      </View>
 
     {/*Content components*/}
       {/*User Previews */}
@@ -69,17 +89,16 @@ const MyTutorsScreen = () => {
           renderItem={({ item }) => <UserPreview user={item} showArrow={true}
             onPress={()=>{
               try {
-                props.selectTutorAction(item)
+                //props.selectTutorAction(item)
               }
               finally {
                 //console.log('the tutor selected is ',selectedTutor)
-                props.setShowActionModal(false)
+                //props.setShowActionModal(false)
 
             }}}/> }
           style={styles.messagepreviews_container}
       />
     </SafeAreaView>
-    </Fragment>
   )
 }
 
@@ -88,7 +107,6 @@ export default MyTutorsScreen
 const styles = StyleSheet.create({
   header_container: {
     paddingHorizontal: 15,
-    backgroundColor: colors.grey_lightest,
     width: "100%",
     height: "17%",
 
@@ -114,11 +132,9 @@ const styles = StyleSheet.create({
 },
   page: {
     flex: 1,
-    backgroundColor: colors.baby_blue_light
   },
   header_container: {
     paddingHorizontal: 15,
-    backgroundColor: colors.grey_lightest,
     width: "100%",
     height: "20%",
 

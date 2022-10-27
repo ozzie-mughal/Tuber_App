@@ -143,7 +143,7 @@ const DayTimePicker = ({ selectedCurrentData, updateSelections,
 
             <Collapsible collapsed={!showDetailedTimes} align="center">
             <View>
-                <Text style={{fontStyle:'italic', marginLeft: 5, fontSize: 12, marginVertical: 5}}>
+                <Text style={{fontStyle:'italic', marginLeft: 5, fontSize: 12, marginVertical: 5, fontFamily: 'Nunito-MediumItalic',}}>
                     Select all that apply
                 </Text>
                 <MultiPicker setSelectedOptions={(value)=>{
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     },
     activeTextStyle: {
         fontSize: 12,
-        fontWeight: "600",
+        fontFamily: 'Nunito-Bold',
         color: 'black',
     },
     inactiveContainer: {
@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
     },
     inactiveTextStyle: {
         fontSize: 12,
+        fontFamily: 'Nunito-Medium',
         color: 'black'
     },
     closeButton: {
@@ -200,12 +201,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     selectedCategoryHeadingText: {
-        fontWeight: '600',
+        fontFamily: 'Nunito-Bold',
         fontSize: 21,
         margin: 10,
     },
     selectedCategorySubheadingText: {
-        fontWeight: '600',
+        fontFamily: 'Nunito-Bold',
         fontSize: 18,
         margin: 10
     },
@@ -218,5 +219,6 @@ const styles = StyleSheet.create({
       multipleToggle__title: {
         fontSize: 14,
         marginHorizontal: 5,
+        fontFamily: 'Nunito-Medium',
       },
 })

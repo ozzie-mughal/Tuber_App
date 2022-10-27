@@ -4,13 +4,15 @@ import colors from '../styles/colors'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const TopTutorPreview = ({rank, username, school, rating, answers, badgeVisible, badgeTitle}) => {
+const TopTutorPreview = ({rank, username, school, rating, answers, badges, certified, badgeVisible, badgeTitle}) => {
 
-    const arrow_right = <MaterialIcons name={"keyboard-arrow-right"} color={colors.turquoise} size={30}/>;
+    const arrow_right = <MaterialIcons name={"keyboard-arrow-right"} color={colors.startup_purple} size={30}/>;
     const star = <MaterialIcons name={"star"} color={'gold'} size={25}/>;
-    const paper_plane = <FontAwesome name={"paper-plane"} color={colors.turquoise} size={20}/>;
-    const medal = <FontAwesome5 name={"medal"} color={colors.slate_blue} size={22}/>;
+    const certified_tick = <MaterialIcons name={"verified"} color={'black'} size={15}/>;
+    const asks = <Ionicons name={"chatbubble"} color={colors.turquoise_green} size={20}/>;
+    const trophy = <Ionicons name={"ios-trophy-sharp"} color={colors.startup_purple} size={20}/>;
     const randomAvatar = 'https://i.pravatar.cc/300';
 
     const [periodOption, setPeriodOption] = useState(null);
@@ -33,37 +35,43 @@ const TopTutorPreview = ({rank, username, school, rating, answers, badgeVisible,
             <View style={{flexDirection: "row"}}>
                 <View style={styles.ratingSummary}>
                     <View style={styles.rankContainer}>
-                        <Text style={styles.rankText}>{rank}</Text>
+                        <Text style={styles.rankText}>
+                            {rank}
+                        </Text>
                     </View>
                     <View style={styles.avatarContainer}>
                         <Image 
                             source={{uri:randomAvatar}}
-                            style={styles.viewImage}/>
+                            style={[styles.viewImage, certified ? {borderWidth:1, borderColor:colors.yellow_sun} : null]}/>
                     </View>
-                    <View style={{paddingLeft:3}}>
-                        <View style={{flexDirection:"row"}}>
-                            <Text style={{
-                                fontWeight:"600",
-                                paddingRight:3}}>
+                    <View style={{paddingLeft:5}}>
+                        <View style={[styles.usernameContainer, 
+                            certified ? {backgroundColor:colors.yellow_sun} : {backgroundColor:'transparent'}]}>
+                            <Text style={styles.usernameText}>
                                 {username}
                             </Text>
+                            <View style={{paddingLeft:5}}>
+                                {certified ? certified_tick : null}
+                            </View>
                         </View>
-                        <Text style={{fontSize:12}}>
+                        <Text style={styles.schoolContainer}>
                             {school}
                         </Text>
                     </View>
                 </View>
                 <View style={styles.ratingBadges}>
-                        <View style={styles.specialsContainer}>
+                    <View style={styles.specialsContainer}>
                         {star}
                         <Text style={styles.specialsText}>{rating}</Text>
-                        </View>
-                        <View style={styles.specialsContainer}>
-                        {paper_plane}
+                    </View>
+                    <View style={styles.specialsContainer}>
+                        {asks}
                         <Text style={styles.specialsText}>{answers}</Text>
-                        </View>
-                    {badgeVisible && <View style={styles.specialsContainer}>
-                    {medal}
+                    </View>
+                    {badgeVisible && 
+                    <View style={styles.specialsContainer}>
+                        {trophy}
+                        <Text style={styles.specialsText}>{badges}</Text>
                     </View>}
                 </View>
             </View>
@@ -119,13 +127,28 @@ const styles = StyleSheet.create({
         borderBottomColor: colors.grey_light,
         borderBottomWidth: 1
     },
+    usernameContainer: {
+        flexDirection:"row", 
+        borderRadius:15, 
+        paddingHorizontal:5
+    },
+    usernameText: {
+        fontFamily: 'Nunito-Bold'
+    },
+    schoolContainer: {
+        flexDirection:"row", 
+        borderRadius:15, 
+        padding:5,
+        fontSize:12,
+        fontFamily:'Nunito-Medium'
+    },
     ratingSummary: {
         flexDirection:'row',
-        width: 150,
+        width: 175,
     },
     ratingBadges: {
-        flexDirection:'row'
-
+        flexDirection:'row',
+        width:'40%'
     },
     openbutton: {
         justifyContent:'center',
@@ -139,6 +162,7 @@ const styles = StyleSheet.create({
     rankContainer: {
         justifyContent:'center',
         alignItems:'center',
+        marginRight:10
         //width:'5%'
     },
     rankText: {

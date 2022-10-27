@@ -20,9 +20,9 @@ import FrontDoorBanner from '../components/FrontDoorBanner';
 
 export default function ResetPasswordScreen({ navigation }) {
 
-    const email = <MaterialIcons name={"email"} color={colors.grey} size={20}/>;
-    const lock = <MaterialIcons name={"lock"} color={colors.grey} size={20}/>;
-    const security = <MaterialIcons name={"security"} color={colors.grey} size={20}/>;
+    const email = <MaterialIcons name={"email"} color={colors.grey_light} size={20}/>;
+    const lock = <MaterialIcons name={"lock"} color={colors.grey_light} size={20}/>;
+    const security = <MaterialIcons name={"security"} color={colors.grey_light} size={20}/>;
 
     const [username, setUsername] = useState('');
     const [code, setCode] = useState('');
@@ -73,17 +73,17 @@ export default function ResetPasswordScreen({ navigation }) {
                             behavior='padding'>
             <SafeAreaView style={elements.generalContainer}>
                 {/* Header Components */}
-                <FrontDoorBanner/>
+                <FrontDoorBanner 
+                    heading='Reset Password'
+                    subHeading='Enter your code and new password.'/>
 
 
             {/* Forgot Password Components */}
             <ScrollView keyboardShouldPersistTaps="handled">
                 
-            <View style={elements.pageContentContainer}>
+            <View style={elements.pageSectionContainer}>
             
                 <View style={elements.stackedInputContainer}>
-                    <Text style={elements.contentHeading_text}>Reset Password</Text>
-                    <Text style={elements.contentSubheading_text}>Enter your code and new password.</Text>
                     <View style={{marginVertical:10}}>
                         <TextInputWithIcon
                             icon={email}
@@ -146,8 +146,7 @@ export default function ResetPasswordScreen({ navigation }) {
             
 
                 </View>
-                <View style={elements.inlineButtonContainer}>
-                    <SecondaryActionButton title="Return to Login" onPress={() => navigation.navigate('SignIn')}/>
+                <View style={elements.submitButtonContainer}>
                     <PrimaryActionButton title="Submit" onPress={handleSubmit} />
                 </View>
             </View>

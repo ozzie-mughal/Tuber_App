@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { ScrollView, ImageBackground, TouchableOpacity, StyleSheet, Modal, View, Text } from "react-native";
+import React, { useRef, useState, useEffect, Fragment } from 'react';
+import { ScrollView, ImageBackground, TouchableOpacity, StyleSheet, Modal, View, Text, Button } from "react-native";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/core'
 import RadioButtonCard from './RadioButtonCard';
@@ -14,29 +14,27 @@ import NumberHeading from '../components/NumberHeading';
 import ShowMore from './ShowMore';
 import InfoModal from './InfoModal';
 import ActionModal from './ActionModal';
+import TutorialModal from './animations/TutorialModal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SelectTutorScreen from '../screens/SelectTutorScreen';
 import UserPreview from './UserPreview';
 import { Auth } from 'aws-amplify';
 import { DataStore } from '@aws-amplify/datastore';
-import { User } from '../../src/models';
-import { ChatRoom } from '../../src/models';
-import { ChatRoomUser } from '../../src/models';
+import { User,ChatRoom,ChatRoomUser } from '../../src/models';
 import TextInputBasic from './TextInputBasic';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import DialPicker from './DialPicker';
+import { HowToAsk, WhoToAsk, WhatToAsk, Summary } from '../assets/content-info/HelperData';
+import { askOptions,yearAskOptions,subjectOptions,whoOptions } from '../assets/content-info/ReferenceData';
 
 export default NewAsk = ({ ...props }) => {
 
     const timer_icon = <Ionicons name={"ios-timer-outline"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
     const person = <Ionicons name={"person"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
+    const newAsk = <Ionicons name={"ios-chatbubble-ellipses-sharp"} color={colors.turquoise_green} size={60}/>;
     const store = <FontAwesome5 name={"coins"} color={'black'} size={20}/>;
-    const randomAvatar = 'https://i.pravatar.cc/300';
-    //const askBackgroundImagetest = {uri: Image.resolveAssetSource(askBackgroundImage).uri};
-    //const askBackgroundImage = {uri: 'https://reactjs.org/logo-og.png'};
 
-    const refRBSheet = useRef();
     const navigation = useNavigation()
 
     //Field validation
@@ -62,6 +60,7 @@ export default NewAsk = ({ ...props }) => {
     
     //Modal states
     const [showInfoModal, setShowInfoModal] = useState(false);
+    const [showTutorialModal, setShowTutorialModal] = useState(false);
     const [showActionModal, setShowActionModal] = useState(false);
 
     //Ask How states
@@ -128,9 +127,9 @@ export default NewAsk = ({ ...props }) => {
             user: selectedTutor,
             chatRoom: newChatRoom,
         }))
-
-        refRBSheet.current.close();
-        
+        props.setShowNewAsk(!props.showNewAsk);
+        closeModal();
+        //Add logic to determine which HOW process to run (eg. if Text, navigate to a chatroom etc.)
         navigation.navigate('ChatRoom', { id: newChatRoom.id, name: selectedTutor.givenName, avatarImage: selectedTutor.avatarImage });  
         //console.log('Pressed ask option');
         }
@@ -144,91 +143,98 @@ export default NewAsk = ({ ...props }) => {
         setWhoOptionData('');
     };
 
+    
 
-    const askOptions = [
-        {value: 'Book 1:1 Class', icon: icons.chalkboard_medium, desc: "Schedule an interactive lesson with a tutor of your choice."},
-        {value: 'Join Group', icon: icons.group_medium, desc: "Enter a virtual, interactive classroom with other students."},
-        {value: 'Video', icon: icons.video_medium, desc: "Get your questions answered on a short video call."},
-        {value: 'Text', icon: icons.text_medium, desc: "Get your questions answered in a chat - as quick as 60 seconds."},
-    ];
-
-    const whoOptions = [
-        {key: 0, value: 'Suggest best for me', icon: icons.chalkboard_medium, desc: "Let Nemo AI predict the most effective tutor for me, based on my preferences, ask history, and availability."},
-        {key: 1, value: 'Select own tutor', icon: icons.group_medium, desc: "Choose a favourite, top-rated, or any tutor. (NOTE: Tutor availability may differ)."},
-    ];
-
-    const yearOptions = [
-        {name: 'K-6', value: 'K-6'},
-        {name: '7-10', value: '7-10'}
-    ]
-    const subjectOptions = [
-        {name: 'Maths', value: 'Maths'},
-        {name: 'Science', value: 'Science'}
-    ]
+    
+    // const subjectOptions = [
+    //     {key: 0,name: 'Maths', value: 'Maths'},
+    //     {key: 1,name: 'Science', value: 'Science'}
+    // ]
 
 
   return (
+    <Fragment>
+    <TouchableOpacity onPress={() => {props.setShowNewAsk(true)}} style={styles.buttonStyle}>
+        {newAsk}
+    </TouchableOpacity>
+  <View>
     <Modal
     animationType="slide"
-    transparent={false}
-    presentationStyle="formSheet"
+    transparent={true}
+    presentationStyle="overFullScreen"
     visible={props.showNewAsk}
     onRequestClose={() => {
       props.setShowNewAsk(!props.showNewAsk);
       closeModal();
       }}    
     >
-        <ImageBackground source={require('../../app/assets/AskBackground.png')} resizeMode='cover' 
+        <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+        <ImageBackground source={require('../../app/assets/banners/AskBanner.png')} resizeMode='cover'
             style={[styles.imageBG,{padding: 10}]}
-            imageStyle={{opacity:0.5}}>
-                <TouchableOpacity 
-                    onPress={()=> {
-                        props.setShowNewAsk(!props.showNewAsk);
-                        closeModal();
-                        props.navigation.navigate('Home');
-                    }}
-                    style={{flexDirection:'row', justifyContent:'flex-end', padding: 0}}
-                    >
-                    {icons.close}
-                </TouchableOpacity>
-
-            <Text style={{marginVertical: 15, fontSize:24, fontWeight: "700"}}>Stumped on something? Let's sort you out.</Text>
-            <ShowMore title='See how it works >'/>
+            imageStyle={{borderTopLeftRadius:25, borderTopRightRadius:25}}
+            >
+                <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                    <Text style={{marginVertical: 15,width:280, fontSize:24, fontWeight: "700"}}>Stumped on something? Let's sort you out.</Text>
+                    <TouchableOpacity 
+                        onPress={()=> {
+                            props.setShowNewAsk(!props.showNewAsk);
+                            closeModal();
+                            //props.navigation.navigate('Home');
+                        }}
+                            style={{ width:40,height:40}}
+                        >
+                        {icons.close}
+                    </TouchableOpacity>
+                </View>
+            <ShowMore title='See how it works >' onPress={()=>{setShowTutorialModal(true)}}/>
         </ImageBackground>
+
+ 
 
         <ScrollView style={{
             marginVertical:20,
             paddingHorizontal: 20,
-            height: 350}}>
+            height: 1000
+            }}>
+
             <View style={elements.stackedModalInputContainer}>
 
-                {/* HOW */}
                 <View style={elements.stackedGreyContainer}>
                     <NumberHeading number='1' keyword='How' title=' do you want to ask?'
+                        ModalContent={<HowToAsk/>}
+                        headerTitle='How to ask?'
                         onPress={()=>{
                             setShowInfoModal(true)}}/>
-                    <RadioButtonCard data={askOptions} selectedValue={selectedAskOption}/>
+                    <View style={{alignItems:'center'}}>
+                        <RadioButtonCard data={askOptions} selectedValue={selectedAskOption}/>
+                    </View>
                     {touched.askType && errors.askType && <Text style={styles.errorText}>{errors.askType}</Text>}
                 </View>
 
-                {/* WHO */}
                 <View style={elements.stackedGreyContainer}>
                     <NumberHeading number='2' keyword='Who' title=' do you want to ask?'
+                        ModalContent={<WhoToAsk/>}
+                        headerTitle='Who to ask?'
                         onPress={()=>{
                             setShowInfoModal(true)}}/>
                     <ToggleCard data={whoOptions} selectedValue={selectedWhoOption}/>
                     {whoOptionData==='Select own tutor' && !selectedTutor &&
+                    <View style={{alignItems:'center'}}>
                     <PrimaryActionButtonWide 
                         title='Select my own' 
                         onPress={()=>{
                             setShowActionModal(true);
-                        }}/>}
+                        }}/>
+                    </View>}
                     {selectedTutor && <View style={{marginVertical: 20}}>
                         <Text style={{fontSize:16, fontWeight: "800"}}>Your Selected Tutor </Text>
                         <UserPreview user={{
                             avatarImage:selectedTutor.avatarImage,
                             givenName:selectedTutor.givenName,
-                            active:selectedTutor.active
+                            active:selectedTutor.active,
+                            org: selectedTutor.UserRole.org,
+                            partnerCentre: selectedTutor.UserRole.partnerCentre,
                             }}
                             showButton={true} 
                             buttonTitle="Change" onPress={()=>{
@@ -239,22 +245,25 @@ export default NewAsk = ({ ...props }) => {
                         <Text style={styles.errorText}>{errors.askSelectedTutor}</Text>}
                 </View>
 
-                {/* WHAT */}
                 <View style={elements.stackedGreyContainer}>
                     <NumberHeading number='3' keyword='What' title=' do you want to ask?'
+                        ModalContent={<WhatToAsk/>}
+                        headerTitle='What to ask?'
                         onPress={()=>{
                             setShowInfoModal(true)}}/>
                     <View style={{flexDirection:'row'}}>
                         <View style={{width: '40%'}}>
                             <Text style={{fontSize:20, fontWeight: "800"}}>Year </Text>
-                            <DialPicker pickerData={yearOptions}
-                                selectedOption={selectYear} setSelectedOption={selectedYear}/>
+                            <DialPicker pickerData={yearAskOptions}
+                                selectedOption={selectYear} setSelectedOption={selectedYear}
+                                fontSize={12}/>
                         </View>
 
                         <View style={{width: '60%'}}>
                             <Text style={{fontSize:20, fontWeight: "800"}}>Subject </Text>
-                            <DialPicker pickerData={subjectOptions}
-                                selectedOption={selectSubject} setSelectedOption={selectedSubject}/>
+                            <DialPicker pickerData={subjectOptions} filterCategory={selectYear}
+                                selectedOption={selectSubject} setSelectedOption={selectedSubject}
+                                fontSize={12}/>
 
 
                         </View>
@@ -266,6 +275,7 @@ export default NewAsk = ({ ...props }) => {
                         <TextInputBasic
                             label={'Brief Description of Ask'}                        
                             value={values.askWhatDesc}
+                            autoCorrect={false}
                             onChangeText={handleChange('askWhatDesc')}
                             onBlur={handleBlur('askWhatDesc')}
                             error={errors.askWhatDesc}
@@ -276,9 +286,10 @@ export default NewAsk = ({ ...props }) => {
                     </View>
                 </View>
 
-                {/* SUMMARY */}
                 <View style={elements.stackedGreyContainer}>
                     <NumberHeading number='4' title='Your Summary'
+                        ModalContent={<Summary/>}
+                        headerTitle='What is a summary?'
                         onPress={()=>{
                             setShowInfoModal(true)}}/>
                         {selectedTutor && <View style={{flexDirection:'row', alignItems:'center', 
@@ -327,13 +338,6 @@ export default NewAsk = ({ ...props }) => {
                     <PrimaryActionButton title='Begin' onPress={handleSubmit}/>
                 </View>
 
-                {/* Modals */}
-                <InfoModal 
-                    showInfoModal={showInfoModal} 
-                    setShowInfoModal={setShowInfoModal} 
-                    headerTitle={'Some title'}
-                    ModalContent={<Text>some extra information</Text>}
-                />
                 <ActionModal 
                     showActionModal={showActionModal} 
                     setShowActionModal={setShowActionModal} 
@@ -341,8 +345,19 @@ export default NewAsk = ({ ...props }) => {
                     ModalContent={SelectTutorScreen}
                     selectTutorAction={setSelectedTutor}
                 />
+                <TutorialModal 
+                    showTutorialModal={showTutorialModal} 
+                    setShowTutorialModal={setShowTutorialModal} 
+                    headerTitle={'How It Works'}
+                    ModalContent={<Text>INSERT TUTORIAL VIDEO HERE</Text>}
+                    modalWidth={'90%'}
+                />
             </ScrollView>
+            </View>
+        </View>
     </Modal>
+    </View>
+    </Fragment>
   );
 }
 
@@ -351,6 +366,22 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '600'
     },
+    buttonStyle: {
+        height: 90,
+        width: 90,
+        backgroundColor: colors.startup_purple,
+        borderWidth:2,
+        borderRadius: 100,
+        position:'relative',
+        bottom:30,
+        justifyContent:'center',
+        alignItems:'center',
+        shadowColor: '#000000',
+        shadowOpacity: 0.4,
+        shadowRadius:4,
+        shadowOffset : { width: 0, height: 4},
+        zIndex:9999
+      },
     headerTimer: {
         padding: 5,
         backgroundColor: colors.grey_light,
@@ -364,10 +395,32 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     imageBG: {
-        justifyContent:'center'
+        justifyContent:'center',
     },
     errorText: {
         color: 'red',
         paddingTop: 5
-    }
+    },
+    modalView: {
+        //margin: 20,
+        // backgroundColor: "white",
+        // borderRadius: 20,
+        // maxHeight:'60%',
+        // paddingBottom: 20,
+        // flex:1,
+        // top: 300,
+
+        width: '100%',
+        flex:1,
+        paddingBottom: 300,
+        backgroundColor: 'white',
+        //elevation: 20,
+        borderRadius: 25,
+        top:300
+    },
+    centeredView: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        width: '100%'
+      },
 })

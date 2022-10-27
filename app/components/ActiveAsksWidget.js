@@ -8,7 +8,7 @@ import TimerWidget from './TimerWidget';
 
 const ActiveAsksWidget = () => {
 
-const arrowRight = <MaterialIcons name={"keyboard-arrow-right"} color={colors.turquoise} size={30}/>;
+const arrowRight = <MaterialIcons name={"keyboard-arrow-right"} color={colors.startup_purple} size={30}/>;
 const randomAvatar = 'https://i.pravatar.cc/300';
 
 
@@ -27,19 +27,19 @@ const randomAvatar = 'https://i.pravatar.cc/300';
                             <Text style={{
                                 fontWeight:"600",
                                 paddingRight:3}}>
-                                Alesha
+                                Ossama
                             </Text>
                             <Image 
-                                source={require('../assets/focus-fill.png')}
+                                source={require('../assets/green-dot.png')}
                                 style={styles.viewImage_small}/>
                         </View>
-                        <Text>I think the answer is 5.</Text>
+                        <Text numberOfLines={1} style={{width:150}}>Yep, the answer is 5.</Text>
                     </View>
                 </View>
                 <View style={{flexDirection: 'row', 
                     justifyContent:'flex-start',alignItems:'center'
                     }}>
-                    <TimerWidget/>
+                    <TimerWidget pillContainerVisible={true}/>
                     <TouchableOpacity style={styles.openbutton}>
                             {arrowRight}
                     </TouchableOpacity>
@@ -60,9 +60,9 @@ const styles = StyleSheet.create({
         padding: 5,
         margin: 5,
         shadowColor: '#000000',
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-        shadowOffset : { width: 0, height: 2}
+        shadowOpacity: 0.4,
+        shadowRadius: 3,
+        shadowOffset : { width: 0, height: 0}
     },
     openbutton: {
         justifyContent:'center',
@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
     },
     viewImage_small: {
         resizeMode: "contain",
-        width: 16,
-        height: 16,
+        width: 12,
+        height: 12,
         justifyContent: "flex-end"
     },
     viewImage_medium: {

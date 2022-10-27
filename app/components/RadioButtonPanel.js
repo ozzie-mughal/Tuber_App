@@ -78,15 +78,15 @@ const styles = StyleSheet.create({
         borderTopRightRadius:15,
     },
     radioButtonCard_title_selected: {
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: "600",
     },
     radioButtonCard_title_unselected: {
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: "400",
     },
     selected: {
-        backgroundColor: colors.turquoise,
+        backgroundColor: colors.turquoise_green,
         borderWidth: 2,
     },
     unselected: {

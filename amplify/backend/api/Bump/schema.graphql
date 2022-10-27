@@ -9,6 +9,8 @@ type UserRole @model @auth(rules: [{allow: public}]) {
   id: ID!
   partnerCentre: String
   availabilities: [String]
+  rating: Float
+  asks: Int
 }
 
 type Voucher @model @auth(rules: [{allow: public}]) {

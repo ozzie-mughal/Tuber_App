@@ -3,9 +3,8 @@ const colors = {
     french_pink: '#FF70A6',
     salmon: '#FF9770',
     yellow_crayola: '#FFD670',
-    yellow_sun: '#fff269',
     mindaro: '#E9FF70',
-    grey: 'grey',
+    
     baby_blue_light: '#A4E5FF',
     baby_blue_lightest: '#D2F1FD',
     french_pink_light: '#FCBDD6',
@@ -13,8 +12,7 @@ const colors = {
     salmon_light: '#FFC9B5',
     yellow_crayola_light: '#FFEBB7',
     mindaro_light: '#F4FFB5',
-    grey_light: '#D1D1D1',
-    grey_lightest: '#F5F5F5',
+    
 
     //Ocean palette
     purple: '#7400B8',
@@ -61,7 +59,21 @@ const colors = {
     pastel_blue: '#A1E5FF',
     lavender: '#CDD9FF',
     bubblegum_pink: '#FFCCF1',
+    bubblegum_pink_light: '#FFDEF6',
+    bubblegum_pink_lightest: '#FFEBF9',
     yellow_fluoro: '#FFF30A',
+
+    //Nimble palette
+    startup_purple: '#6E78FF',
+    startup_purple_light: '#A4AAFE',
+    money_yellow: '#FFE900',
+    yellow_sun: '#fff269',
+    turquoise_green: '#03FCBA',
+    turquoise_green_light: '#96FFE3',
+    turquoise_green_lightest: '#D1FFF3',
+    grey: 'grey',
+    grey_light: '#D1D1D1',
+    grey_lightest: '#EDEDED',
 }
 
 export default colors

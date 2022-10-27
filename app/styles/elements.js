@@ -4,7 +4,7 @@ const elements = {
     primaryButton: {
         width: '100%',
         paddingVertical: 10,
-        backgroundColor: '#11F3E8',
+        backgroundColor: colors.turquoise_green,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -16,17 +16,56 @@ const elements = {
         shadowOffset : { width: 0, height: 3}
     },
     primaryButtonText: {
-        fontSize: 20,
+        fontSize: 17,
         fontWeight: "600",
+        fontFamily: 'Nunito-Bold',
+        color:'white'
+    },
+    askNowPrimaryButton: {
+        width: '100%',
+        paddingVertical: 10,
+        backgroundColor: colors.turquoise_green,
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+        //borderWidth: 3
+        shadowColor: '#000000',
+        shadowOpacity: 0.5,
+        shadowRadius: 6,
+        shadowOffset : { width: 0, height: 3}
+    },
+    askNowPrimaryButtonText: {
+        fontSize: 17,
+        fontWeight: "600",
+        fontFamily: 'Nunito-Bold',
+    },
+    askNowSecondaryButton: {
+        //width: '100%',
+        padding: 10,
+        backgroundColor: 'transparent',
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+        marginHorizontal: 5,
+        borderWidth: 1,
+        borderColor: 'white',
+        
+    },
+    askNowSecondaryButtonText: {
+        fontSize: 17,
+        fontWeight: "600",
+        fontFamily: 'Nunito-Bold',
         color:'white'
     },
     secondaryButton: {
         width: '100%',
         paddingVertical: 10,
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         borderRadius: 20,
         borderWidth: 2,
-        borderColor: colors.bubblegum_pink,
+        borderColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
@@ -37,9 +76,22 @@ const elements = {
         shadowOffset : { width: 0, height: 3}
     },
     secondaryButtonText: {
-        fontSize: 20,
+        fontSize: 17,
         fontWeight: "600",
-        color: colors.bubblegum_pink,
+        fontFamily: 'Nunito-Bold',
+        color: 'white',
+    },
+    askNowIconContainer: {
+        //width: '100%',
+        padding: 10,
+        backgroundColor: 'transparent',
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+        marginHorizontal: 5,
+        borderWidth: 1,
+        borderColor: 'white',
     },
     secondaryButtonInline: {
         //width: '20%',
@@ -49,7 +101,7 @@ const elements = {
         borderRadius: 25,
         //borderWidth: 1,
         //borderColor: colors.lavender,
-        backgroundColor: colors.turquoise_green_light,
+        backgroundColor: colors.turquoise_green,
         justifyContent: 'center',
         alignItems: 'center',
         margin: 10,
@@ -60,14 +112,14 @@ const elements = {
         shadowOffset : { width: 0, height: 3}
     },
     secondaryButtonInlineText: {
-        fontSize: 14,
-        fontWeight: "500",
+        fontSize: 15,
+        fontFamily: 'Nunito-Medium',
     },
     primaryActionButton: {
         width: '45%',
         height: 50,
         paddingVertical: 10,
-        backgroundColor: colors.turquoise,
+        backgroundColor: colors.turquoise_green,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -78,9 +130,8 @@ const elements = {
         shadowOffset : { width: 0, height: 3}
     },
     primaryActionButtonText: {
-        fontSize: 16,
-        fontWeight: "600",
-        color: 'white'
+        fontSize: 17,
+        fontFamily:'Nunito-Bold'
     },
     primaryActionListButton: {
         width: '25%',
@@ -102,13 +153,13 @@ const elements = {
         color: 'white'
     },
     primaryActionButtonWide: {
-        width: '100%',
+        width: '50%',
         paddingVertical: 10,
-        backgroundColor: colors.lavender_blue,
+        backgroundColor: colors.yellow_sun,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 10,
         shadowColor: '#000000',
         shadowOpacity: 0.5,
         shadowRadius: 6,
@@ -117,12 +168,11 @@ const elements = {
     primaryActionButtonTextWide: {
         fontSize: 16,
         fontWeight: "600",
-        color: 'white'
     },
     showMoreButton: {
         width: '40%',
         paddingVertical: 5,
-        backgroundColor: colors.lavender_blue,
+        backgroundColor: colors.yellow_sun,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -161,7 +211,11 @@ const elements = {
     },
     topSafeAreaContainer: {
         flex: 0,
-        backgroundColor: colors.turquoise_green
+        backgroundColor: 'white'
+    },
+    bottomSafeAreaContainer: {
+        flex: 0,
+        backgroundColor: colors.startup_purple
     },
     topSafeAreaContainer_light: {
         flex: 0,
@@ -171,81 +225,85 @@ const elements = {
         flex: 1,
         backgroundColor: 'white',
     },
-    generalDashboardContainer: {
+    askNowContainer: {
         flex: 1,
-        backgroundColor: colors.grey_light,
+        backgroundColor: colors.startup_purple,
     },
     splashHeaderContainer: {
         justifyContent: "center",
         alignItems: "center",
-        //backgroundColor: colors.baby_blue,
-        width: "100%",
+        marginTop: 10,
         height: "25%",
     },
     screenHeaderContainer: {
         justifyContent: "center",
-        alignItems: "center",
-        //backgroundColor: colors.baby_blue,
-        width: "100%",
-        height: 150,
+        height: 250,
     },
     splashContentContainer: {
         flex: 1,
         alignItems: "center",
         position: "relative",
-        top: '22%',
-        backgroundColor:'white'
+        top: '10%',
+        paddingTop: 40,
+        borderRadius: 30,
+        backgroundColor:colors.startup_purple
     },
     pageHeaderContainer: {
         paddingHorizontal: 15,
         backgroundColor: colors.skyblue_crayola,
         width: "100%",
-        height: "15%",
+        height: "20%",
     },
     pageHeading_text: {
-        fontSize: 26,
+        fontSize: 34,
         fontWeight: "600",
-        color: 'white'
+        color: 'white',
+        fontFamily: 'Nunito-Bold'
     },
     pageSubheading_text: {
-        fontSize: 21,
+        fontSize: 24,
         fontWeight: "600",
-        color: 'white'
+        color: 'white',
+        fontFamily: 'Nunito-SemiBold'
     },
     contentHeading_text: {
-        fontSize: 35,
+        fontSize: 34,
         fontWeight: '600',
+        fontFamily: 'Nunito-ExtraBold',
         marginVertical: 5,
         color: 'black',
     },
     contentSubheading_text: {
         fontSize: 24,
         fontWeight: '600',
+        fontFamily: 'Nunito-Bold',
         color: 'black',
     },
+    pageSectionContainer: {
+        flex: 1,      
+        marginTop:25,  
+        paddingTop: 30,
+        backgroundColor: colors.startup_purple,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30
+    },
     pageContentContainer: {
-        flex: 1,
-        marginTop: 170,
-        alignItems: "center",
-        backgroundColor: "white",
-        posititon: 'absolute',
-        //bottom: -100
+        height: '55%',
+        marginHorizontal: 15
     },
     dashboardContentContainer: {
         flex: 1,
         paddingHorizontal: 15,
         backgroundColor: "white",
         width: '100%',
-        borderRadius: 30 ,
-        paddingTop: 50,
-        marginTop: 75
+
         
     },
     stackedGreyContainer: {
         backgroundColor:colors.grey_lightest, 
         padding: 10, 
         borderRadius: 25,
-        marginVertical: 20
+        marginVertical: 20,
     },
     stackedInputContainer: {
         width: "90%"
@@ -270,6 +328,13 @@ const elements = {
         flexDirection:'row',
         width: "90%",
         justifyContent: "space-between",
+        alignItems: 'center',
+        marginBottom: 25
+    },
+    submitButtonContainer: {
+        flexDirection:'row',
+        width: "90%",
+        justifyContent: "flex-end",
         alignItems: 'center',
         marginBottom: 25
     },
@@ -300,7 +365,7 @@ const elements = {
     },
     formLabelText: {
         fontSize: 16,
-        fontWeight: '500'
+        fontFamily: 'Nunito-Medium',
     }
 }
 

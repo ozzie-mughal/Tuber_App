@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, 
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, 
     Alert, Image, SafeAreaView, Button, ScrollView,
     KeyboardAvoidingView } from 'react-native';
 import WavyHeader from '../components/WavyHeader';
@@ -22,8 +22,8 @@ import getCurrentUserInfo from '../functions/getCurrentUserInfo';
 
 export default function LoginScreen({ navigation, updateAuthState, isUserLoggedIn}) {
 
-    const email = <MaterialIcons name={"email"} color={colors.grey} size={20}/>;
-    const lock = <MaterialIcons name={"lock"} color={colors.grey} size={20}/>;
+    const email = <MaterialIcons name={"email"} color={"white"} size={20}/>;
+    const lock = <MaterialIcons name={"lock"} color={"white"} size={20}/>;
 
     useEffect(()=>{
         console.log(isUserLoggedIn);
@@ -59,6 +59,7 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
         validationSchema: LoginSchema,
         initialValues: {email: 'o.mughal@hotmail.com', password: 'Bumpy12345!'},
         onSubmit: values => {
+            
             try {
                 signIn(values)
             }
@@ -79,31 +80,14 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
         <SafeAreaView style={elements.generalContainer}>
             {/* Header Components */}
             <View style={elements.splashHeaderContainer}>                
-
-                <LinearGradient
-                    // Background Linear Gradient
-                    //colors={[colors.orange,colors.sky_pink,colors.skyblue_crayola]}
-                    colors={[colors.turquoise_green, colors.turquoise_blue]}
-                    //start={{x:0.2,y:0.1}}
-                    //end={{x:0.3,y:0.9}}
-                    locations={[0.3,1.0]}
-                    style={[styles.background]}
-                />
-
                 <Image 
-                    source={require('../assets/nemo-logo.png')}
-                    style={{resizeMode: 'contain', width: 250, height: 250, bottom:25}}
+                    source={require('../assets/brand/nimble_logoname.png')}
+                    style={{resizeMode: 'contain', width: 250, height: 250}}
                 />
-            </View>
-            <View style={{
-                height: 30,
-            }}>
-                <WavyHeader
-                    customHeight={250}
-                    customFill={colors.turquoise_blue}
-                    customBgColor="white"
-                    customWavePattern="m0 0 48 26.7C96 53 192 107 288 144s192 59 288 48 192-53 288-80 192-37 288-26.7c96 10.7 192 42.7 240 58.7l48 16V0H0Z"
-                />
+                <Text style={{color:colors.turquoise_green, textAlign:'center',
+                    fontFamily: 'Nunito-ExtraBold',fontSize:28,paddingHorizontal:10}}>
+                                Join as a student, tutor, or parent.
+                            </Text>
             </View>
 
             {/* Login/Register Components */}
@@ -135,10 +119,10 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
                         touched={touched.password}
                         value={values.password}
                     />
-                    <View style={{alignItems:"flex-end", marginTop: 5}}>
+                    <View style={{alignItems:"flex-end", marginTop: 10}}>
                         <TouchableOpacity
                             onPress={() => navigation.navigate('ForgotPassword')}>
-                            <Text style={{textDecorationLine:"underline"}}>
+                            <Text style={{textDecorationLine:"underline", color:'white', fontFamily: 'Nunito-Medium',fontSize:17}}>
                                 Forgot your password?
                             </Text>
                         </TouchableOpacity>
@@ -147,50 +131,49 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
                 </View>
                 <View style={elements.stackedButtonContainer}>
                     <PrimaryButton title="Login" onPress={handleSubmit}/>
-                    <View style={{
-                        flexDirection:'row',
-                        paddingVertical: 10}
-                        }>
-                    <Line_X
-                        customColor="grey"
-                        customWidth={130}
-                        customHeight={5}
-                        customX1={0}
-                        customY1={0}
-                        customX2={130}
-                        customY2={0}/>
-                    <Text style={{
-                            marginHorizontal:10,
-                            color: 'grey',
-                            fontSize: 14}}>
-                        or
-                    </Text>
-                    <Line_X
-                        customColor="grey"
-                        customWidth={130}
-                        customHeight={5}
-                        customX1={0}
-                        customY1={0}
-                        customX2={130}
-                        customY2={0}/>
-                    </View>
+                    <View style={{alignItems:'center', paddingVertical: 15}}>
+                        <View style={{
+                            flexDirection:'row',
+                            paddingVertical: 10}
+                            }>
+                        <Line_X
+                            customColor="white"
+                            customWidth={130}
+                            customHeight={5}
+                            customX1={0}
+                            customY1={0}
+                            customX2={130}
+                            customY2={0}/>
+                        <Text style={{marginHorizontal:10,color: 'white',fontSize: 17,fontFamily: 'Nunito-Medium',}}>
+                            or
+                        </Text>
+                        <Line_X
+                            customColor="white"
+                            customWidth={130}
+                            customHeight={5}
+                            customX1={0}
+                            customY1={0}
+                            customX2={130}
+                            customY2={0}/>
+                        </View>
                     {/* Alternative Login options */}
                     <View style={{
                         flexDirection: 'row',
                     }}>
-                        <TouchableOpacity style={{marginHorizontal: 5, width:40, height:40, 
-                            borderRadius: 50, backgroundColor:"black", justifyContent:'center',alignItems:'center'}}>
+                        <TouchableOpacity style={{marginHorizontal: 5, width:45, height:45, 
+                            borderRadius: 50, backgroundColor:"black", justifyContent:'center',alignItems:'center', borderColor:'white', borderWidth:1}}>
                                 <Ionicons name={"logo-apple"} size={20} color='white'/>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{marginHorizontal: 5, width:40, height:40, 
-                            borderRadius: 50, backgroundColor:"red", justifyContent:'center',alignItems:'center'}}>
+                        <TouchableOpacity style={{marginHorizontal: 5, width:45, height:45, 
+                            borderRadius: 50, backgroundColor:"red", justifyContent:'center',alignItems:'center', borderColor:'white', borderWidth:1}}>
                                 <Ionicons name={"logo-google"} size={20} color='white'/>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{marginHorizontal: 5, width:40, height:40, 
-                            borderRadius: 50, backgroundColor:"blue", justifyContent:'center',alignItems:'center'}}>
+                        <TouchableOpacity style={{marginHorizontal: 5, width:45, height:45, 
+                            borderRadius: 50, backgroundColor:"blue", justifyContent:'center',alignItems:'center', borderColor:'white', borderWidth:1}}>
                                 <Ionicons name={"logo-facebook"} size={20} color='white'/>
                         </TouchableOpacity>
 
+                    </View>
                     </View>
                     <SecondaryButton title="Register" onPress={() => navigation.navigate('SignUp')}/>
                     

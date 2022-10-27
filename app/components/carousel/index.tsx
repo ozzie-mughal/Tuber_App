@@ -22,7 +22,7 @@ const colorsDots = [
 
 function Index() {
     const [isVertical, setIsVertical] = React.useState(false);
-    const [autoPlay, setAutoPlay] = React.useState(true);
+    const [autoPlay, setAutoPlay] = React.useState(false);
     const [pagingEnabled, setPagingEnabled] = React.useState<boolean>(true);
     const [snapEnabled, setSnapEnabled] = React.useState<boolean>(true);
     const progressValue = useSharedValue<number>(0);

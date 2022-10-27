@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         margin: 2
     },
     activeTextStyle: {
-        fontWeight: "600",
+        fontFamily: 'Nunito-Bold',
         color: 'black'
     },
     inactiveContainer: {
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
         margin: 2
     },
     inactiveTextStyle: {
-        color: 'black'
+        color: 'black',
+        fontFamily: 'Nunito-Medium',
     },
 })

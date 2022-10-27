@@ -26,6 +26,7 @@ const getCurrentUserInfo = async (username) => {
     finally {
     //Store user role info to AsyncStorage
     //console.log(userRole);
+    if (userRole) {
     if (userRole.roleType === 'Student') {
       //Persist student role info locally for save post-confirmation
       const studentData = [
@@ -56,6 +57,7 @@ const getCurrentUserInfo = async (username) => {
   } else {
     console.log('Error: User Role type not found')
   }
+}
 
   }
 

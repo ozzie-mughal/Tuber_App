@@ -8,9 +8,6 @@ import TimerWidget from '../components/TimerWidget'
 import colors from '../styles/colors'
 import elements from '../styles/elements'
 import { DataStore } from '@aws-amplify/datastore'
-import { MenuProvider } from 'react-native-popup-menu';
-import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-
 
 const ChatRoomScreen = () => {
 
@@ -80,12 +77,11 @@ const ChatRoomScreen = () => {
     //navigation.setOptions({ headerTitle: () => <ChatRoomScreenHeader avatarImage={avatarImage} name={name}/>})
 
   return (
-    <ActionSheetProvider>
     <Fragment>
         <SafeAreaView style={styles.page}>
             <View style={styles.pageContent}>
                 <View style={styles.timerContainer}>
-                    <TimerWidget/>
+                    <TimerWidget pillContainerVisible={false}/>
                 </View>
                 <FlatList 
                     data={messages}
@@ -97,7 +93,6 @@ const ChatRoomScreen = () => {
         </SafeAreaView>
         <SafeAreaView style={{backgroundColor:'white'}}/>
     </Fragment>
-    </ActionSheetProvider>
   )
 }
 
@@ -108,26 +103,26 @@ export default ChatRoomScreen
 
 const styles = StyleSheet.create({
     page: {
-        backgroundColor: colors.slate_blue_light,
+        backgroundColor: 'white',
         flex: 1
     },
     pageContent: {
         backgroundColor: 'white',
         flex: 1,
-        top: 10,
+        //top: 10,
         borderTopLeftRadius: 30, 
         borderTopRightRadius: 30 
     },
     timerContainer: {
-        backgroundColor:colors.yellow_sun,
+        backgroundColor:'#F5F5F5',
         borderBottomLeftRadius: 30, 
         borderBottomRightRadius: 30,
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
         shadowColor: '#000000',
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-        shadowOffset : { width: 0, height: 10},
+        shadowOpacity: 0.25,
+        shadowRadius: 12,
+        shadowOffset : { width: 0, height: 9},
     }
 })

@@ -65,15 +65,15 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     toggleCard_title_selected: {
-        fontSize: 16,
-        fontWeight: "600",
+        fontSize: 15,
+        fontFamily: 'Nunito-Bold',
     },
     toggleCard_title_unselected: {
-        fontSize: 16,
-        fontWeight: "400",
+        fontSize: 15,
+        fontFamily: 'Nunito-Medium',
     },
     selected: {
-        backgroundColor: colors.turquoise,
+        backgroundColor: colors.turquoise_green,
         borderWidth: 2,
     },
     unselected: {

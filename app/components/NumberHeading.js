@@ -65,15 +65,15 @@ const styles = StyleSheet.create({
     },
     headingText: {
         fontSize: 24, 
-        fontWeight:'600'
+        fontFamily:'Nunito-Bold',
     },
     headingKeywordText: {
         fontSize: 28, 
-        fontWeight:'700',
+        fontFamily:'Nunito-Bold',
         textDecorationLine:'underline'
     },
     numberHeadingText: {
-        fontSize: 30, 
-        fontWeight:'400',
+        fontSize: 34, 
+        fontFamily:'Nunito-Bold',
     }
 })

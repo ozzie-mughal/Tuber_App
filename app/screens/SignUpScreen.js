@@ -8,8 +8,6 @@ import { Auth, DataStore, Storage } from 'aws-amplify';
 import PrimaryActionButton from '../components/PrimaryActionButton';
 import SecondaryActionButton from '../components/SecondaryActionButton';
 import elements from '../styles/elements';
-import colors from '../styles/colors'; 
-import icons from '../styles/icons';
 import RadioButtonPanel from '../components/RadioButtonPanel';
 import RadioButtonGrid from '../components/RadioButtonGrid';
 import NumberHeading from '../components/NumberHeading';
@@ -21,21 +19,17 @@ import * as Yup from 'yup';
 import DateTimePickerBasic from '../components/DateTimePickerBasic';
 import Moment from 'moment';
 import MultiPicker from '../components/MultiPicker'; 
-import {Picker} from '@react-native-picker/picker';
 import DialPicker from '../components/DialPicker';
 import FrontDoorBanner from '../components/FrontDoorBanner';
 import SecondaryButtonInline from '../components/SecondaryButtonInline';
 import ConfirmationText from '../components/ConfirmationText';
 import ToggleCard from '../components/ToggleCard';
 import ErrorModal from '../components/ErrorModal';
-import ActionModal from '../components/ActionModal';
 import ImageUpload from '../components/ImageUpload';
 import getBlob from '../functions/getBlob';
 import { Voucher, UserRole } from '../../src/models';
 import storeAsyncData from '../functions/AsyncStorage/storeAsyncData';
 import { v4 as uuidv4 } from 'uuid';
-import PrimaryActionButtonWide from '../components/PrimaryActionButtonWide';
-import SelectAvailabilitiesScreen from './SelectAvailabilitiesScreen';
 import AvailabilityPicker from '../components/AvailabilityPicker';
 
 
@@ -361,22 +355,21 @@ const errorInfo =
 
 return (
 <Fragment>
-            <SafeAreaView style={elements.topSafeAreaContainer}/>
-            <KeyboardAvoidingView 
-                            style={elements.generalContainer}
-                            behavior='padding'>
+    <KeyboardAvoidingView 
+        style={elements.generalContainer}
+        behavior='padding'>
             <SafeAreaView style={elements.generalContainer}>
                 {/* Header Components */}
-                <FrontDoorBanner/>
+                <FrontDoorBanner 
+                    heading='Register'
+                    subHeading='Join as a student, tutor, or parent.'/>
 
         {/* Register Components */}
-        <ScrollView keyboardShouldPersistTaps="handled">
             
-        <View style={elements.pageContentContainer}>
+        <View style={elements.pageSectionContainer}>
+        <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{alignItems: "center"}}>
         
             <View style={elements.stackedInputContainer}>
-                <Text style={elements.contentHeading_text}>Register</Text>
-                <Text style={elements.contentSubheading_text}>Join as a student, tutor or parent.</Text>
                 <View style={elements.stackedGreyContainer}>
                     <NumberHeading number='1' title='I am a ...'
                         headerTitle='How will you use Nemo?'
@@ -561,7 +554,8 @@ return (
                         <View>
                             <Text style={[elements.formLabelText,styles.otherInputLabel]}>What year are you in?* </Text>
                             <DialPicker pickerRef={pickerRef} pickerData={yearOptions}
-                                selectedOption={selectedYear} setSelectedOption={selectedYearOption}/>
+                                selectedOption={selectedYear} setSelectedOption={selectedYearOption}
+                                fontSize={18}/>
                         </View>
 
                         {selectedYear && <View style={styles.otherInputContainer}>
@@ -572,7 +566,7 @@ return (
 
                         <View style={styles.otherInputContainer}>
                             <Text style={[elements.formLabelText,styles.otherInputLabel]}>Voucher Code </Text>
-                            <Text style={{fontStyle:'italic'}}>
+                            <Text style={{fontFamily: 'Nunito-MediumItalic',}}>
                                 Have you been given a voucher code by your school/learning centre to earn a number of free asks?
                             </Text>
                             <View style={{flexDirection:'row'}}>
@@ -625,7 +619,8 @@ return (
                     <View style={{marginVertical:10}}>
                         <Text style={[elements.formLabelText,styles.otherInputLabel]}>Please select partner centre * </Text>
                         <DialPicker pickerRef={pickerRef} pickerData={PartnerCentreOptions}
-                                selectedOption={selectedPartnerCentre} setSelectedOption={selectedPartnerCentreOption}/>
+                                selectedOption={selectedPartnerCentre} setSelectedOption={selectedPartnerCentreOption}
+                                fontSize={18}/>
                     </View>
                     : null}
                     <View style={styles.otherInputContainer}>
@@ -648,18 +643,18 @@ return (
                 : null}
             </View>
 
-            <View style={elements.inlineButtonContainer}>
-                <SecondaryActionButton title="Return to Login" onPress={() => navigation.navigate('SignIn')}/>
+            <View style={elements.submitButtonContainer}>
                 <PrimaryActionButton title="Register" onPress={() => {
                     handleSubmit();
                     setSubmitToggle(!submitToggle);
                 }}/>
             </View>
 
-        </View>
         </ScrollView>
+        </View>
       </SafeAreaView>
       </KeyboardAvoidingView>
+      <SafeAreaView style={elements.bottomSafeAreaContainer}/>
         <ErrorModal 
             showErrorModal={showErrorModal}
             setShowErrorModal={setShowErrorModal}

@@ -1,23 +1,14 @@
-import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Pressable, Button, StyleSheet, Alert, Text, ScrollView, Modal } from 'react-native';
-import {
-  BottomSheetModal,
-  BottomSheetBackdrop,
-  BottomSheetBackdropProps,
-} from '@gorhom/bottom-sheet';
-import HeaderHandle from './HeaderHandle';
-import withModalProvider from './withModalProvider';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import elements from '../styles/elements';
 import colors from '../styles/colors'; 
 
-const InfoModal = ({showInfoModal, setShowInfoModal, headerTitle, ModalContent}) => {
+const InfoModal = ({showInfoModal, setShowInfoModal, headerTitle, ModalContent, ...props}) => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={showInfoModal}
       onRequestClose={() => {
@@ -26,7 +17,8 @@ const InfoModal = ({showInfoModal, setShowInfoModal, headerTitle, ModalContent})
       }}
     >
       <View style={styles.centeredView}>
-        <View style={styles.modalView}>
+        <View style={[styles.modalView, 
+          {width: props.modalWidth ? props.modalWidth : '75%'}]}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalHeaderText}>
               {headerTitle}
@@ -55,11 +47,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    //width: '100%'
   },
   modalHeader: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: colors.lavender_blue,
+    backgroundColor: colors.startup_purple,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
@@ -67,7 +61,7 @@ const styles = StyleSheet.create({
   },
   modalHeaderText: {
     fontSize: 20,
-    fontWeight: '600',
+    fontFamily:'Nunito-Bold',
     paddingVertical: 5
   },
   modalView: {
@@ -86,12 +80,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.55,
     shadowRadius: 10,
     elevation: 5,
-    width: '75%'
+    //width: '75%'
   },
   modalContent: {
     paddingBottom: 20,
     paddingHorizontal: 35,
-    marginBottom: 10
+    marginBottom: 10,
+
   },
   button: {
     borderRadius: 20,
@@ -100,14 +95,14 @@ const styles = StyleSheet.create({
     elevation: 2
   },
   buttonOpen: {
-    backgroundColor: colors.slate_blue_light,
+    backgroundColor: colors.startup_purple,
   },
   buttonClose: {
-    backgroundColor: colors.slate_blue_light,
+    backgroundColor: colors.startup_purple,
   },
   textStyle: {
     color: "white",
-    fontWeight: "bold",
+    fontFamily:'Nunito-Medium',
     textAlign: "center"
   },
   modalText: {

@@ -74,15 +74,15 @@ const styles = StyleSheet.create({
     },
     radioButtonCard_title_selected: {
         fontSize: 15,
-        fontWeight: "600",
+        fontFamily: 'Nunito-Bold',
     },
     radioButtonCard_title_unselected: {
         fontSize: 15,
-        fontWeight: "400",
+        fontFamily: 'Nunito-Medium',
 
     },
     selected: {
-        backgroundColor: colors.turquoise,
+        backgroundColor: colors.turquoise_green,
         borderWidth: 2,
     },
     unselected: {

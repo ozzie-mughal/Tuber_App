@@ -82,6 +82,20 @@ export const schema = {
                     "attributes": [],
                     "isArrayNullable": true
                 },
+                "rating": {
+                    "name": "rating",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "asks": {
+                    "name": "asks",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -649,5 +663,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "c82ab45f5bcf28bef81c0724cf283e05"
+    "version": "edf2df765bb879871a2ad69723c3eed4"
 };

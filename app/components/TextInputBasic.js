@@ -12,7 +12,7 @@ const TextInputBasic = ({icon, InputWidth, label, error, touched, ...otherProps}
 
   return (
     <View>
-        <Text style={[{fontWeight:'500'}, {color: validationColor},elements.formLabelText]}>
+        <Text style={[{fontWeight:'500', fontSize:17, fontFamily:'Nunito-Medium'}, {color: validationColor},elements.formLabelText]}>
             {label}
         </Text>
         <View style={[{borderColor: validationColor}, styles.textInputContainer]}>
@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
     },
     input: {
         paddingHorizontal: 15,
-        //width: {width} ? {width} : '100%'
+        fontSize: 17,
+        fontFamily:'Nunito-Medium'
     },
     errorText: {
         color: 'red',

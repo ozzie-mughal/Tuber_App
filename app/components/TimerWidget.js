@@ -4,10 +4,10 @@ import Message from '../components/Message'
 import ChatData from '../assets/dummy-data/Chats'
 import MessageInput from '../components/MessageInput'
 import { useRoute, useNavigation } from '@react-navigation/core';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../styles/colors'
 
-const timer_icon = <Ionicons name={"ios-timer-outline"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
+const timer_icon = <MaterialCommunityIcons name={"clock-outline"} color={colors.grey} size={20} style={{marginHorizontal: 5}}/>;
 
 const TimerWidget = (props) => {
 
@@ -25,7 +25,8 @@ const TimerWidget = (props) => {
     return (
         <View style={styles.chatRoomScreenHeaderContainer}>
             <View style={{ flexDirection: 'row',justifyContent:'space-between'}}>
-                <View style={styles.headerTimer}>
+                <View style={[styles.headerTimer, props.pillContainerVisible ?
+                    {backgroundColor: colors.grey_lightest} : null ]}>
                     {timer_icon}
                     {dt<10 && <Text style={styles.timerText}>00:0{dt}</Text>}
                     {dt>=10 && <Text style={styles.timerText}>00:{dt}</Text>}
@@ -43,17 +44,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         //marginLeft: 50,
         marginHorizontal:5,
-        justifyContent: 'flex-end',
-        alignItems:'flex-end',
+        justifyContent: 'center',
+        alignItems:'center',
     },
     timerText: {
-        fontSize: 14,
-        fontWeight: '600'
+        fontSize: 15,
+        fontFamily:'Nunito-Medium',
+        color: colors.grey
     },
     headerTimer: {
         padding: 5,
-        backgroundColor: colors.grey_light,
-        width: 70,
+        width: 80,
         flexDirection: 'row',
         borderRadius: 15,
         justifyContent: 'center',

@@ -9,10 +9,31 @@ import Initializing from './app/navigation/Initialising';
 import AuthenticationNavigator from './app/navigation/AuthenticationNavigator';
 import AppNavigator from './app/navigation/AppNavigator';
 import Moment from 'moment';
+import { useFonts } from 'expo-font';
 
 Amplify.configure(config);
 
 function App() {
+  
+  //Load custom fonts
+  const [fontsLoaded] = useFonts({
+    'Nunito-Black': require('./app/styles/fonts/Nunito-Black.ttf'),
+    'Nunito-BlackItalic': require('./app/styles/fonts/Nunito-BlackItalic.ttf'),
+    'Nunito-Bold': require('./app/styles/fonts/Nunito-Bold.ttf'),
+    'Nunito-BoldItalic': require('./app/styles/fonts/Nunito-BoldItalic.ttf'),
+    'Nunito-ExtraBold': require('./app/styles/fonts/Nunito-ExtraBold.ttf'),
+    'Nunito-ExtraBoldItalic': require('./app/styles/fonts/Nunito-ExtraBoldItalic.ttf'),
+    'Nunito-ExtraLight': require('./app/styles/fonts/Nunito-ExtraLight.ttf'),
+    'Nunito-ExtraLightItalic': require('./app/styles/fonts/Nunito-ExtraLightItalic.ttf'),
+    'Nunito-Italic': require('./app/styles/fonts/Nunito-Italic.ttf'),
+    'Nunito-Light': require('./app/styles/fonts/Nunito-Light.ttf'),
+    'Nunito-LightItalic': require('./app/styles/fonts/Nunito-LightItalic.ttf'),
+    'Nunito-Medium': require('./app/styles/fonts/Nunito-Medium.ttf'),
+    'Nunito-MediumItalic': require('./app/styles/fonts/Nunito-MediumItalic.ttf'),
+    'Nunito-Regular': require('./app/styles/fonts/Nunito-Regular.ttf'),
+    'Nunito-SemiBold': require('./app/styles/fonts/Nunito-SemiBold.ttf'),
+    'Nunito-SemiBoldItalic': require('./app/styles/fonts/Nunito-SemiBoldItalic.ttf'),
+  });
 
   const [isUserLoggedIn, setUserLoggedIn] = useState('initializing');
   const [user, setUser] = useState(null);
@@ -21,6 +42,7 @@ function App() {
   useEffect(() => {
     checkAuthState();
   }, []);
+
 
   //Check whether latest message is synchronised with DataStore
   useEffect(() => {
@@ -128,6 +150,10 @@ function App() {
   }
   function updateAuthState(isUserLoggedIn) {
     setUserLoggedIn(isUserLoggedIn);
+  }
+
+  if (!fontsLoaded) {
+    return null;
   }
 
   return (

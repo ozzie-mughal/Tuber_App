@@ -211,7 +211,7 @@ const MessageInput = ({ chatRoom }) => {
         {audio && <AudioPlayer soundURI={soundURI} setAudio={setAudio} deleteButton={true} setSoundURI={setSoundURI}/>}
         {/*Upload progress bar */}
         {audio && 
-            <View style={{backgroundColor:colors.turquoise, 
+            <View style={{backgroundColor:colors.startup_purple, 
                 height: 4, marginVertical: 5, width: (soundURIUploadProgress * 100)+'%'}}/>}
 
         {/*Message Input */}
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
         marginHorizontal:10
     },
     audioPlaybackSlider: {
-        backgroundColor: colors.turquoise, 
+        backgroundColor: colors.startup_purple, 
         borderRadius: 15, 
         height: 15,
         width: 15, 
@@ -322,16 +322,16 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 25,
         borderWidth: 2,
-        borderColor: colors.turquoise,
+        borderColor: colors.startup_purple,
         justifyContent: 'center',
         alignItems:'center'
     },
     micButtonPressed: {
-        backgroundColor: colors.turquoise,
+        backgroundColor: colors.startup_purple,
         padding: 10,
         borderRadius: 25,
         borderWidth: 2,
-        borderColor: colors.turquoise,
+        borderColor: colors.startup_purple,
         justifyContent: 'center',
         alignItems:'center'
     }

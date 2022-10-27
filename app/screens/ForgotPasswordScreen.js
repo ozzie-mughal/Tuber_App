@@ -19,7 +19,7 @@ import FrontDoorBanner from '../components/FrontDoorBanner';
 
 export default function ForgotPasswordScreen({ navigation, updateAuthState}) {
 
-    const email = <MaterialIcons name={"email"} color={colors.grey} size={20}/>;
+    const email = <MaterialIcons name={"email"} color={colors.grey_light} size={20}/>;
 
     const LoginSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email').required('Required'),
@@ -59,14 +59,14 @@ export default function ForgotPasswordScreen({ navigation, updateAuthState}) {
                         behavior='padding'>
         <SafeAreaView style={elements.generalContainer}>
             {/* Header Components */}
-            <FrontDoorBanner/>
+            <FrontDoorBanner 
+                    heading='Forgot Password'
+                    subHeading='We will send a verification code to your email to 
+                    reset your password.'/>
 
             {/* Login/Register Components */}
             <View style={elements.splashContentContainer}>
                 <View style={elements.stackedInputContainer}>
-                    <Text style={elements.contentHeading_text}>Forgot Password</Text>
-                    <Text style={elements.contentSubheading_text}>We will send a verification code to your email to 
-                    reset your password.</Text>
                     <TextInputWithIcon
                         icon={email}
                         placeholder="Enter email"
@@ -83,8 +83,7 @@ export default function ForgotPasswordScreen({ navigation, updateAuthState}) {
                     />
 
                 </View>
-                <View style={elements.inlineButtonContainer}>
-                    <SecondaryActionButton title="Return to Login" onPress={() => navigation.navigate('SignIn')}/>
+                <View style={elements.submitButtonContainer}>
                     <PrimaryActionButton title="Send Code" onPress={handleSubmit}/>
                 </View>
             </View>

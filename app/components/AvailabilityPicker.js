@@ -165,8 +165,8 @@ import SecondaryButtonInline from './SecondaryButtonInline';
     },
     headerText: {
       textAlign: 'left',
-      fontSize: 16,
-      fontWeight: '500',
+      fontSize: 15,
+      fontFamily: 'Nunito-Bold',
     },
     content: {
       padding: 10,
@@ -187,7 +187,8 @@ import SecondaryButtonInline from './SecondaryButtonInline';
       alignItems: 'center',
     },
     multipleToggle__title: {
-      fontSize: 14,
+      fontSize: 15,
       marginHorizontal: 5,
+      fontFamily: 'Nunito-Medium',
     },
   });

@@ -6,27 +6,40 @@ import elements from '../styles/elements';
 import UserPreview from '../components/UserPreview';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { DataStore } from '@aws-amplify/datastore';
-import { User } from '../../src/models';
+import { User, UserRole } from '../../src/models';
 
 export default function SelectTutorScreen( { ...props } ) {
 
   const [users, setUsers] = useState([]);
+  const [tutors, setTutors] = useState([]);
 
   useEffect(()=> {
-    try {DataStore.query(User).then(setUsers);
-    console.log(users)
+    try {
+      DataStore.query(User,user => user.UserRole("ne",null))
+      .then(setUsers);
     }
     catch (e) {
       console.log("Datastory query error: ",e)
     }
+    finally {
+
+    }
     },[])
+
+  useEffect(()=>{
+    if (users.length > 0) {
+      const tutors = users.map(user => {return user.UserRole.roleType === 'Tutor' ? user : null});
+      setTutors(tutors);
+    }
+  },[users])
+
 
   return (
     <View style={styles.page}>
     {/* Header Components */}
       <View style={styles.header_container}>   
         <SegmentedControl
-          tintColor={colors.skyblue_crayola}
+          tintColor={colors.turquoise_green}
           fontStyle={{color: 'black'}}
           values={['Favourites', 'Top-Rated', 'All']}
           selectedIndex={0}
@@ -34,9 +47,10 @@ export default function SelectTutorScreen( { ...props } ) {
       </View>
       {/*User Previews */}
       <FlatList
-          data={users}
-          renderItem={({ item }) => <UserPreview user={item} showButton={true} 
-            buttonTitle="Select" onPress={()=>{
+          data={tutors}
+          renderItem={({ item }) => <UserPreview user={item} 
+          showButton={false} showArrow={true} showBadges={true}
+            onPress={()=>{
               try {
                 props.selectTutorAction(item)
               }
