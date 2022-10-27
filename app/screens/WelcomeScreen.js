@@ -28,7 +28,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomNavSheet from '../navigation/BottomSheet';
 
 const store = <FontAwesome5 name={"coins"} color={colors.money_yellow} size={20}/>;
-const hamburger_menu = <Entypo name={"menu"} color={colors.yellow_sun} size={40}/>;
+const hamburger_menu = <Entypo name={"menu"} color={colors.tertiary} size={40}/>;
 const lightning = <MaterialCommunityIcons name={"lightning-bolt"} color={colors.turquoise_green} size={20}/>;
 
 
@@ -157,13 +157,13 @@ export default function WelcomeScreen({ navigation, updateAuthState }) {
         <MenuProvider>
 
         <GestureHandlerRootView style={{flex:1}}>
-            <SafeAreaView style={{backgroundColor:colors.startup_purple}} />
+            <SafeAreaView style={{backgroundColor:colors.primary}} />
                 
                 {/* Header Content */}
                 <View style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
-                    backgroundColor: colors.startup_purple,
+                    backgroundColor: colors.primary,
                     padding: 10}}>
                     <TouchableOpacity style={{marginTop: 10,marginLeft: 10,}}
                         onPress={()=>navigation.toggleDrawer()}>
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
         height: 55,
         borderRadius: 30,
         borderWidth:1,
-        borderColor: colors.yellow_sun
+        borderColor: colors.tertiary
     },
     header_title: {
         width: "70%",

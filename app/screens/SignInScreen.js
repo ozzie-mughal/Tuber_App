@@ -18,12 +18,13 @@ import * as Yup from 'yup';
 import { LinearGradient } from 'expo-linear-gradient';
 import { color } from 'react-native-reanimated';
 import getCurrentUserInfo from '../functions/getCurrentUserInfo';
+import currentBrand from '../assets/brand/currentBrand';
 
 
 export default function LoginScreen({ navigation, updateAuthState, isUserLoggedIn}) {
 
-    const email = <MaterialIcons name={"email"} color={"white"} size={20}/>;
-    const lock = <MaterialIcons name={"lock"} color={"white"} size={20}/>;
+    const email = <MaterialIcons name={"email"} color={colors.secondary} size={20}/>;
+    const lock = <MaterialIcons name={"lock"} color={colors.secondary} size={20}/>;
 
     useEffect(()=>{
         console.log(isUserLoggedIn);
@@ -81,13 +82,10 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
             {/* Header Components */}
             <View style={elements.splashHeaderContainer}>                
                 <Image 
-                    source={require('../assets/brand/nimble_logoname.png')}
-                    style={{resizeMode: 'contain', width: 250, height: 250}}
+                    source={require('../assets/brand/uplift-education/UpliftEd_Logo.png')}
+                    style={{resizeMode: 'contain', width: 275, height: 275}}
                 />
-                <Text style={{color:colors.turquoise_green, textAlign:'center',
-                    fontFamily: 'Nunito-ExtraBold',fontSize:28,paddingHorizontal:10}}>
-                                Join as a student, tutor, or parent.
-                            </Text>
+ 
             </View>
 
             {/* Login/Register Components */}
@@ -122,7 +120,7 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
                     <View style={{alignItems:"flex-end", marginTop: 10}}>
                         <TouchableOpacity
                             onPress={() => navigation.navigate('ForgotPassword')}>
-                            <Text style={{textDecorationLine:"underline", color:'white', fontFamily: 'Nunito-Medium',fontSize:17}}>
+                            <Text style={{textDecorationLine:"underline", color:colors.secondary, fontFamily: 'Nunito-Medium',fontSize:17}}>
                                 Forgot your password?
                             </Text>
                         </TouchableOpacity>
@@ -137,18 +135,18 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
                             paddingVertical: 10}
                             }>
                         <Line_X
-                            customColor="white"
+                            customColor={colors.secondary}
                             customWidth={130}
                             customHeight={5}
                             customX1={0}
                             customY1={0}
                             customX2={130}
                             customY2={0}/>
-                        <Text style={{marginHorizontal:10,color: 'white',fontSize: 17,fontFamily: 'Nunito-Medium',}}>
+                        <Text style={{marginHorizontal:10,color: colors.secondary,fontSize: 17,fontFamily: 'Nunito-Medium',}}>
                             or
                         </Text>
                         <Line_X
-                            customColor="white"
+                            customColor={colors.secondary}
                             customWidth={130}
                             customHeight={5}
                             customX1={0}
@@ -161,15 +159,15 @@ export default function LoginScreen({ navigation, updateAuthState, isUserLoggedI
                         flexDirection: 'row',
                     }}>
                         <TouchableOpacity style={{marginHorizontal: 5, width:45, height:45, 
-                            borderRadius: 50, backgroundColor:"black", justifyContent:'center',alignItems:'center', borderColor:'white', borderWidth:1}}>
+                            borderRadius: 50, backgroundColor:"black", justifyContent:'center',alignItems:'center', borderColor:colors.secondary, borderWidth:1}}>
                                 <Ionicons name={"logo-apple"} size={20} color='white'/>
                         </TouchableOpacity>
                         <TouchableOpacity style={{marginHorizontal: 5, width:45, height:45, 
-                            borderRadius: 50, backgroundColor:"red", justifyContent:'center',alignItems:'center', borderColor:'white', borderWidth:1}}>
+                            borderRadius: 50, backgroundColor:"red", justifyContent:'center',alignItems:'center', borderColor:colors.secondary, borderWidth:1}}>
                                 <Ionicons name={"logo-google"} size={20} color='white'/>
                         </TouchableOpacity>
                         <TouchableOpacity style={{marginHorizontal: 5, width:45, height:45, 
-                            borderRadius: 50, backgroundColor:"blue", justifyContent:'center',alignItems:'center', borderColor:'white', borderWidth:1}}>
+                            borderRadius: 50, backgroundColor:"blue", justifyContent:'center',alignItems:'center', borderColor:colors.secondary, borderWidth:1}}>
                                 <Ionicons name={"logo-facebook"} size={20} color='white'/>
                         </TouchableOpacity>
 

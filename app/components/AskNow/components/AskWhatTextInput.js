@@ -32,14 +32,14 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 10,
         marginVertical: 2,
-        backgroundColor: colors.startup_purple_light,
+        backgroundColor: colors.selected,
         borderWidth:1
     },
     input: {
         paddingHorizontal: 15,
         fontSize: 17,
         fontFamily:'Nunito-SemiBold',
-        color: colors.turquoise_green
+        color: colors.tertiary
     },
     errorText: {
         color: 'red',

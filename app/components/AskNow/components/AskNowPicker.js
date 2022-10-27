@@ -22,11 +22,11 @@ const AskNowPicker = ({ navigation, open, value, items, setOpen,
         setValue={setValue}
         setItems={setItems}
         containerStyle={{width:containerWidth}}
-        style={{backgroundColor:colors.startup_purple_light, borderColor:'transparent'}}
-        textStyle={[styles.askNowText, {color:colors.turquoise_green, fontSize:size}]}
+        style={{backgroundColor:colors.selected, borderColor:'transparent'}}
+        textStyle={[styles.askNowText, {color:colors.tertiary, fontSize:size}]}
         listItemLabelStyle={{color:'black', fontSize:17, fontFamily:'Nunito-Medium'}}
-        ArrowDownIconComponent={() => {return (<MaterialIcons name={"keyboard-arrow-down"} color={colors.yellow_sun} size={size}/>)}}
-        ArrowUpIconComponent={() => {return (<MaterialIcons name={"keyboard-arrow-up"} color={colors.yellow_sun} size={size}/>)}}
+        ArrowDownIconComponent={() => {return (<MaterialIcons name={"keyboard-arrow-down"} color={colors.secondary} size={size}/>)}}
+        ArrowUpIconComponent={() => {return (<MaterialIcons name={"keyboard-arrow-up"} color={colors.secondary} size={size}/>)}}
         zIndex={9999}
         placeholder={placeholder}
         maxHeight={maxHeight}

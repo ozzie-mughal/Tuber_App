@@ -78,7 +78,8 @@ const colors = {
     //APP PALETTE
     primary: '#FBCC41',
     secondary: '#000000',
-    tertiary: '#D1D1D1',
+    tertiary: '#FFFFFF',
+    selected: '#A78A32',
     error: '',
     confirmation: ''
 }

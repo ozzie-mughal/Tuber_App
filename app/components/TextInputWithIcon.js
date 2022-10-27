@@ -7,7 +7,7 @@ import colors from '../styles/colors';
 
 const TextInputWithIcon = ({icon, error, touched, ...otherProps}) => {
 
-    const validationColor = !touched ? 'white' : error ? 'red' : colors.UN_blue;
+    const validationColor = !touched ? colors.secondary : error ? 'red' : colors.primary;
 
 
   return (
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     input: {
         paddingHorizontal: 15,
         width:'100%',
-        color:'white',
+        color:colors.secondary,
         fontFamily: 'Nunito-SemiBold',
         fontSize: 17
     },

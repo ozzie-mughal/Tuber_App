@@ -87,11 +87,11 @@ const AskNowWidget = (props) => {
 
     const askWhoOptions = [
         {key: 'My Tutors', order: 'left', value: 'My Tutors', 
-            icon:<FontAwesome name={"heart"} color={colors.turquoise_green} size={20}/>,
-            icon_selected:<FontAwesome name={"heart"} color={colors.startup_purple} size={20}/>},
+            icon:<FontAwesome name={"heart"} color={colors.secondary} size={20}/>,
+            icon_selected:<FontAwesome name={"heart"} color={colors.primary} size={20}/>},
         {key: 'Best for me', order: 'right', value: 'Best for me',
-            icon:<FontAwesome5 name={"robot"} color={colors.turquoise_green} size={20}/>,
-            icon_selected:<FontAwesome5 name={"robot"} color={colors.startup_purple} size={20}/>},
+            icon:<FontAwesome5 name={"robot"} color={colors.secondary} size={20}/>,
+            icon_selected:<FontAwesome5 name={"robot"} color={colors.primary} size={20}/>},
       ]
 
     const [askWhoToggle, setAskWhoToggle] = useState(null);
@@ -114,7 +114,7 @@ const AskNowWidget = (props) => {
   return (
     <Fragment>
         <View style={[styles.askHowContent]}>
-            <Text style={[styles.askNowText, {color:'white'}]}>I want to </Text>
+            <Text style={[styles.askNowText, {color:colors.secondary}]}>I want to </Text>
             <AskNowPicker open={open_askHow} 
                 value={value_askHow} 
                 items={items_askHow} 
@@ -130,7 +130,7 @@ const AskNowWidget = (props) => {
         </View>
 
         <View style={[styles.askWhatContentText,{zIndex:-1}]}>
-            <Text style={[styles.askNowText, {color:'white', zIndex:-1}]}>an Ask about </Text>
+            <Text style={[styles.askNowText, {color:colors.secondary, zIndex:-1}]}>an Ask about </Text>
             <AskWhatTextInput placeholder='Brief description of the Ask ...' color='white' autoCorrect={false}
                 value={values.askWhat}
                 onChangeText={handleChange('askWhat')}
@@ -168,7 +168,7 @@ const AskNowWidget = (props) => {
                 touched={touched.askWhat_Subject}/>
         </View>
         <View style={[styles.askWhoContentText,{zIndex:-1}]}>
-            <Text style={[styles.askNowText, {color:'white', zIndex:-1}]}>from</Text>
+            <Text style={[styles.askNowText, {color:colors.secondary, zIndex:-1}]}>from</Text>
             <View style={{justifyContent:'center', alignItems:'flex-end', flex:1, zIndex:-1}}>
                 <AskNowToggleCard data={askWhoOptions} selectedValue={selectedAskWhoToggle}
                     error={errors.askWho}
@@ -184,7 +184,7 @@ const AskNowWidget = (props) => {
                     setValue_askHow, setValue_askWhat_Year, 
                     setValue_askWhat_Subject, selectedAskWhoToggle
                 )}}/>
-                <AskNowIconButton icon={<Ionicons name={"ios-help"} color={'white'} size={20}/>}
+                <AskNowIconButton icon={<Ionicons name={"ios-help"} color={colors.tertiary} size={20}/>}
                     onPress={()=>{setShowInfoModal(true)}}/>
             </View>
             <View style={styles.askNowActionButton_Submit}>

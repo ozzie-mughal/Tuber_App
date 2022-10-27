@@ -4,7 +4,7 @@ const elements = {
     primaryButton: {
         width: '100%',
         paddingVertical: 10,
-        backgroundColor: colors.turquoise_green,
+        backgroundColor: colors.primary,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -19,12 +19,12 @@ const elements = {
         fontSize: 17,
         fontWeight: "600",
         fontFamily: 'Nunito-Bold',
-        color:'white'
+        color:colors.secondary
     },
     askNowPrimaryButton: {
         width: '100%',
         paddingVertical: 10,
-        backgroundColor: colors.turquoise_green,
+        backgroundColor: colors.secondary,
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
@@ -39,6 +39,7 @@ const elements = {
         fontSize: 17,
         fontWeight: "600",
         fontFamily: 'Nunito-Bold',
+        color: colors.primary
     },
     askNowSecondaryButton: {
         //width: '100%',
@@ -65,7 +66,7 @@ const elements = {
         backgroundColor: 'transparent',
         borderRadius: 20,
         borderWidth: 2,
-        borderColor: 'white',
+        borderColor: colors.secondary,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
@@ -79,7 +80,7 @@ const elements = {
         fontSize: 17,
         fontWeight: "600",
         fontFamily: 'Nunito-Bold',
-        color: 'white',
+        color: colors.secondary,
     },
     askNowIconContainer: {
         //width: '100%',
@@ -211,7 +212,7 @@ const elements = {
     },
     topSafeAreaContainer: {
         flex: 0,
-        backgroundColor: 'white'
+        backgroundColor: colors.primary
     },
     bottomSafeAreaContainer: {
         flex: 0,
@@ -223,11 +224,11 @@ const elements = {
     },
     generalContainer: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: colors.primary,
     },
     askNowContainer: {
         flex: 1,
-        backgroundColor: colors.startup_purple,
+        backgroundColor: colors.primary,
     },
     splashHeaderContainer: {
         justifyContent: "center",
@@ -246,7 +247,11 @@ const elements = {
         top: '10%',
         paddingTop: 40,
         borderRadius: 30,
-        backgroundColor:colors.startup_purple
+        backgroundColor:colors.tertiary,
+        shadowColor: '#000000',
+        shadowOpacity: 0.5,
+        shadowRadius: 6,
+        shadowOffset : { width: 0, height: -4}
     },
     pageHeaderContainer: {
         paddingHorizontal: 15,

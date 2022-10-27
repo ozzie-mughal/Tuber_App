@@ -32,7 +32,7 @@ export default NewAsk = ({ ...props }) => {
 
     const timer_icon = <Ionicons name={"ios-timer-outline"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
     const person = <Ionicons name={"person"} color={"black"} size={15} style={{marginHorizontal: 5}}/>;
-    const newAsk = <Ionicons name={"ios-chatbubble-ellipses-sharp"} color={colors.turquoise_green} size={60}/>;
+    const newAsk = <Ionicons name={"ios-chatbubble-ellipses-sharp"} color={colors.secondary} size={60}/>;
     const store = <FontAwesome5 name={"coins"} color={'black'} size={20}/>;
 
     const navigation = useNavigation()
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
     buttonStyle: {
         height: 90,
         width: 90,
-        backgroundColor: colors.startup_purple,
+        backgroundColor: colors.primary,
         borderWidth:2,
         borderRadius: 100,
         position:'relative',

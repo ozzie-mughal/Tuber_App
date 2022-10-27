@@ -21,10 +21,10 @@ const store = <AntDesign name={"appstore1"} color={colors.grey_light} size={32}/
 const myTutors = <MaterialIcons name={"favorite"} color={colors.grey_light} size={32}/>;
 const home = <MaterialIcons name={"home"} color={colors.grey_light} size={32}/>;
 const paperPlane = <FontAwesome name={"paper-plane"} color={'white'} size={40}/>
-const inbox_active = <FontAwesome5 name={"inbox"} color={colors.startup_purple} size={32}/>;
-const store_active = <AntDesign name={"appstore1"} color={colors.startup_purple} size={32}/>;
-const myTutors_active = <MaterialIcons name={"favorite"} color={colors.startup_purple} size={32}/>;
-const home_active= <MaterialIcons name={"home"} color={colors.startup_purple} size={32}/>;
+const inbox_active = <FontAwesome5 name={"inbox"} color={colors.primary} size={32}/>;
+const store_active = <AntDesign name={"appstore1"} color={colors.primary} size={32}/>;
+const myTutors_active = <MaterialIcons name={"favorite"} color={colors.primary} size={32}/>;
+const home_active= <MaterialIcons name={"home"} color={colors.primary} size={32}/>;
 const paperPlane_active = <FontAwesome name={"paper-plane"} color={'white'} size={40}/>
 
 const PlaceholderNewAsk = () => {

@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         justifyContent:'space-evenly',
         alignItems: 'center',
         borderWidth:2,
-        borderColor:colors.turquoise_green,
+        borderColor:colors.secondary,
         flexDirection:'row',
         zIndex:-1
     },
@@ -88,22 +88,22 @@ const styles = StyleSheet.create({
         justifyContent:'space-evenly',
         alignItems: 'center',
         borderWidth:2,
-        borderColor:colors.turquoise_green,
+        borderColor:colors.secondary,
         flexDirection:'row',
         zIndex:-1
     },
     toggleCard_title_selected: {
         fontSize: 15,
         fontFamily: 'Nunito-Bold',
-        color:colors.startup_purple
+        color:colors.primary
     },
     toggleCard_title_unselected: {
         fontSize: 15,
         fontFamily: 'Nunito-Bold',
-        color:colors.turquoise_green
+        color:colors.secondary
     },
     selected: {
-        backgroundColor: colors.turquoise_green,
+        backgroundColor: colors.secondary,
         borderWidth: 2,
     },
     unselected: {
